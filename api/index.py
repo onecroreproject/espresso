@@ -1,7 +1,9 @@
 from flask import Flask, render_template, redirect, url_for
 import os
 
-app = Flask(__name__)
+app = Flask(__name__, 
+            template_folder="../templates", 
+            static_folder="../static")
 
 @app.route('/')
 def splash():
@@ -59,14 +61,14 @@ def wallet():
 def profile():
     return render_template('profile.html')
 
-
 @app.route('/favorites')
 def favorites():
     """Favorites page with user's saved items"""
-    return render_template('favorites.html',)
+    return render_template('favorites.html')
+
 @app.route('/topup')
 def topup():
-    """Favorites page with user's saved items"""
-    return render_template('topup.html',)
-if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    """Topup page"""
+    return render_template('topup.html')
+
+# No app.run() for Vercel deployment
