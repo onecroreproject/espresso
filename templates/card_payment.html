@@ -1,0 +1,858 @@
+{% extends "base.html" %}
+
+{% block title %}Card Payment — Espresso{% endblock %}
+
+{% block extra_css %}
+<style>
+  .card-page { 
+    padding: 12px 12px 30px; 
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  /* Header with back button */
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .back-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: #fcf0e6;
+    border: 1px solid #e9d9c8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #5c3b2c;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+
+  .back-btn:active {
+    background: #5c3b2c;
+    color: white;
+  }
+
+  .back-btn .material-symbols-outlined {
+    font-size: 20px;
+  }
+
+  .card-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    color: #3a2417;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Amount card */
+  .amount-card {
+    background: linear-gradient(135deg, #5c3b2c, #8b5e3c);
+    border-radius: 20px;
+    padding: 18px;
+    margin-bottom: 20px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(92,59,44,0.25);
+  }
+
+  .amount-card::after {
+    content: '';
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.05);
+    right: -50px;
+    top: -50px;
+  }
+
+  .amount-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.7;
+    margin-bottom: 4px;
+  }
+
+  .amount-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: #f5c48a;
+    margin-bottom: 4px;
+    line-height: 1.1;
+  }
+
+  .amount-merchant {
+    font-size: 12px;
+    opacity: 0.8;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .amount-merchant .material-symbols-outlined {
+    font-size: 14px;
+  }
+
+  /* Card form */
+  .card-form {
+    background: #ffffff;
+    border-radius: 24px;
+    padding: 18px 16px;
+    border: 1px solid #e9d9c8;
+    box-shadow: 0 5px 15px rgba(92,59,44,0.05);
+    margin-bottom: 16px;
+  }
+
+  .form-section-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: #3a2417;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .form-section-title .material-symbols-outlined {
+    color: #b48c5c;
+    font-size: 16px;
+  }
+
+  /* Card preview - smaller for mobile */
+  .card-preview {
+    background: linear-gradient(135deg, #1a1f2e, #2a2f3f);
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 20px;
+    color: white;
+    position: relative;
+    min-height: 130px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .card-chip {
+    width: 35px;
+    height: 25px;
+    background: linear-gradient(135deg, #d4af37, #b8860b);
+    border-radius: 6px;
+    margin-bottom: 15px;
+  }
+
+  .card-number-display {
+    font-family: 'Courier New', monospace;
+    font-size: 15px;
+    letter-spacing: 1.5px;
+    margin-bottom: 15px;
+    color: rgba(255,255,255,0.9);
+    word-break: break-all;
+  }
+
+  .card-details-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .card-holder-display {
+    text-transform: uppercase;
+    font-size: 10px;
+    letter-spacing: 0.5px;
+    color: rgba(255,255,255,0.6);
+    max-width: 60%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .card-expiry-display {
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .card-type-icon {
+    position: absolute;
+    bottom: 16px;
+    right: 16px;
+    font-size: 24px;
+    opacity: 0.8;
+  }
+
+  /* Form fields - mobile optimized */
+  .input-group {
+    margin-bottom: 16px;
+  }
+
+  .input-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #3a2417;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .input-label .material-symbols-outlined {
+    font-size: 14px;
+    color: #b48c5c;
+  }
+
+  .input-field {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1.5px solid #e9d9c8;
+    border-radius: 14px;
+    font-size: 14px;
+    font-family: 'Montserrat', sans-serif;
+    transition: all 0.2s;
+    background: #fcfaf7;
+    -webkit-appearance: none;
+  }
+
+  .input-field:focus {
+    outline: none;
+    border-color: #5c3b2c;
+    background: #ffffff;
+    box-shadow: 0 2px 8px rgba(92,59,44,0.1);
+  }
+
+  .input-field::placeholder {
+    color: #bba08a;
+    font-size: 13px;
+  }
+
+  .input-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .input-row .input-group {
+    flex: 1;
+    min-width: 120px;
+  }
+
+  /* Save card option */
+  .save-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px;
+    background: #fcf0e6;
+    border-radius: 14px;
+    margin: 16px 0;
+  }
+
+  .save-card-checkbox {
+    width: 22px;
+    height: 22px;
+    border: 2px solid #c4a882;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    flex-shrink: 0;
+  }
+
+  .save-card-checkbox.checked {
+    background: #5c3b2c;
+    border-color: #5c3b2c;
+    color: white;
+  }
+
+  .save-card-checkbox .material-symbols-outlined {
+    font-size: 14px;
+  }
+
+  .save-card-text {
+    flex: 1;
+    font-size: 13px;
+    font-weight: 500;
+    color: #3a2417;
+    line-height: 1.3;
+  }
+
+  .save-card-text small {
+    display: block;
+    font-size: 11px;
+    color: #8b6f54;
+    font-weight: 400;
+    margin-top: 2px;
+  }
+
+  /* Pay button - full width mobile */
+  .btn-pay-card {
+    width: 100%;
+    background: linear-gradient(135deg, #5c3b2c, #8b5e3c);
+    color: white;
+    border: none;
+    border-radius: 30px;
+    padding: 18px;
+    font-size: 16px;
+    font-weight: 700;
+    font-family: 'Montserrat', sans-serif;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(92,59,44,0.3);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 16px;
+  }
+
+  .btn-pay-card:active {
+    transform: scale(0.98);
+    opacity: 0.9;
+  }
+
+  .btn-pay-card:disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  .btn-pay-card .material-symbols-outlined {
+    font-size: 18px;
+  }
+
+  /* Security badges - scrollable on mobile */
+  .security-badge {
+    display: flex;
+    gap: 10px;
+    margin: 16px 0 8px;
+    overflow-x: auto;
+    padding: 4px 0 8px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .security-badge::-webkit-scrollbar {
+    display: none;
+  }
+
+  .badge-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    color: #8b6f54;
+    background: #fcf8f3;
+    padding: 6px 14px;
+    border-radius: 30px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .badge-item .material-symbols-outlined {
+    font-size: 14px;
+    color: #27ae60;
+  }
+
+  /* Error message */
+  .error-message {
+    color: #c0392b;
+    font-size: 11px;
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .error-message .material-symbols-outlined {
+    font-size: 12px;
+  }
+
+  /* Success overlay - mobile optimized */
+  .success-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(92,59,44,0.95);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 3000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s;
+    padding: 16px;
+  }
+
+  .success-overlay.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .success-content {
+    background: white;
+    border-radius: 32px;
+    padding: 30px 20px;
+    text-align: center;
+    max-width: 300px;
+    width: 100%;
+    transform: scale(0.9);
+    transition: transform 0.3s;
+  }
+
+  .success-overlay.active .success-content {
+    transform: scale(1);
+  }
+
+  .success-icon {
+    width: 70px;
+    height: 70px;
+    background: #27ae60;
+    border-radius: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+    color: white;
+    font-size: 32px;
+  }
+
+  .success-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #3a2417;
+    margin-bottom: 8px;
+  }
+
+  .success-text {
+    color: #8b6f54;
+    margin-bottom: 16px;
+    font-size: 14px;
+  }
+
+  /* Responsive breakpoints */
+  @media (max-width: 360px) {
+    .card-header h1 {
+      font-size: 20px;
+    }
+    
+    .amount-value {
+      font-size: 28px;
+    }
+    
+    .card-number-display {
+      font-size: 13px;
+      letter-spacing: 1px;
+    }
+    
+    .input-row {
+      flex-direction: column;
+      gap: 0;
+    }
+    
+    .input-row .input-group {
+      min-width: 100%;
+    }
+    
+    .card-preview {
+      min-height: 120px;
+      padding: 12px;
+    }
+    
+    .card-chip {
+      width: 30px;
+      height: 20px;
+      margin-bottom: 10px;
+    }
+  }
+
+  @media (min-width: 361px) and (max-width: 480px) {
+    .input-row {
+      flex-direction: row;
+    }
+    
+    .input-row .input-group {
+      min-width: calc(50% - 5px);
+    }
+  }
+
+  @media (max-width: 280px) {
+    .btn-pay-card {
+      padding: 16px;
+      font-size: 15px;
+    }
+    
+    .save-card-text {
+      font-size: 12px;
+    }
+  }
+
+  /* Touch-friendly improvements */
+  .input-field, 
+  .btn-pay-card, 
+  .back-btn, 
+  .save-card {
+    touch-action: manipulation;
+  }
+
+  /* Prevent zoom on input focus for iOS */
+  @supports (-webkit-touch-callout: none) {
+    .input-field {
+      font-size: 16px;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="card-page">
+
+  <!-- Header -->
+  <div class="card-header">
+    <div class="back-btn" onclick="goBack()">
+      <span class="material-symbols-outlined">arrow_back</span>
+    </div>
+    <h1>Card Payment</h1>
+  </div>
+
+  <!-- Amount Card -->
+  <div class="amount-card" id="amountCard">
+    <div class="amount-label">Total Amount</div>
+    <div class="amount-value" id="displayAmount">₹588</div>
+    <div class="amount-merchant">
+      <span class="material-symbols-outlined">store</span>
+      Espresso Cafe
+    </div>
+  </div>
+
+  <!-- Card Form -->
+  <div class="card-form">
+    <div class="form-section-title">
+      <span class="material-symbols-outlined">credit_card</span>
+      Card Details
+    </div>
+
+    <!-- Card Preview -->
+    <div class="card-preview" id="cardPreview">
+      <div class="card-chip"></div>
+      <div class="card-number-display" id="displayCardNumber">•••• •••• •••• ••••</div>
+      <div class="card-details-row">
+        <div class="card-holder-display" id="displayCardHolder">CARD HOLDER</div>
+        <div class="card-expiry-display" id="displayCardExpiry">MM/YY</div>
+      </div>
+      <div class="card-type-icon" id="cardTypeIcon">💳</div>
+    </div>
+
+    <!-- Card Number -->
+    <div class="input-group">
+      <div class="input-label">
+        <span class="material-symbols-outlined">numbers</span>
+        Card Number
+      </div>
+      <input type="text" class="input-field" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19" inputmode="numeric" pattern="[0-9\s]*" oninput="formatCardNumber(this); updateCardPreview()">
+      <div class="error-message" id="cardNumberError" style="display: none;">
+        <span class="material-symbols-outlined">error</span> Invalid card number
+      </div>
+    </div>
+
+    <!-- Card Holder -->
+    <div class="input-group">
+      <div class="input-label">
+        <span class="material-symbols-outlined">badge</span>
+        Card Holder
+      </div>
+      <input type="text" class="input-field" id="cardHolder" placeholder="JOHN DOE" oninput="updateCardPreview()">
+    </div>
+
+    <!-- Expiry and CVV Row -->
+    <div class="input-row">
+      <div class="input-group">
+        <div class="input-label">
+          <span class="material-symbols-outlined">calendar_month</span>
+          Expiry
+        </div>
+        <input type="text" class="input-field" id="expiryDate" placeholder="MM/YY" maxlength="5" inputmode="numeric" oninput="formatExpiry(this); updateCardPreview()">
+        <div class="error-message" id="expiryError" style="display: none;">
+          <span class="material-symbols-outlined">error</span> Invalid
+        </div>
+      </div>
+
+      <div class="input-group">
+        <div class="input-label">
+          <span class="material-symbols-outlined">lock</span>
+          CVV
+        </div>
+        <input type="password" class="input-field" id="cvv" placeholder="•••" maxlength="3" inputmode="numeric" oninput="validateCVV(this)">
+        <div class="error-message" id="cvvError" style="display: none;">
+          <span class="material-symbols-outlined">error</span> Invalid
+        </div>
+      </div>
+    </div>
+
+    <!-- Save Card Option -->
+    <div class="save-card" onclick="toggleSaveCard()">
+      <div class="save-card-checkbox" id="saveCardCheckbox">
+        <span class="material-symbols-outlined" id="saveCardIcon" style="display: none;">check</span>
+      </div>
+      <div class="save-card-text">
+        Save card
+        <small>For faster checkout next time</small>
+      </div>
+    </div>
+
+    <!-- Pay Button -->
+    <button class="btn-pay-card" onclick="processCardPayment()" id="payButton">
+      <span class="material-symbols-outlined">lock</span>
+      Pay <span id="payButtonAmount">₹588</span>
+    </button>
+  </div>
+
+  <!-- Security Badges - Scrollable on mobile -->
+  <div class="security-badge">
+    <div class="badge-item">
+      <span class="material-symbols-outlined">encrypted</span>
+      256-bit SSL
+    </div>
+    <div class="badge-item">
+      <span class="material-symbols-outlined">verified</span>
+      PCI Compliant
+    </div>
+    <div class="badge-item">
+      <span class="material-symbols-outlined">security</span>
+      3D Secure
+    </div>
+  </div>
+
+  <!-- Success Overlay -->
+  <div class="success-overlay" id="successOverlay">
+    <div class="success-content">
+      <div class="success-icon">
+        <span class="material-symbols-outlined">check_circle</span>
+      </div>
+      <div class="success-title">Paid!</div>
+      <div class="success-text">Your payment was successful</div>
+      <button class="btn-pay-card" onclick="redirectToTracking()" style="margin-top: 5px;">Track Order</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // Load order data
+  let orderTotal = 588;
+  let saveCard = false;
+
+  window.addEventListener('load', function() {
+    const savedOrder = localStorage.getItem('pendingCardPayment');
+    if (savedOrder) {
+      try {
+        const order = JSON.parse(savedOrder);
+        orderTotal = order.total;
+        document.getElementById('displayAmount').textContent = `₹${orderTotal}`;
+        document.getElementById('payButtonAmount').textContent = `₹${orderTotal}`;
+      } catch(e) {}
+    }
+  });
+
+  function goBack() {
+    window.history.back();
+  }
+
+  function formatCardNumber(input) {
+    let value = input.value.replace(/\D/g, '');
+    let formattedValue = '';
+    
+    for (let i = 0; i < value.length; i++) {
+      if (i > 0 && i % 4 === 0) {
+        formattedValue += ' ';
+      }
+      formattedValue += value[i];
+    }
+    
+    input.value = formattedValue;
+    validateCardNumber(value);
+  }
+
+  function validateCardNumber(value) {
+    const number = value.replace(/\s/g, '');
+    const errorEl = document.getElementById('cardNumberError');
+    
+    if (number.length > 0 && number.length < 16) {
+      errorEl.style.display = 'flex';
+      return false;
+    } else {
+      errorEl.style.display = 'none';
+      return number.length === 16;
+    }
+  }
+
+  function formatExpiry(input) {
+    let value = input.value.replace(/\D/g, '');
+    
+    if (value.length >= 2) {
+      value = value.substring(0, 2) + '/' + value.substring(2, 4);
+    }
+    
+    input.value = value;
+    validateExpiry(value);
+  }
+
+  function validateExpiry(value) {
+    const errorEl = document.getElementById('expiryError');
+    
+    if (value.length === 5) {
+      const [month, year] = value.split('/');
+      const currentDate = new Date();
+      const currentYear = currentDate.getFullYear() % 100;
+      const currentMonth = currentDate.getMonth() + 1;
+      
+      if (month >= 1 && month <= 12 && year >= currentYear) {
+        errorEl.style.display = 'none';
+        return true;
+      }
+    }
+    
+    if (value.length > 0) {
+      errorEl.style.display = 'flex';
+      return false;
+    }
+    
+    errorEl.style.display = 'none';
+    return false;
+  }
+
+  function validateCVV(input) {
+    const value = input.value.replace(/\D/g, '');
+    input.value = value;
+    
+    const errorEl = document.getElementById('cvvError');
+    
+    if (value.length > 0 && value.length < 3) {
+      errorEl.style.display = 'flex';
+      return false;
+    } else {
+      errorEl.style.display = 'none';
+      return value.length === 3;
+    }
+  }
+
+  function updateCardPreview() {
+    const cardNumber = document.getElementById('cardNumber').value || '•••• •••• •••• ••••';
+    const cardHolder = document.getElementById('cardHolder').value || 'CARD HOLDER';
+    const expiry = document.getElementById('expiryDate').value || 'MM/YY';
+    
+    document.getElementById('displayCardNumber').textContent = cardNumber || '•••• •••• •••• ••••';
+    document.getElementById('displayCardHolder').textContent = cardHolder.toUpperCase() || 'CARD HOLDER';
+    document.getElementById('displayCardExpiry').textContent = expiry || 'MM/YY';
+  }
+
+  function toggleSaveCard() {
+    saveCard = !saveCard;
+    const checkbox = document.getElementById('saveCardCheckbox');
+    const icon = document.getElementById('saveCardIcon');
+    
+    if (saveCard) {
+      checkbox.classList.add('checked');
+      icon.style.display = 'inline';
+    } else {
+      checkbox.classList.remove('checked');
+      icon.style.display = 'none';
+    }
+  }
+
+  function validateForm() {
+    const cardNumber = document.getElementById('cardNumber').value.replace(/\s/g, '');
+    const cardHolder = document.getElementById('cardHolder').value;
+    const expiry = document.getElementById('expiryDate').value;
+    const cvv = document.getElementById('cvv').value;
+    
+    let isValid = true;
+    
+    // Validate card number
+    if (cardNumber.length !== 16) {
+      document.getElementById('cardNumberError').style.display = 'flex';
+      isValid = false;
+    }
+    
+    // Validate card holder
+    if (!cardHolder.trim()) {
+      isValid = false;
+    }
+    
+    // Validate expiry
+    if (expiry.length !== 5 || !validateExpiry(expiry)) {
+      document.getElementById('expiryError').style.display = 'flex';
+      isValid = false;
+    }
+    
+    // Validate CVV
+    if (cvv.length !== 3) {
+      document.getElementById('cvvError').style.display = 'flex';
+      isValid = false;
+    }
+    
+    return isValid;
+  }
+
+  function processCardPayment() {
+    if (!validateForm()) {
+      alert('Please fill in all card details correctly');
+      return;
+    }
+    
+    // Disable button to prevent double submission
+    const payButton = document.getElementById('payButton');
+    payButton.disabled = true;
+    payButton.innerHTML = '<span class="material-symbols-outlined">hourglass_empty</span> Processing...';
+    
+    // Simulate payment processing
+    setTimeout(() => {
+      // Show success overlay
+      document.getElementById('successOverlay').classList.add('active');
+      
+      // Clear saved pending payment
+      localStorage.removeItem('pendingCardPayment');
+      
+      // Save card if option selected
+      if (saveCard) {
+        const savedCards = JSON.parse(localStorage.getItem('savedCards') || '[]');
+        savedCards.push({
+          last4: document.getElementById('cardNumber').value.slice(-4),
+          holder: document.getElementById('cardHolder').value,
+          type: 'CARD'
+        });
+        localStorage.setItem('savedCards', JSON.stringify(savedCards));
+      }
+      
+      // Re-enable button
+      payButton.disabled = false;
+      payButton.innerHTML = `<span class="material-symbols-outlined">lock</span> Pay ₹${orderTotal}`;
+    }, 1500);
+  }
+
+  function redirectToTracking() {
+    window.location.href = "{{ url_for('order') }}";
+  }
+
+  // Add input event listeners for real-time validation
+  document.getElementById('cardNumber').addEventListener('keyup', function(e) {
+    if (e.key === 'Backspace' || e.key === 'Delete') {
+      updateCardPreview();
+    }
+  });
+</script>
+{% endblock %}

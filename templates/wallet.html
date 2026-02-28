@@ -1,0 +1,808 @@
+{% extends "base.html" %}
+
+{% block title %}Espresso · Wallet{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Balance Card */
+    .balance-section { padding: 20px 16px 16px; }
+
+    .balance-card {
+        background: linear-gradient(135deg, #5c3b2c, #3a2417);
+        color: white;
+        border-radius: 30px;
+        padding: 24px 20px;
+        box-shadow: 0 10px 25px rgba(92, 59, 44, 0.3);
+        text-align: center;
+    }
+
+    .balance-label {
+        font-size: 14px;
+        opacity: 0.9;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        color: rgba(255,255,255,0.9);
+    }
+
+    .balance-label .material-symbols-outlined {
+        color: #f5c48a;
+    }
+
+    .balance-amount {
+        font-size: 48px;
+        font-weight: 700;
+        font-family: 'Playfair Display', serif;
+        color: #f5c48a;
+        text-align: center;
+    }
+
+    /* Quick Actions */
+    .quick-actions {
+        display: flex;
+        gap: 12px;
+        padding: 0 16px 20px;
+    }
+
+    .action-btn {
+        flex: 1;
+        background: #ffffff;
+        border: 1px solid #e9d9c8;
+        border-radius: 40px;
+        padding: 14px 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        font-weight: 600;
+        color: #5c3b2c;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 14px;
+    }
+
+    .action-btn:active { background: #fcf0e6; }
+    .action-btn .material-symbols-outlined { font-size: 22px; color: #b48c5c; }
+
+    /* Top-up Presets */
+    .topup-section { padding: 0 16px 20px; }
+
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+    }
+
+    .section-header h2 {
+        font-family: 'Playfair Display', serif;
+        font-size: 20px;
+        color: #3a2417;
+        font-weight: 700;
+    }
+
+    .view-all { 
+        color: #b48c5c; 
+        font-size: 13px; 
+        font-weight: 500; 
+        cursor: pointer;
+        transition: color 0.2s;
+    }
+
+    .view-all:hover {
+        color: #5c3b2c;
+    }
+
+    .preset-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+        margin-bottom: 16px;
+    }
+
+    .preset-card {
+        background: #ffffff;
+        border: 2px solid #e9d9c8;
+        border-radius: 25px;
+        padding: 16px 8px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .preset-card.active {
+        background: #5c3b2c;
+        border-color: #5c3b2c;
+    }
+
+    .preset-amount { 
+        font-size: 18px; 
+        font-weight: 700; 
+        color: #3a2417; 
+    }
+    
+    .preset-bonus {  
+        font-size: 12px; 
+        color: #b48c5c; 
+        font-weight: 600; 
+        margin-top: 4px; 
+    }
+
+    .preset-card.active .preset-amount,
+    .preset-card.active .preset-bonus { color: white; }
+    .preset-card.active .preset-bonus { color: #f5c48a; }
+
+    /* Custom Top-up */
+    .custom-topup {
+        background: #ffffff;
+        border-radius: 40px;
+        padding: 16px;
+        border: 1px solid #e9d9c8;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .custom-input {
+        flex: 1;
+        padding: 14px 18px;
+        border: 2px solid #e9d9c8;
+        border-radius: 40px;
+        font-size: 16px;
+        font-family: 'Montserrat', sans-serif;
+        color: #3a2417;
+    }
+
+    .custom-input:focus { 
+        outline: none; 
+        border-color: #5c3b2c;
+    }
+
+    .custom-input::placeholder {
+        color: #b9a187;
+    }
+
+    .apply-btn {
+        background: #5c3b2c;
+        color: white;
+        border: none;
+        padding: 14px 28px;
+        border-radius: 40px;
+        font-weight: 600;
+        cursor: pointer;
+        font-family: 'Montserrat', sans-serif;
+        white-space: nowrap;
+        transition: background 0.2s;
+    }
+
+    .apply-btn:active { background: #6f4a2e; }
+
+    /* Security Section */
+    .security-section {
+        padding: 0 16px 30px;
+        margin-top: 10px;
+    }
+
+    .security-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+    }
+
+    .security-item {
+        background: #ffffff;
+        border-radius: 20px;
+        padding: 16px 8px;
+        text-align: center;
+        border: 1px solid #e9d9c8;
+        box-shadow: 0 2px 8px rgba(92, 59, 44, 0.05);
+        transition: all 0.2s;
+    }
+
+    .security-item:active {
+        transform: scale(0.98);
+        background: #fcf0e6;
+    }
+
+    .security-icon {
+        color: #b48c5c;
+        margin-bottom: 8px;
+    }
+
+    .security-icon .material-symbols-outlined {
+        font-size: 28px;
+    }
+
+    .security-text {
+        font-size: 11px;
+        font-weight: 600;
+        color: #3a2417;
+        letter-spacing: 0.5px;
+    }
+
+    /* History Modal Styles */
+    .history-modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(58, 36, 23, 0.7);
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        z-index: 2000;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s;
+    }
+
+    .history-modal-overlay.active {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .history-modal-content {
+        background: #ffffff;
+        width: 100%;
+        max-width: 450px;
+        border-radius: 32px 32px 0 0;
+        padding: 24px 20px 30px;
+        transform: translateY(100%);
+        transition: transform 0.3s ease;
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+
+    .history-modal-overlay.active .history-modal-content {
+        transform: translateY(0);
+    }
+
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #f0e4d6;
+    }
+
+    .modal-header h3 {
+        font-size: 22px;
+        font-weight: 700;
+        color: #3a2417;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .modal-header h3 .material-symbols-outlined {
+        color: #b48c5c;
+    }
+
+    .close-modal {
+        background: none;
+        border: none;
+        font-size: 28px;
+        cursor: pointer;
+        color: #b48c5c;
+        padding: 0 8px;
+        transition: color 0.2s;
+    }
+
+    .close-modal:hover {
+        color: #5c3b2c;
+    }
+
+    .filter-tabs {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 20px;
+        overflow-x: auto;
+        padding: 4px 0;
+        scrollbar-width: none;
+    }
+
+    .filter-tabs::-webkit-scrollbar {
+        display: none;
+    }
+
+    .filter-tab {
+        padding: 8px 16px;
+        border-radius: 40px;
+        font-size: 13px;
+        font-weight: 500;
+        background: #fcf0e6;
+        color: #5c3b2c;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .filter-tab.active {
+        background: #5c3b2c;
+        color: white;
+    }
+
+    .history-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        max-height: 60vh;
+        overflow-y: auto;
+    }
+
+    .history-modal-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 16px;
+        background: #fcf9f7;
+        border-radius: 20px;
+        border: 1px solid #e9d9c8;
+    }
+
+    .history-modal-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .history-modal-icon.topup { 
+        background: #e3f2e9; 
+        color: #2e7d32; 
+    }
+    
+    .history-modal-icon.payment { 
+        background: #fee; 
+        color: #c0392b; 
+    }
+    
+    .history-modal-icon.bonus { 
+        background: #fcf0e6; 
+        color: #b48c5c; 
+    }
+
+    .history-modal-details {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .history-modal-title {
+        font-weight: 600;
+        color: #3a2417;
+        margin-bottom: 4px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .history-modal-type {
+        font-size: 10px;
+        padding: 3px 8px;
+        border-radius: 30px;
+        background: #f0e4d6;
+        color: #5c3b2c;
+        font-weight: 600;
+    }
+
+    .history-modal-type.topup { 
+        background: #e3f2e9; 
+        color: #2e7d32; 
+    }
+    
+    .history-modal-type.bonus { 
+        background: #fcf0e6; 
+        color: #b48c5c; 
+    }
+
+    .history-modal-date {
+        font-size: 11px;
+        color: #8b6f54;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .history-modal-date .material-symbols-outlined {
+        font-size: 12px;
+        color: #b48c5c;
+    }
+
+    .history-modal-amount {
+        font-weight: 700;
+        font-size: 18px;
+        white-space: nowrap;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+    }
+
+    .history-modal-amount.positive { color: #2e7d32; }
+    .history-modal-amount.negative { color: #c0392b; }
+
+    .history-modal-balance {
+        font-size: 10px;
+        color: #8b6f54;
+        font-weight: 400;
+    }
+
+    .month-divider {
+        font-size: 13px;
+        font-weight: 600;
+        color: #5c3b2c;
+        background: #fcf0e6;
+        padding: 8px 12px;
+        border-radius: 30px;
+        margin: 8px 0;
+    }
+
+    /* Responsive */
+    @media (max-width: 480px) {
+        .preset-grid   { grid-template-columns: repeat(2, 1fr); }
+        .custom-topup  { flex-direction: column; }
+        .apply-btn     { width: 100%; }
+        .balance-amount { font-size: 40px; }
+        .security-grid { gap: 8px; }
+        .security-item { padding: 12px 4px; }
+        .security-icon .material-symbols-outlined { font-size: 24px; }
+        .security-text { font-size: 10px; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Balance Card -->
+<div class="balance-section">
+    <div class="balance-card">
+        <div class="balance-label">
+            <span class="material-symbols-outlined">account_balance_wallet</span>
+            Available Balance
+        </div>
+        <div class="balance-amount">BD 42.50</div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="quick-actions">
+    <button class="action-btn" id="topupBtn" onclick="goToTopup()">
+        <span class="material-symbols-outlined">add_circle</span> Top Up
+    </button>
+    <button class="action-btn" id="historyBtn" onclick="openHistoryModal()">
+        <span class="material-symbols-outlined">history</span> History
+    </button>
+</div>
+
+<!-- Top-up Presets -->
+<div class="topup-section">
+    <div class="section-header">
+        <h2>Quick Top-Up</h2>
+        <span class="view-all" onclick="goToTopup()">Bonus included →</span>
+    </div>
+    <div class="preset-grid">
+        <div class="preset-card" data-amount="10" onclick="selectPreset(10)">
+            <div class="preset-amount">BD 10</div>
+            <div class="preset-bonus">+1.500</div>
+        </div>
+        <div class="preset-card" data-amount="15" onclick="selectPreset(15)">
+            <div class="preset-amount">BD 15</div>
+            <div class="preset-bonus">+2.500</div>
+        </div>
+        <div class="preset-card active" data-amount="25" onclick="selectPreset(25)">
+            <div class="preset-amount">BD 25</div>
+            <div class="preset-bonus">+5.000</div>
+        </div>
+        <div class="preset-card" data-amount="50" onclick="selectPreset(50)">
+            <div class="preset-amount">BD 50</div>
+            <div class="preset-bonus">+12.000</div>
+        </div>
+    </div>
+
+    <div class="custom-topup">
+        <input type="number" class="custom-input" id="customInput" placeholder="Custom amount (BD)" value="20">
+        <button class="apply-btn" id="applyBtn" onclick="handleCustomTopup()">Top Up</button>
+    </div>
+</div>
+
+<!-- Security Section -->
+<div class="security-section">
+    <div class="security-grid">
+        <div class="security-item">
+            <div class="security-icon"><span class="material-symbols-outlined">encrypted</span></div>
+            <div class="security-text">AES-256</div>
+        </div>
+        <div class="security-item">
+            <div class="security-icon"><span class="material-symbols-outlined">verified</span></div>
+            <div class="security-text">PCI DSS</div>
+        </div>
+        <div class="security-item">
+            <div class="security-icon"><span class="material-symbols-outlined">lock</span></div>
+            <div class="security-text">TLS 1.3</div>
+        </div>
+    </div>
+</div>
+
+<!-- History Modal -->
+<div class="history-modal-overlay" id="historyModal">
+    <div class="history-modal-content">
+        <div class="modal-header">
+            <h3>
+                <span class="material-symbols-outlined">history</span>
+                Transaction History
+            </h3>
+            <button class="close-modal" onclick="closeHistoryModal()">&times;</button>
+        </div>
+
+        <!-- Filter Tabs -->
+        <div class="filter-tabs">
+            <span class="filter-tab active" onclick="filterHistory('all')">All</span>
+            <span class="filter-tab" onclick="filterHistory('topup')">Top-ups</span>
+            <span class="filter-tab" onclick="filterHistory('bonus')">Bonuses</span>
+        </div>
+
+        <div class="history-list" id="historyList">
+            <!-- Month Divider -->
+            <div class="month-divider">March 2024</div>
+
+            <!-- Today's Top-up -->
+            <div class="history-modal-item" data-type="topup">
+                <div class="history-modal-icon topup">
+                    <span class="material-symbols-outlined">add_card</span>
+                </div>
+                <div class="history-modal-details">
+                    <div class="history-modal-title">
+                        Wallet Top-up
+                        <span class="history-modal-type topup">Top-up</span>
+                    </div>
+                    <div class="history-modal-date">
+                        <span class="material-symbols-outlined">schedule</span>
+                        Today · 10:30 AM
+                    </div>
+                </div>
+                <div class="history-modal-amount positive">
+                    +BD 25.00
+                    <span class="history-modal-balance">+5.000 bonus</span>
+                </div>
+            </div>
+
+            <!-- Payment -->
+            <div class="history-modal-item" data-type="payment">
+                <div class="history-modal-icon payment">
+                    <span class="material-symbols-outlined">shopping_bag</span>
+                </div>
+                <div class="history-modal-details">
+                    <div class="history-modal-title">
+                        Cappuccino
+                        <span class="history-modal-type" style="background:#fee; color:#c0392b;">Payment</span>
+                    </div>
+                    <div class="history-modal-date">
+                        <span class="material-symbols-outlined">schedule</span>
+                        Today · 9:15 AM
+                    </div>
+                </div>
+                <div class="history-modal-amount negative">
+                    -BD 3.50
+                </div>
+            </div>
+
+            <!-- Bonus -->
+            <div class="history-modal-item" data-type="bonus">
+                <div class="history-modal-icon bonus">
+                    <span class="material-symbols-outlined">celebration</span>
+                </div>
+                <div class="history-modal-details">
+                    <div class="history-modal-title">
+                        Welcome Bonus
+                        <span class="history-modal-type bonus">Bonus</span>
+                    </div>
+                    <div class="history-modal-date">
+                        <span class="material-symbols-outlined">schedule</span>
+                        Yesterday · 2:15 PM
+                    </div>
+                </div>
+                <div class="history-modal-amount positive">
+                    +BD 5.00
+                    <span class="history-modal-balance">First top-up</span>
+                </div>
+            </div>
+
+            <!-- Month Divider -->
+            <div class="month-divider">February 2024</div>
+
+            <!-- Previous Top-up -->
+            <div class="history-modal-item" data-type="topup">
+                <div class="history-modal-icon topup">
+                    <span class="material-symbols-outlined">add_card</span>
+                </div>
+                <div class="history-modal-details">
+                    <div class="history-modal-title">
+                        Wallet Top-up
+                        <span class="history-modal-type topup">Top-up</span>
+                    </div>
+                    <div class="history-modal-date">
+                        <span class="material-symbols-outlined">schedule</span>
+                        26 Feb 2024 · 3:45 PM
+                    </div>
+                </div>
+                <div class="history-modal-amount positive">
+                    +BD 15.00
+                    <span class="history-modal-balance">+2.500 bonus</span>
+                </div>
+            </div>
+
+            <!-- Another Payment -->
+            <div class="history-modal-item" data-type="payment">
+                <div class="history-modal-icon payment">
+                    <span class="material-symbols-outlined">restaurant</span>
+                </div>
+                <div class="history-modal-details">
+                    <div class="history-modal-title">
+                        Croissant + Latte
+                        <span class="history-modal-type" style="background:#fee; color:#c0392b;">Payment</span>
+                    </div>
+                    <div class="history-modal-date">
+                        <span class="material-symbols-outlined">schedule</span>
+                        25 Feb 2024 · 11:20 AM
+                    </div>
+                </div>
+                <div class="history-modal-amount negative">
+                    -BD 5.30
+                </div>
+            </div>
+
+            <!-- Large Top-up -->
+            <div class="history-modal-item" data-type="topup">
+                <div class="history-modal-icon topup">
+                    <span class="material-symbols-outlined">add_card</span>
+                </div>
+                <div class="history-modal-details">
+                    <div class="history-modal-title">
+                        Wallet Top-up
+                        <span class="history-modal-type topup">Top-up</span>
+                    </div>
+                    <div class="history-modal-date">
+                        <span class="material-symbols-outlined">schedule</span>
+                        20 Feb 2024 · 2:30 PM
+                    </div>
+                </div>
+                <div class="history-modal-amount positive">
+                    +BD 50.00
+                    <span class="history-modal-balance">+12.000 bonus</span>
+                </div>
+            </div>
+
+            <!-- Refund -->
+            <div class="history-modal-item" data-type="refund">
+                <div class="history-modal-icon" style="background:#e8f0fe; color:#1976d2;">
+                    <span class="material-symbols-outlined">autorenew</span>
+                </div>
+                <div class="history-modal-details">
+                    <div class="history-modal-title">
+                        Order Cancelled
+                        <span class="history-modal-type" style="background:#e8f0fe; color:#1976d2;">Refund</span>
+                    </div>
+                    <div class="history-modal-date">
+                        <span class="material-symbols-outlined">schedule</span>
+                        18 Feb 2024 · 4:45 PM
+                    </div>
+                </div>
+                <div class="history-modal-amount positive">
+                    +BD 8.50
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block qr_card %}{% endblock %}
+
+{% block extra_js %}
+<script>
+    let selectedAmount = 25; // Default selected amount
+
+    // Navigate to topup page
+    function goToTopup() {
+        window.location.href = "{{ url_for('topup') }}";
+    }
+
+    // Select preset amount
+    function selectPreset(amount) {
+        selectedAmount = amount;
+        document.querySelectorAll('.preset-card').forEach(c => c.classList.remove('active'));
+        event.target.closest('.preset-card').classList.add('active');
+    }
+
+    // Handle custom topup
+    function handleCustomTopup() {
+        const amount = document.getElementById('customInput').value;
+        if (amount && amount > 0) {
+            selectedAmount = amount;
+            // Navigate to topup page with amount
+            window.location.href = "{{ url_for('topup') }}?amount=" + amount;
+        } else {
+            alert('Please enter a valid amount');
+        }
+    }
+
+    // History Modal Functions
+    function openHistoryModal() {
+        document.getElementById('historyModal').classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeHistoryModal() {
+        document.getElementById('historyModal').classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    // Filter history by type
+    function filterHistory(type) {
+        // Update active tab
+        document.querySelectorAll('.filter-tab').forEach(tab => {
+            tab.classList.remove('active');
+        });
+        event.target.classList.add('active');
+
+        // Filter items
+        const items = document.querySelectorAll('.history-modal-item');
+        items.forEach(item => {
+            if (type === 'all' || item.dataset.type === type) {
+                item.style.display = 'flex';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    }
+
+    // Preset selection
+    document.querySelectorAll('.preset-card').forEach(card => {
+        card.addEventListener('click', function () {
+            document.querySelectorAll('.preset-card').forEach(c => c.classList.remove('active'));
+            this.classList.add('active');
+            selectedAmount = this.getAttribute('data-amount');
+        });
+    });
+
+    // Quick actions
+    document.getElementById('topupBtn').addEventListener('click', goToTopup);
+    document.getElementById('historyBtn').addEventListener('click', openHistoryModal);
+
+    // Custom top-up
+    document.getElementById('applyBtn').addEventListener('click', function () {
+        const amount = document.getElementById('customInput').value;
+        if (amount && amount > 0) {
+            // Navigate to topup page with amount
+            window.location.href = "{{ url_for('topup') }}?amount=" + amount;
+        } else {
+            alert('Please enter a valid amount');
+        }
+    });
+
+    // Enter key in custom input
+    document.getElementById('customInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            handleCustomTopup();
+        }
+    });
+
+    // Close modal when clicking overlay
+    document.getElementById('historyModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeHistoryModal();
+        }
+    });
+
+    // Prevent closing when clicking modal content
+    document.querySelector('.history-modal-content').addEventListener('click', function(e) {
+        e.stopPropagation();
+    });
+</script>
+{% endblock %}

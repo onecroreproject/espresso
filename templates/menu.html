@@ -1,0 +1,637 @@
+{% extends "base.html" %}
+
+{% block title %}Espresso · Menu{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* header with back button */
+    .menu-header {
+        background: #ffffff;
+        padding: 12px 16px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #f0e4d6;
+        width: 100%;
+    }
+
+    .header-back {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        color: #5c3b2c;
+        text-decoration: none;
+        font-size: clamp(13px, 3.5vw, 14px);
+        font-weight: 500;
+        padding: 8px 12px;
+        border-radius: 40px;
+        background: #fcf0e6;
+        white-space: nowrap;
+    }
+
+    /* category section */
+    .category-section {
+        padding: 20px 12px 12px;
+        width: 100%;
+    }
+
+    .section-title {
+        font-family: 'Playfair Display', serif;
+        font-size: clamp(18px, 5vw, 22px);
+        color: #3a2417;
+        margin-bottom: 16px;
+        font-weight: 700;
+        padding-left: 4px;
+    }
+
+    .category-scroll {
+        display: flex;
+        overflow-x: auto;
+        gap: 16px;
+        padding: 4px 4px 16px;
+        scrollbar-width: thin;
+        -webkit-overflow-scrolling: touch;
+        scroll-snap-type: x mandatory;
+        width: 100%;
+    }
+
+    .category-scroll::-webkit-scrollbar { height: 3px; }
+    .category-scroll::-webkit-scrollbar-thumb {
+        background-color: #b48c5c;
+        border-radius: 20px;
+    }
+
+    .category-item {
+        flex: 0 0 auto;
+        width: 90px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        cursor: pointer;
+        scroll-snap-align: start;
+    }
+
+    .category-image {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        overflow: hidden;
+        border: 3px solid #e9d9c8;
+        margin-bottom: 8px;
+        transition: all 0.2s;
+        background: #ffffff;
+        box-shadow: 0 4px 8px rgba(92, 59, 44, 0.1);
+    }
+
+    .category-item.active .category-image {
+        border-color: #5c3b2c;
+        transform: scale(1.05);
+        box-shadow: 0 6px 12px rgba(92, 59, 44, 0.2);
+    }
+
+    .category-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    .category-name {
+        font-size: clamp(11px, 3vw, 12px);
+        color: #8b6f54;
+        font-weight: 500;
+        white-space: nowrap;
+    }
+
+    .category-item.active .category-name {
+        color: #5c3b2c;
+        font-weight: 600;
+    }
+
+    /* NEW ITEM STICKER */
+    .new-badge {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        background: #ff6b6b;
+        color: white;
+        font-size: 10px;
+        font-weight: 600;
+        padding: 4px 8px;
+        border-radius: 20px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        box-shadow: 0 2px 8px rgba(255, 107, 107, 0.3);
+        animation: pulse 2s infinite;
+        z-index: 10;
+    }
+
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
+    }
+
+    /* menu items grid */
+    .menu-items-section {
+        padding: 8px 12px 20px;
+        width: 100%;
+    }
+
+    .menu-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 12px;
+        width: 100%;
+    }
+
+    @media (max-width: 340px) {
+        .menu-grid { grid-template-columns: 1fr; }
+    }
+
+    .menu-item-card {
+        background: #ffffff;
+        border-radius: 20px;
+        padding: 14px 10px;
+        border: 1px solid #e9d9c8;
+        box-shadow: 0 4px 10px rgba(92, 59, 44, 0.05);
+        cursor: pointer;
+        transition: transform 0.2s;
+        width: 100%;
+        position: relative; /* For new badge positioning */
+    }
+
+    .menu-item-card:active {
+        transform: scale(0.98);
+        background: #fcf0e6;
+    }
+
+    .item-image {
+        width: 100%;
+        aspect-ratio: 1/1;
+        border-radius: 16px;
+        margin-bottom: 10px;
+        overflow: hidden;
+        background: #f0e4d6;
+        position: relative;
+    }
+
+    .item-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    .item-name {
+        font-size: clamp(14px, 4vw, 16px);
+        font-weight: 600;
+        color: #3a2417;
+        margin-bottom: 6px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .item-price {
+        font-size: clamp(16px, 4.5vw, 18px);
+        font-weight: 700;
+        color: #5c3b2c;
+    }
+
+    .item-price::before {
+        content: 'BD ';
+        margin-right: 2px;
+        font-weight: 500;
+        font-size: 0.9em;
+    }
+
+    /* MODAL */
+    .modal-overlay {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: rgba(0,0,0,0.5);
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        z-index: 2000;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s;
+    }
+
+    .modal-overlay.active {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .modal-content {
+        background: #ffffff;
+        width: 100%;
+        max-width: 450px;
+        border-radius: 32px 32px 0 0;
+        padding: 24px 20px 30px;
+        transform: translateY(100%);
+        transition: transform 0.3s ease;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+
+    .modal-overlay.active .modal-content {
+        transform: translateY(0);
+    }
+
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+    }
+
+    .modal-header h3 {
+        font-size: clamp(20px, 6vw, 24px);
+        font-weight: 700;
+        color: #3a2417;
+    }
+
+    .close-modal {
+        background: none;
+        border: none;
+        font-size: 32px;
+        cursor: pointer;
+        color: #8b6f54;
+        padding: 0 8px;
+    }
+
+    .modal-product-image {
+        width: 120px;
+        height: 120px;
+        border-radius: 24px;
+        overflow: hidden;
+        margin: 0 auto 16px;
+        border: 3px solid #f0e4d6;
+        box-shadow: 0 8px 16px rgba(92, 59, 44, 0.15);
+        position: relative;
+    }
+
+    .modal-product-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .modal-item-name {
+        font-size: clamp(22px, 6.5vw, 26px);
+        font-weight: 600;
+        color: #5c3b2c;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .size-selector { margin-bottom: 24px; }
+
+    .size-label {
+        font-size: clamp(15px, 4vw, 16px);
+        font-weight: 600;
+        color: #3a2417;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .size-options {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .size-btn {
+        flex: 1 1 auto;
+        min-width: 90px;
+        padding: 14px 0;
+        border: 2px solid #e9d9c8;
+        border-radius: 40px;
+        background: #ffffff;
+        font-size: clamp(14px, 3.8vw, 16px);
+        font-weight: 500;
+        color: #5c3b2c;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+    }
+
+    .size-btn.active {
+        background: #5c3b2c;
+        color: #ffffff;
+        border-color: #5c3b2c;
+    }
+
+    .quantity-selector { margin-bottom: 28px; }
+
+    .quantity-label {
+        font-size: clamp(15px, 4vw, 16px);
+        font-weight: 600;
+        color: #3a2417;
+        margin-bottom: 12px;
+    }
+
+    .quantity-controls {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: #fcf0e6;
+        border-radius: 60px;
+        padding: 6px;
+    }
+
+    .qty-btn {
+        width: clamp(44px, 12vw, 48px);
+        height: clamp(44px, 12vw, 48px);
+        border-radius: 50%;
+        border: none;
+        background: #ffffff;
+        font-size: clamp(22px, 6vw, 24px);
+        font-weight: 600;
+        color: #5c3b2c;
+        cursor: pointer;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .qty-number {
+        font-size: clamp(22px, 6vw, 24px);
+        font-weight: 700;
+        color: #5c3b2c;
+        min-width: 50px;
+        text-align: center;
+    }
+
+    .add-to-cart-btn {
+        width: 100%;
+        background: #5c3b2c;
+        color: white;
+        border: none;
+        padding: 16px;
+        border-radius: 60px;
+        font-size: clamp(16px, 4.5vw, 18px);
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        cursor: pointer;
+        margin-top: 16px;
+    }
+
+    .add-to-cart-btn:active {
+        transform: scale(0.98);
+        background: #6f4a2e;
+    }
+
+    .add-to-cart-btn .price-display::before {
+        content: 'BD ';
+        margin-right: 2px;
+        font-weight: 500;
+    }
+
+    @media (orientation: landscape) and (max-height: 600px) {
+        .menu-grid { grid-template-columns: repeat(3, 1fr); }
+        .modal-content { max-height: 85vh; }
+    }
+
+    @media (min-width: 600px) and (max-width: 1024px) {
+        .menu-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Override the sticky header from base with a back-button version -->
+
+<!-- category scroll -->
+<div class="category-section">
+    <div class="section-title">MENU☕</div>
+    <div class="category-scroll" id="categoryScroll">
+        <div class="category-item active" data-category="all">
+            <div class="category-image">
+                <img src="{{ url_for('static', filename='imgg.jpeg') }}" alt="All"
+                    onerror="this.src='data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2280%22%20height%3D%2280%22%20viewBox%3D%220%200%2080%2080%22%3E%3Crect%20width%3D%2280%22%20height%3D%2280%22%20fill%3D%22%23d4b99c%22%2F%3E%3Ctext%20x%3D%2220%22%20y%3D%2248%22%20font-family%3D%22Montserrat%22%20font-size%3D%2220%22%20fill%3D%22%23ffffff%22%3EAll%3C%2Ftext%3E%3C%2Fsvg%3E';">
+            </div>
+            <span class="category-name">All</span>
+        </div>
+        <div class="category-item" data-category="espresso">
+            <div class="category-image">
+                <img src="{{ url_for('static', filename='imgg2.jpeg') }}" alt="Espresso"
+                    onerror="this.src='data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2280%22%20height%3D%2280%22%20viewBox%3D%220%200%2080%2080%22%3E%3Crect%20width%3D%2280%22%20height%3D%2280%22%20fill%3D%22%23a77b51%22%2F%3E%3Ctext%20x%3D%2210%22%20y%3D%2248%22%20font-family%3D%22Montserrat%22%20font-size%3D%2216%22%20fill%3D%22%23ffffff%22%3EEspresso%3C%2Ftext%3E%3C%2Fsvg%3E';">
+            </div>
+            <span class="category-name">Espresso</span>
+        </div>
+        <div class="category-item" data-category="brewed">
+            <div class="category-image">
+                <img src="{{ url_for('static', filename='imgg3.jpeg') }}" alt="Brewed"
+                    onerror="this.src='data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2280%22%20height%3D%2280%22%20viewBox%3D%220%200%2080%2080%22%3E%3Crect%20width%3D%2280%22%20height%3D%2280%22%20fill%3D%22%23987b5f%22%2F%3E%3Ctext%20x%3D%2215%22%20y%3D%2248%22%20font-family%3D%22Montserrat%22%20font-size%3D%2216%22%20fill%3D%22%23ffffff%22%3EBrewed%3C%2Ftext%3E%3C%2Fsvg%3E';">
+            </div>
+            <span class="category-name">Brewed</span>
+        </div>
+        <div class="category-item" data-category="cold">
+            <div class="category-image">
+                <img src="{{ url_for('static', filename='imgg5.jpeg') }}" alt="Cold"
+                    onerror="this.src='data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2280%22%20height%3D%2280%22%20viewBox%3D%220%200%2080%2080%22%3E%3Crect%20width%3D%2280%22%20height%3D%2280%22%20fill%3D%22%236fa8c7%22%2F%3E%3Ctext%20x%3D%2222%22%20y%3D%2248%22%20font-family%3D%22Montserrat%22%20font-size%3D%2216%22%20fill%3D%22%23ffffff%22%3ECold%3C%2Ftext%3E%3C%2Fsvg%3E';">
+            </div>
+            <span class="category-name">Cold</span>
+        </div>
+        <div class="category-item" data-category="pastry">
+            <div class="category-image">
+                <img src="{{ url_for('static', filename='imgg9.jpeg') }}" alt="Pastry"
+                    onerror="this.src='data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2280%22%20height%3D%2280%22%20viewBox%3D%220%200%2080%2080%22%3E%3Crect%20width%3D%2280%22%20height%3D%2280%22%20fill%3D%22%23c2a27f%22%2F%3E%3Ctext%20x%3D%2218%22%20y%3D%2248%22%20font-family%3D%22Montserrat%22%20font-size%3D%2216%22%20fill%3D%22%23ffffff%22%3EPastry%3C%2Ftext%3E%3C%2Fsvg%3E';">
+            </div>
+            <span class="category-name">Pastry</span>
+        </div>
+    </div>
+</div>
+
+<!-- menu items grid -->
+<div class="menu-items-section">
+    <div class="section-title">✨ popular now</div>
+    <div class="menu-grid" id="menuGrid"></div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>customize</h3>
+            <button class="close-modal" id="closeModal">&times;</button>
+        </div>
+        <div class="modal-product-image" id="modalProductImage">
+            <img src="" alt="" id="modalImageSrc">
+        </div>
+        <div class="modal-item-name" id="modalItemName">Espresso</div>
+
+        <div class="size-selector">
+            <div class="size-label">
+                <span class="material-symbols-outlined">straighten</span> select size
+            </div>
+            <div class="size-options">
+                <button class="size-btn active" data-size="small">
+                    <span class="material-symbols-outlined">coffee</span> small
+                </button>
+                <button class="size-btn" data-size="medium">
+                    <span class="material-symbols-outlined">local_cafe</span> medium
+                </button>
+                <button class="size-btn" data-size="large">
+                    <i class="fa-solid fa-mug-hot"></i> large
+                </button>
+            </div>
+        </div>
+
+        <div class="quantity-selector">
+            <div class="quantity-label">quantity</div>
+            <div class="quantity-controls">
+                <button class="qty-btn" id="decrementQty">−</button>
+                <span class="qty-number" id="qtyDisplay">1</span>
+                <button class="qty-btn" id="incrementQty">+</button>
+            </div>
+        </div>
+
+        <button class="add-to-cart-btn" id="addToCartBtn">
+            <span class="material-symbols-outlined">shopping_bag</span>
+            add · <span class="price-display" id="modalPrice">2.500</span>
+        </button>
+    </div>
+</div>
+{% endblock %}
+
+{# Hide the default QR card from base.html on this page #}
+{% block qr_card %}{% endblock %}
+
+{% block extra_js %}
+<script>
+    const menuItems = [
+        // NEW ITEMS - Top 5
+        { name: 'Honey Almond Latte', price: 4.200, category: 'espresso', image: "{{ url_for('static', filename='imgg3.jpeg') }}", isNew: true },
+        { name: 'Salted Caramel Mocha', price: 4.500, category: 'espresso', image: "{{ url_for('static', filename='imgg4.jpeg') }}", isNew: true },
+        { name: 'Lavender Oat Latte', price: 4.300, category: 'espresso', image: "{{ url_for('static', filename='imgg2.jpeg') }}", isNew: true },
+        { name: 'Brown Sugar Shaken', price: 3.900, category: 'cold', image: "{{ url_for('static', filename='imgg5.jpeg') }}", isNew: true },
+        { name: 'Tiramisu Cup', price: 3.800, category: 'pastry', image: "{{ url_for('static', filename='imgg9.jpeg') }}", isNew: true },
+        
+        // Regular Items
+        { name: 'Espresso',        price: 2.500, category: 'espresso', image: "{{ url_for('static', filename='imgg.jpeg') }}" },
+        { name: 'Double Espresso', price: 3.500, category: 'espresso', image: "{{ url_for('static', filename='imgg2.jpeg') }}" },
+        { name: 'Cappuccino',      price: 3.000, category: 'espresso', image: "{{ url_for('static', filename='imgg3.jpeg') }}" },
+        { name: 'Latte',           price: 3.200, category: 'espresso', image: "{{ url_for('static', filename='imgg4.jpeg') }}" },
+        { name: 'Caramel Macchiato', price: 3.500, category: 'espresso', image: "{{ url_for('static', filename='imgg4.jpeg') }}" },
+        { name: 'Cold Brew',       price: 2.800, category: 'cold',     image: "{{ url_for('static', filename='imgg5.jpeg') }}" },
+        { name: 'Iced Latte',      price: 3.200, category: 'cold',     image: "{{ url_for('static', filename='imgg6.jpeg') }}" },
+        { name: 'Iced Americano',  price: 2.600, category: 'cold',     image: "{{ url_for('static', filename='imgg7.jpeg') }}" },
+        { name: 'Cold Drink',      price: 2.200, category: 'cold',     image: "{{ url_for('static', filename='imgg8.jpeg') }}" },
+        { name: 'Pour Over',       price: 2.800, category: 'brewed',   image: "{{ url_for('static', filename='imgg7.jpeg') }}" },
+        { name: 'French Press',    price: 2.500, category: 'brewed',   image: "{{ url_for('static', filename='imgg8.jpeg') }}" },
+        { name: 'Croissant',       price: 1.800, category: 'pastry',   image: "{{ url_for('static', filename='imgg9.jpeg') }}" },
+        { name: 'Chocolate Cake',  price: 3.000, category: 'pastry',   image: "{{ url_for('static', filename='imgg10.jpeg') }}" }
+    ];
+
+    const menuGrid     = document.getElementById('menuGrid');
+    const modalOverlay = document.getElementById('modalOverlay');
+    const modalItemName = document.getElementById('modalItemName');
+    const modalPrice   = document.getElementById('modalPrice');
+    const modalImageSrc = document.getElementById('modalImageSrc');
+    const qtyDisplay   = document.getElementById('qtyDisplay');
+    let currentItem = null, currentQty = 1, currentSize = 'small';
+
+    function renderMenu(category = 'all') {
+        menuGrid.innerHTML = '';
+        const filtered = category === 'all' ? menuItems : menuItems.filter(i => i.category === category);
+        filtered.forEach(item => {
+            const card = document.createElement('div');
+            card.className = 'menu-item-card';
+            
+            // Add new badge if item is new
+            const newBadge = item.isNew ? '<div class="new-badge">NEW</div>' : '';
+            
+            card.innerHTML = `
+                <div class="item-image">
+                    <img src="${item.image}" alt="${item.name}" onerror="this.parentElement.style.background='#d4b99c';">
+                </div>
+                ${newBadge}
+                <div class="item-name">${item.name}</div>
+                <div class="item-price">${item.price.toFixed(3)}</div>
+            `;
+            card.addEventListener('click', () => openModal(item));
+            menuGrid.appendChild(card);
+        });
+    }
+
+    document.querySelectorAll('.category-item').forEach(cat => {
+        cat.addEventListener('click', function () {
+            document.querySelectorAll('.category-item').forEach(c => c.classList.remove('active'));
+            this.classList.add('active');
+            renderMenu(this.dataset.category);
+            document.querySelector('.menu-items-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    });
+
+    function openModal(item) {
+        currentItem = item; currentQty = 1; currentSize = 'small';
+        modalItemName.textContent = item.name;
+        modalPrice.textContent = item.price.toFixed(3);
+        modalImageSrc.src = item.image;
+        modalImageSrc.alt = item.name;
+        qtyDisplay.textContent = '1';
+        document.querySelectorAll('.size-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.size === 'small');
+        });
+        modalOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+        modalOverlay.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    document.getElementById('closeModal').addEventListener('click', closeModal);
+    modalOverlay.addEventListener('click', e => { if (e.target === modalOverlay) closeModal(); });
+
+    document.querySelectorAll('.size-btn').forEach(btn => {
+        btn.addEventListener('click', function () {
+            document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            currentSize = this.dataset.size;
+            if (currentItem) {
+                let p = currentItem.price;
+                if (currentSize === 'medium') p += 0.500;
+                if (currentSize === 'large')  p += 1.000;
+                modalPrice.textContent = p.toFixed(3);
+            }
+        });
+    });
+
+    document.getElementById('incrementQty').addEventListener('click', () => { currentQty++; qtyDisplay.textContent = currentQty; });
+    document.getElementById('decrementQty').addEventListener('click', () => { if (currentQty > 1) { currentQty--; qtyDisplay.textContent = currentQty; } });
+
+    document.getElementById('addToCartBtn').addEventListener('click', () => {
+        let p = currentItem.price;
+        if (currentSize === 'medium') p += 0.500;
+        if (currentSize === 'large')  p += 1.000;
+        alert(`✅ Added to cart:\n${currentQty}x ${currentItem.name} (${currentSize})\nTotal: BD ${(p * currentQty).toFixed(3)}`);
+        closeModal();
+    });
+
+    // touch feedback
+    document.querySelectorAll('.size-btn, .qty-btn, .add-to-cart-btn, .menu-item-card').forEach(btn => {
+        btn.addEventListener('touchstart', () => btn.style.opacity = '0.8', { passive: true });
+        btn.addEventListener('touchend',   () => btn.style.opacity = '1');
+    });
+
+    renderMenu('all');
+</script>
+{% endblock %}

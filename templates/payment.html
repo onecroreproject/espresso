@@ -1,0 +1,938 @@
+{% extends "base.html" %}
+
+{% block title %}Payment — Espresso{% endblock %}
+
+{% block extra_css %}
+<style>
+  .payment-page { padding: 20px 16px 40px; }
+
+  /* Order summary card */
+  .order-summary-card {
+    background: linear-gradient(135deg, #3a2417, #5c3b2c);
+    border-radius: 24px;
+    padding: 20px;
+    margin-bottom: 24px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .order-summary-card::after {
+    content: '';
+    position: absolute;
+    width: 160px; height: 160px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.05);
+    right: -40px; top: -40px;
+  }
+
+  .summary-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.55);
+    margin-bottom: 14px;
+  }
+
+  .summary-items { margin-bottom: 16px; }
+
+  .summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0;
+    font-size: 14px;
+  }
+
+  .summary-row .item-name { color: rgba(255,255,255,0.85); }
+  .summary-row .item-price { font-weight: 600; color: #f5dfc5; }
+
+  .summary-divider {
+    border: none;
+    border-top: 1px dashed rgba(255,255,255,0.2);
+    margin: 12px 0;
+  }
+
+  .summary-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .summary-total .total-label {
+    font-size: 13px;
+    color: rgba(255,255,255,0.7);
+    font-weight: 500;
+  }
+
+  .summary-total .total-amount {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: #f5c48a;
+  }
+
+  /* Section headings */
+  .pay-section-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #3a2417;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    padding-left: 4px;
+  }
+
+  /* Payment method cards */
+  .pay-methods { display: flex; flex-direction: column; gap: 12px; margin-bottom: 28px; }
+
+  .pay-method {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: #ffffff;
+    border: 2px solid #e9d9c8;
+    border-radius: 18px;
+    padding: 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+  }
+
+  .pay-method.selected {
+    border-color: #5c3b2c;
+    background: #fcf0e6;
+    box-shadow: 0 4px 16px rgba(92,59,44,0.15);
+  }
+
+  .pay-method-icon {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+
+  .pay-method-icon.wallet-icon { background: #e8f4fd; }
+  .pay-method-icon.apple-icon    { background: #000000; color: white; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-weight: 400; }
+  .pay-method-icon.samsung-icon   { background: #1428a0; color: white; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 24px; }
+  .pay-method-icon.card-icon    { background: #fdeae8; }
+
+  .pay-method-info { flex: 1; }
+  .pay-method-name { font-size: 15px; font-weight: 600; color: #3a2417; }
+  .pay-method-sub  { font-size: 12px; color: #9b856e; margin-top: 2px; }
+
+  .pay-radio {
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    border: 2px solid #c4a882;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.2s;
+  }
+
+  .pay-method.selected .pay-radio {
+    border-color: #5c3b2c;
+  }
+
+  .pay-method.selected .pay-radio::after {
+    content: '';
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: #5c3b2c;
+  }
+
+  /* Wallet balance chip */
+  .wallet-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: #e6f0fd;
+    border-radius: 20px;
+    padding: 4px 10px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #2a6dd9;
+    margin-left: 8px;
+  }
+
+  /* Pay button */
+  .btn-pay {
+    display: block;
+    width: 100%;
+    background: linear-gradient(135deg, #5c3b2c, #a0603a);
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 20px;
+    font-size: 17px;
+    font-weight: 700;
+    font-family: 'Montserrat', sans-serif;
+    cursor: pointer;
+    box-shadow: 0 10px 28px rgba(92,59,44,0.4);
+    transition: all 0.2s ease;
+    letter-spacing: 0.4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    text-decoration: none;
+    margin-top: 20px;
+  }
+
+  .btn-pay:active { transform: scale(0.98); opacity: 0.9; }
+  .btn-pay .material-symbols-outlined { font-size: 22px; }
+
+  /* Card payment button */
+  .btn-card-payment {
+    display: block;
+    width: 100%;
+    background: linear-gradient(135deg, #2c3e50, #3498db);
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 20px;
+    font-size: 17px;
+    font-weight: 700;
+    font-family: 'Montserrat', sans-serif;
+    cursor: pointer;
+    box-shadow: 0 10px 28px rgba(52,152,219,0.4);
+    transition: all 0.2s ease;
+    letter-spacing: 0.4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    text-decoration: none;
+    margin-top: 20px;
+  }
+
+  .btn-card-payment:active { transform: scale(0.98); opacity: 0.9; }
+
+  /* Security note */
+  .secure-note {
+    text-align: center;
+    margin-top: 14px;
+    font-size: 12px;
+    color: #9b856e;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+  }
+
+  .secure-note .material-symbols-outlined { font-size: 14px; color: #7d9b6e; }
+
+  /* Card Modal */
+  .card-modal-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    z-index: 2000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s;
+  }
+
+  .card-modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .card-modal-content {
+    background: #ffffff;
+    width: 100%;
+    max-width: 450px;
+    border-radius: 32px 32px 0 0;
+    padding: 24px 20px 30px;
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .card-modal-overlay.active .card-modal-content {
+    transform: translateY(0);
+  }
+
+  .card-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  .card-modal-header h3 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #3a2417;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .close-modal {
+    background: none;
+    border: none;
+    font-size: 28px;
+    cursor: pointer;
+    color: #8b6f54;
+    padding: 0 8px;
+  }
+
+  /* Card Preview in Modal */
+  .modal-card-preview {
+    background: linear-gradient(135deg, #1a1f2e, #2a2f3f);
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 20px;
+    color: white;
+    position: relative;
+    min-height: 130px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+  }
+
+  .modal-card-chip {
+    width: 35px;
+    height: 25px;
+    background: linear-gradient(135deg, #d4af37, #b8860b);
+    border-radius: 6px;
+    margin-bottom: 15px;
+  }
+
+  .modal-card-number {
+    font-family: 'Courier New', monospace;
+    font-size: 15px;
+    letter-spacing: 1.5px;
+    margin-bottom: 15px;
+    color: rgba(255,255,255,0.9);
+  }
+
+  .modal-card-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .modal-card-holder {
+    text-transform: uppercase;
+    font-size: 10px;
+    letter-spacing: 0.5px;
+    color: rgba(255,255,255,0.6);
+  }
+
+  .modal-card-expiry {
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  /* Modal Form Fields */
+  .modal-input-group {
+    margin-bottom: 16px;
+  }
+
+  .modal-input-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #3a2417;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .modal-input-label .material-symbols-outlined {
+    font-size: 14px;
+    color: #b48c5c;
+  }
+
+  .modal-input-field {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1.5px solid #e9d9c8;
+    border-radius: 14px;
+    font-size: 14px;
+    font-family: 'Montserrat', sans-serif;
+    transition: all 0.2s;
+    background: #fcfaf7;
+  }
+
+  .modal-input-field:focus {
+    outline: none;
+    border-color: #5c3b2c;
+    background: #ffffff;
+  }
+
+  .modal-input-row {
+    display: flex;
+    gap: 10px;
+  }
+
+  .modal-input-row .modal-input-group {
+    flex: 1;
+  }
+
+  .modal-error {
+    color: #c0392b;
+    font-size: 11px;
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  /* Modal Pay Button */
+  .modal-pay-btn {
+    width: 100%;
+    background: linear-gradient(135deg, #5c3b2c, #8b5e3c);
+    color: white;
+    border: none;
+    border-radius: 30px;
+    padding: 18px;
+    font-size: 16px;
+    font-weight: 700;
+    font-family: 'Montserrat', sans-serif;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 20px;
+  }
+
+  .modal-pay-btn:active { transform: scale(0.98); opacity: 0.9; }
+  .modal-pay-btn:disabled { opacity: 0.5; pointer-events: none; }
+
+  /* Success Modal */
+  .success-modal-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(92,59,44,0.95);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 3000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s;
+    padding: 16px;
+  }
+
+  .success-modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .success-modal-content {
+    background: white;
+    border-radius: 32px;
+    padding: 30px 20px;
+    text-align: center;
+    max-width: 300px;
+    width: 100%;
+    transform: scale(0.9);
+    transition: transform 0.3s;
+  }
+
+  .success-modal-overlay.active .success-modal-content {
+    transform: scale(1);
+  }
+
+  .success-icon {
+    width: 70px;
+    height: 70px;
+    background: #27ae60;
+    border-radius: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+    color: white;
+    font-size: 32px;
+  }
+
+  .success-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #3a2417;
+    margin-bottom: 8px;
+  }
+
+  .success-text {
+    color: #8b6f54;
+    margin-bottom: 20px;
+    font-size: 14px;
+  }
+
+  .track-order-btn {
+    width: 100%;
+    background: linear-gradient(135deg, #5c3b2c, #8b5e3c);
+    color: white;
+    border: none;
+    border-radius: 30px;
+    padding: 16px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  @media (max-width: 480px) {
+    .modal-input-row {
+      flex-direction: column;
+      gap: 0;
+    }
+  }
+</style>
+<!-- Font Awesome for Apple logo only -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+{% endblock %}
+
+{% block content %}
+<div class="payment-page">
+
+  <!-- Order Summary -->
+  <div class="order-summary-card">
+    <div class="summary-label">Your Order</div>
+    <div class="summary-items">
+      <div class="summary-row">
+        <span class="item-name">Caramel Latte × 1</span>
+        <span class="item-price">₹220</span>
+      </div>
+      <div class="summary-row">
+        <span class="item-name">Blueberry Muffin × 2</span>
+        <span class="item-price">₹160</span>
+      </div>
+      <div class="summary-row">
+        <span class="item-name">Cold Brew × 1</span>
+        <span class="item-price">₹180</span>
+      </div>
+    </div>
+    <hr class="summary-divider">
+    <div class="summary-row" style="font-size:12px; color:rgba(255,255,255,0.55);">
+      <span>Subtotal</span><span>₹560</span>
+    </div>
+    <div class="summary-row" style="font-size:12px; color:rgba(255,255,255,0.55);">
+      <span>Taxes & Charges</span><span>₹28</span>
+    </div>
+    <hr class="summary-divider">
+    <div class="summary-total">
+      <span class="total-label">Total Payable</span>
+      <span class="total-amount" id="totalAmount">₹588</span>
+    </div>
+  </div>
+
+  <!-- Payment Methods -->
+  <div class="pay-section-title">Choose Payment</div>
+  <div class="pay-methods">
+
+    <div class="pay-method selected" onclick="selectMethod(this, 'wallet')">
+      <div class="pay-method-icon wallet-icon">💳</div>
+      <div class="pay-method-info">
+        <div class="pay-method-name">
+          Espresso Wallet
+          <span class="wallet-chip">₹350 left</span>
+        </div>
+        <div class="pay-method-sub">Instant • Earn 2× points</div>
+      </div>
+      <div class="pay-radio"></div>
+    </div>
+
+    <div class="pay-method" onclick="selectMethod(this, 'apple')">
+      <div class="pay-method-icon apple-icon">
+        <i class="fab fa-apple"></i>
+      </div>
+      <div class="pay-method-info">
+        <div class="pay-method-name">Apple Pay</div>
+        <div class="pay-method-sub">Fast & secure with Face ID</div>
+      </div>
+      <div class="pay-radio"></div>
+    </div>
+
+    <div class="pay-method" onclick="selectMethod(this, 'samsung')">
+      <div class="pay-method-icon samsung-icon">S</div>
+      <div class="pay-method-info">
+        <div class="pay-method-name">Samsung Pay</div>
+        <div class="pay-method-sub">Pay with fingerprint or PIN</div>
+      </div>
+      <div class="pay-radio"></div>
+    </div>
+
+    <div class="pay-method" onclick="selectMethod(this, 'card')">
+      <div class="pay-method-icon card-icon">💳</div>
+      <div class="pay-method-info">
+        <div class="pay-method-name">Credit / Debit Card</div>
+        <div class="pay-method-sub">Visa, Mastercard, RuPay</div>
+      </div>
+      <div class="pay-radio"></div>
+    </div>
+
+  </div>
+
+  <!-- Dynamic Pay Button (changes based on selection) -->
+  <div id="paymentButtonContainer"></div>
+
+  <div class="secure-note">
+    <span class="material-symbols-outlined">verified_user</span>
+    256-bit encrypted & secure payment
+  </div>
+
+</div>
+
+<!-- Card Entry Modal -->
+<div class="card-modal-overlay" id="cardModal">
+  <div class="card-modal-content">
+    <div class="card-modal-header">
+      <h3>
+        <span class="material-symbols-outlined">credit_card</span>
+        Enter Card Details
+      </h3>
+      <button class="close-modal" onclick="closeCardModal()">&times;</button>
+    </div>
+
+    <!-- Card Preview -->
+    <div class="modal-card-preview">
+      <div class="modal-card-chip"></div>
+      <div class="modal-card-number" id="modalCardNumber">•••• •••• •••• ••••</div>
+      <div class="modal-card-details">
+        <div class="modal-card-holder" id="modalCardHolder">CARD HOLDER</div>
+        <div class="modal-card-expiry" id="modalCardExpiry">MM/YY</div>
+      </div>
+    </div>
+
+    <!-- Card Number -->
+    <div class="modal-input-group">
+      <div class="modal-input-label">
+        <span class="material-symbols-outlined">numbers</span>
+        Card Number
+      </div>
+      <input type="text" class="modal-input-field" id="modalCardNumberInput" placeholder="1234 5678 9012 3456" maxlength="19" inputmode="numeric" oninput="formatModalCardNumber(this); updateModalPreview()">
+      <div class="modal-error" id="modalCardError" style="display: none;">
+        <span class="material-symbols-outlined">error</span> Invalid card number
+      </div>
+    </div>
+
+    <!-- Card Holder -->
+    <div class="modal-input-group">
+      <div class="modal-input-label">
+        <span class="material-symbols-outlined">badge</span>
+        Card Holder
+      </div>
+      <input type="text" class="modal-input-field" id="modalCardHolderInput" placeholder="JOHN DOE" oninput="updateModalPreview()">
+    </div>
+
+    <!-- Expiry and CVV Row -->
+    <div class="modal-input-row">
+      <div class="modal-input-group">
+        <div class="modal-input-label">
+          <span class="material-symbols-outlined">calendar_month</span>
+          Expiry
+        </div>
+        <input type="text" class="modal-input-field" id="modalExpiryInput" placeholder="MM/YY" maxlength="5" inputmode="numeric" oninput="formatModalExpiry(this); updateModalPreview()">
+        <div class="modal-error" id="modalExpiryError" style="display: none;">
+          <span class="material-symbols-outlined">error</span> Invalid
+        </div>
+      </div>
+
+      <div class="modal-input-group">
+        <div class="modal-input-label">
+          <span class="material-symbols-outlined">lock</span>
+          CVV
+        </div>
+        <input type="password" class="modal-input-field" id="modalCvvInput" placeholder="•••" maxlength="3" inputmode="numeric" oninput="validateModalCVV(this)">
+        <div class="modal-error" id="modalCvvError" style="display: none;">
+          <span class="material-symbols-outlined">error</span> Invalid
+        </div>
+      </div>
+    </div>
+
+    <!-- Pay Button -->
+    <button class="modal-pay-btn" onclick="processCardModalPayment()" id="modalPayBtn">
+      <span class="material-symbols-outlined">lock</span>
+      Pay <span id="modalPayAmount">₹588</span>
+    </button>
+  </div>
+</div>
+
+<!-- Success Modal -->
+<div class="success-modal-overlay" id="successModal">
+  <div class="success-modal-content">
+    <div class="success-icon">
+      <span class="material-symbols-outlined">check_circle</span>
+    </div>
+    <div class="success-title">Payment Successful!</div>
+    <div class="success-text">Your order has been placed</div>
+    <button class="track-order-btn" onclick="goToOrderPage()">
+      <span class="material-symbols-outlined">receipt</span>
+      View Order
+    </button>
+  </div>
+</div>
+
+<script>
+  let selectedMethod = 'wallet'; // Default selection
+  let orderTotal = 588;
+
+  function selectMethod(el, method) {
+    document.querySelectorAll('.pay-method').forEach(m => m.classList.remove('selected'));
+    el.classList.add('selected');
+    selectedMethod = method;
+    updatePaymentButton();
+  }
+
+  function updatePaymentButton() {
+    const container = document.getElementById('paymentButtonContainer');
+    const totalAmount = document.getElementById('totalAmount').textContent;
+    
+    if (selectedMethod === 'card') {
+      container.innerHTML = `
+        <button class="btn-card-payment" onclick="openCardModal()">
+          <span class="material-symbols-outlined">credit_card</span>
+          Enter Card Details · ${totalAmount}
+        </button>
+      `;
+    } else {
+      let methodName = 'Espresso Wallet';
+      let icon = 'account_balance_wallet';
+      
+      if (selectedMethod === 'apple') {
+        methodName = 'Apple Pay';
+        icon = 'payments';
+      } else if (selectedMethod === 'samsung') {
+        methodName = 'Samsung Pay';
+        icon = 'payments';
+      }
+      
+      container.innerHTML = `
+        <button class="btn-pay" onclick="processPayment('${selectedMethod}')">
+          <span class="material-symbols-outlined">${icon}</span>
+          Pay ${totalAmount} with ${methodName}
+        </button>
+      `;
+    }
+  }
+
+  // Card Modal Functions
+  function openCardModal() {
+    document.getElementById('cardModal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+    document.getElementById('modalPayAmount').textContent = document.getElementById('totalAmount').textContent;
+  }
+
+  function closeCardModal() {
+    document.getElementById('cardModal').classList.remove('active');
+    document.body.style.overflow = '';
+    resetModalForm();
+  }
+
+  function resetModalForm() {
+    document.getElementById('modalCardNumberInput').value = '';
+    document.getElementById('modalCardHolderInput').value = '';
+    document.getElementById('modalExpiryInput').value = '';
+    document.getElementById('modalCvvInput').value = '';
+    document.getElementById('modalCardNumber').textContent = '•••• •••• •••• ••••';
+    document.getElementById('modalCardHolder').textContent = 'CARD HOLDER';
+    document.getElementById('modalCardExpiry').textContent = 'MM/YY';
+    document.getElementById('modalCardError').style.display = 'none';
+    document.getElementById('modalExpiryError').style.display = 'none';
+    document.getElementById('modalCvvError').style.display = 'none';
+  }
+
+  function formatModalCardNumber(input) {
+    let value = input.value.replace(/\D/g, '');
+    let formattedValue = '';
+    
+    for (let i = 0; i < value.length; i++) {
+      if (i > 0 && i % 4 === 0) {
+        formattedValue += ' ';
+      }
+      formattedValue += value[i];
+    }
+    
+    input.value = formattedValue;
+    validateModalCardNumber(value);
+  }
+
+  function validateModalCardNumber(value) {
+    const number = value.replace(/\s/g, '');
+    const errorEl = document.getElementById('modalCardError');
+    
+    if (number.length > 0 && number.length < 16) {
+      errorEl.style.display = 'flex';
+      return false;
+    } else {
+      errorEl.style.display = 'none';
+      return number.length === 16;
+    }
+  }
+
+  function formatModalExpiry(input) {
+    let value = input.value.replace(/\D/g, '');
+    
+    if (value.length >= 2) {
+      value = value.substring(0, 2) + '/' + value.substring(2, 4);
+    }
+    
+    input.value = value;
+    validateModalExpiry(value);
+  }
+
+  function validateModalExpiry(value) {
+    const errorEl = document.getElementById('modalExpiryError');
+    
+    if (value.length === 5) {
+      const [month, year] = value.split('/');
+      const currentDate = new Date();
+      const currentYear = currentDate.getFullYear() % 100;
+      const currentMonth = currentDate.getMonth() + 1;
+      
+      if (month >= 1 && month <= 12 && year >= currentYear) {
+        errorEl.style.display = 'none';
+        return true;
+      }
+    }
+    
+    if (value.length > 0) {
+      errorEl.style.display = 'flex';
+      return false;
+    }
+    
+    errorEl.style.display = 'none';
+    return false;
+  }
+
+  function validateModalCVV(input) {
+    const value = input.value.replace(/\D/g, '');
+    input.value = value;
+    
+    const errorEl = document.getElementById('modalCvvError');
+    
+    if (value.length > 0 && value.length < 3) {
+      errorEl.style.display = 'flex';
+      return false;
+    } else {
+      errorEl.style.display = 'none';
+      return value.length === 3;
+    }
+  }
+
+  function updateModalPreview() {
+    const cardNumber = document.getElementById('modalCardNumberInput').value || '•••• •••• •••• ••••';
+    const cardHolder = document.getElementById('modalCardHolderInput').value || 'CARD HOLDER';
+    const expiry = document.getElementById('modalExpiryInput').value || 'MM/YY';
+    
+    document.getElementById('modalCardNumber').textContent = cardNumber || '•••• •••• •••• ••••';
+    document.getElementById('modalCardHolder').textContent = cardHolder.toUpperCase() || 'CARD HOLDER';
+    document.getElementById('modalCardExpiry').textContent = expiry || 'MM/YY';
+  }
+
+  function validateModalForm() {
+    const cardNumber = document.getElementById('modalCardNumberInput').value.replace(/\s/g, '');
+    const cardHolder = document.getElementById('modalCardHolderInput').value;
+    const expiry = document.getElementById('modalExpiryInput').value;
+    const cvv = document.getElementById('modalCvvInput').value;
+    
+    let isValid = true;
+    
+    if (cardNumber.length !== 16) {
+      document.getElementById('modalCardError').style.display = 'flex';
+      isValid = false;
+    }
+    
+    if (!cardHolder.trim()) {
+      isValid = false;
+    }
+    
+    if (expiry.length !== 5 || !validateModalExpiry(expiry)) {
+      document.getElementById('modalExpiryError').style.display = 'flex';
+      isValid = false;
+    }
+    
+    if (cvv.length !== 3) {
+      document.getElementById('modalCvvError').style.display = 'flex';
+      isValid = false;
+    }
+    
+    return isValid;
+  }
+
+  function processCardModalPayment() {
+    if (!validateModalForm()) {
+      alert('Please fill in all card details correctly');
+      return;
+    }
+    
+    const payBtn = document.getElementById('modalPayBtn');
+    payBtn.disabled = true;
+    payBtn.innerHTML = '<span class="material-symbols-outlined">hourglass_empty</span> Processing...';
+    
+    // Simulate payment processing
+    setTimeout(() => {
+      closeCardModal();
+      document.getElementById('successModal').classList.add('active');
+      
+      // Save order data
+      saveOrderData();
+      
+      payBtn.disabled = false;
+      payBtn.innerHTML = `<span class="material-symbols-outlined">lock</span> Pay <span id="modalPayAmount">₹${orderTotal}</span>`;
+    }, 1500);
+  }
+
+  function processPayment(method) {
+    // Show success modal for other payment methods
+    document.getElementById('successModal').classList.add('active');
+    saveOrderData();
+  }
+
+  function saveOrderData() {
+    const orderData = {
+      items: [
+        { name: 'Caramel Latte', qty: 1, price: 220 },
+        { name: 'Blueberry Muffin', qty: 2, price: 160 },
+        { name: 'Cold Brew', qty: 1, price: 180 }
+      ],
+      subtotal: 560,
+      taxes: 28,
+      total: orderTotal,
+      paymentMethod: selectedMethod,
+      timestamp: new Date().toISOString(),
+      status: 'confirmed'
+    };
+    
+    localStorage.setItem('currentOrder', JSON.stringify(orderData));
+  }
+
+  function goToOrderPage() {
+    window.location.href = "{{ url_for('order') }}";
+  }
+
+  // Close modals when clicking overlay
+  document.getElementById('cardModal').addEventListener('click', function(e) {
+    if (e.target === this) closeCardModal();
+  });
+
+  document.getElementById('successModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+      document.getElementById('successModal').classList.remove('active');
+    }
+  });
+
+  // Initialize
+  window.addEventListener('load', function() {
+    updatePaymentButton();
+  });
+</script>
+{% endblock %}

@@ -1,0 +1,509 @@
+{% extends "base.html" %}
+
+{% block title %}Espresso · Rewards{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Hero */
+    .hero-section {
+        background: linear-gradient(135deg, #5c3b2c, #3a2417);
+        color: white;
+        padding: 32px 20px;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .hero-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 32px;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+
+    .hero-subtitle {
+        font-size: 16px;
+        opacity: 0.9;
+        margin-bottom: 24px;
+    }
+
+    .wallet-card {
+        background: rgba(255,255,255,0.15);
+        backdrop-filter: blur(10px);
+        border-radius: 30px;
+        padding: 20px;
+        margin: 0 auto;
+        max-width: 300px;
+        border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .wallet-balance { font-size: 36px; font-weight: 700; margin-bottom: 8px; }
+    .wallet-label   { font-size: 14px; opacity: 0.8; }
+    .wallet-meta    { display: flex; justify-content: center; gap: 16px; margin-top: 12px; font-size: 13px; }
+
+    /* Progress */
+    .progress-section { padding: 0 16px 20px; }
+
+    .progress-card {
+        background: #ffffff;
+        border-radius: 30px;
+        padding: 20px;
+        border: 1px solid #e9d9c8;
+        box-shadow: 0 4px 15px rgba(92, 59, 44, 0.1);
+    }
+
+    .progress-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #3a2417;
+        margin-bottom: 16px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .progress-stats {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 12px;
+        color: #8b6f54;
+        font-size: 13px;
+    }
+
+    .progress-bar-bg {
+        height: 12px;
+        background: #f0e4d6;
+        border-radius: 30px;
+        overflow: hidden;
+        margin-bottom: 16px;
+    }
+
+    .progress-bar-fill {
+        height: 100%;
+        width: 66%;
+        background: linear-gradient(90deg, #d4a373, #5c3b2c);
+        border-radius: 30px;
+    }
+
+    .reward-badge {
+        background: #fcf0e6;
+        border-radius: 30px;
+        padding: 16px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .badge-icon {
+        width: 48px;
+        height: 48px;
+        background: #5c3b2c;
+        border-radius: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        flex-shrink: 0;
+    }
+
+    .badge-text h4 { font-size: 16px; font-weight: 600; color: #3a2417; }
+    .badge-text p  { font-size: 13px; color: #8b6f54; }
+
+    /* Top-Up Table */
+    .topup-section { padding: 0 16px 20px; }
+
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+    }
+
+    .section-header h2 {
+        font-family: 'Playfair Display', serif;
+        font-size: 22px;
+        color: #3a2417;
+        font-weight: 700;
+    }
+
+    .table-container {
+        background: #ffffff;
+        border-radius: 30px;
+        padding: 20px;
+        border: 1px solid #e9d9c8;
+    }
+
+    .bonus-table { width: 100%; border-collapse: collapse; }
+
+    .bonus-table th {
+        text-align: left;
+        padding: 12px 0;
+        color: #8b6f54;
+        font-weight: 500;
+        font-size: 14px;
+        border-bottom: 2px solid #f0e4d6;
+    }
+
+    .bonus-table td {
+        padding: 16px 0;
+        border-bottom: 1px solid #f0e4d6;
+        font-weight: 500;
+    }
+
+    .bonus-table tr:last-child td { border-bottom: none; }
+
+    .topup-amount { color: #3a2417; font-weight: 600; }
+    .bonus-amount { color: #5c3b2c; font-weight: 700; }
+
+    .bonus-badge {
+        background: #fcf0e6;
+        color: #5c3b2c;
+        padding: 4px 12px;
+        border-radius: 30px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .topup-btn {
+        background: #5c3b2c;
+        color: white;
+        border: none;
+        padding: 14px 24px;
+        border-radius: 40px;
+        font-weight: 600;
+        width: 100%;
+        margin-top: 16px;
+        cursor: pointer;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 15px;
+        transition: background 0.2s;
+    }
+
+    .topup-btn:active { background: #6f4a2e; }
+
+    /* Payment Integration */
+    .payment-integration { padding: 0 16px 20px; }
+
+    .integration-card {
+        background: #ffffff;
+        border-radius: 30px;
+        padding: 20px;
+        border: 1px solid #e9d9c8;
+    }
+
+    .integration-label {
+        text-align: center;
+        margin-bottom: 16px;
+    }
+
+    .integration-label span {
+        background: #fcf0e6;
+        padding: 6px 16px;
+        border-radius: 40px;
+        font-size: 13px;
+        font-weight: 600;
+        color: #5c3b2c;
+    }
+
+    .wallet-icons {
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+        margin: 20px 0;
+    }
+
+    .wallet-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 30px;
+    }
+
+    .wallet-icon.apple { 
+        background: #000; 
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    }
+    
+    .wallet-icon.samsung { 
+        background: #1428a0; 
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700;
+        font-size: 28px;
+    }
+
+    .integration-text {
+        text-align: center;
+        color: #3a2417;
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+    .wallet-btns {
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
+    }
+
+    .wallet-btn {
+        flex: 1;
+        padding: 12px;
+        border-radius: 40px;
+        font-weight: 600;
+        cursor: pointer;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 13px;
+        transition: background 0.2s;
+        background: transparent;
+    }
+
+    .wallet-btn.apple-btn  { border: 2px solid #5c3b2c; color: #5c3b2c; }
+    .wallet-btn.samsung-btn { border: 2px solid #1428a0; color: #1428a0; }
+    .wallet-btn:active { opacity: 0.8; }
+
+    /* Benefits */
+    .benefits-section { padding: 0 16px 20px; }
+
+    .benefits-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .benefit-card {
+        background: #ffffff;
+        border-radius: 25px;
+        padding: 20px 12px;
+        border: 1px solid #e9d9c8;
+        text-align: center;
+    }
+
+    .benefit-icon {
+        width: 48px;
+        height: 48px;
+        background: #fcf0e6;
+        border-radius: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 12px;
+        color: #5c3b2c;
+    }
+
+    .benefit-title { font-weight: 600; color: #3a2417; margin-bottom: 4px; }
+    .benefit-desc  { font-size: 12px; color: #8b6f54; }
+
+    /* Flow */
+    .flow-section { padding: 0 16px 20px; }
+
+    .flow-card {
+        background: #ffffff;
+        border-radius: 30px;
+        padding: 20px;
+        border: 1px solid #e9d9c8;
+    }
+
+    .flow-step {
+        display: flex;
+        gap: 16px;
+        margin-bottom: 20px;
+        position: relative;
+    }
+
+    .flow-step:last-child { margin-bottom: 0; }
+
+    .flow-step:not(:last-child)::before {
+        content: '';
+        position: absolute;
+        left: 20px;
+        top: 40px;
+        width: 2px;
+        height: calc(100% - 20px);
+        background: #f0e4d6;
+    }
+
+    .step-number {
+        width: 40px;
+        height: 40px;
+        background: #5c3b2c;
+        border-radius: 20px;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        z-index: 2;
+        flex-shrink: 0;
+    }
+
+    .step-content { flex: 1; }
+    .step-title { font-weight: 600; color: #3a2417; margin-bottom: 4px; }
+    .step-desc  { font-size: 13px; color: #8b6f54; }
+
+    /* Security */
+    .security-section { padding: 0 16px 20px; }
+
+    .security-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+    }
+
+    .security-item {
+        background: #ffffff;
+        border-radius: 20px;
+        padding: 16px 8px;
+        text-align: center;
+        border: 1px solid #e9d9c8;
+    }
+
+    .security-icon { color: #5c3b2c; margin-bottom: 8px; }
+    .security-text { font-size: 11px; font-weight: 600; color: #3a2417; }
+
+    /* Future */
+    .future-section { padding: 0 16px 20px; }
+
+    .future-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+    }
+
+    .future-item {
+        background: linear-gradient(145deg, #ffffff, #fcf0e6);
+        border-radius: 25px;
+        padding: 16px 8px;
+        text-align: center;
+        border: 1px solid #e9d9c8;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .future-item .material-symbols-outlined { font-size: 32px; color: #5c3b2c; }
+    .future-item span:last-child { font-size: 12px; font-weight: 600; color: #3a2417; }
+
+    /* Responsive */
+    @media (max-width: 480px) {
+        .benefits-grid  { grid-template-columns: 1fr; }
+        .security-grid  { grid-template-columns: repeat(2, 1fr); }
+        .future-grid    { grid-template-columns: repeat(2, 1fr); }
+        .hero-title     { font-size: 28px; }
+    }
+</style>
+<!-- Font Awesome for Apple Pay icon only -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+{% endblock %}
+
+{% block content %}
+<!-- Hero -->
+<div>
+    
+</div>
+<br>
+<!-- Progress -->
+<div class="progress-section">
+    <div class="progress-card">
+        <div class="progress-title">
+            <span class="material-symbols-outlined">local_cafe</span>
+            Rewards Progress
+        </div>
+        <div class="progress-stats">
+            <span>4 of 6 purchases</span>
+            <span>1 free drink incoming</span>
+        </div>
+        <div class="progress-bar-bg">
+            <div class="progress-bar-fill"></div>
+        </div>
+        <div class="reward-badge">
+            <div class="badge-icon">
+                <span class="material-symbols-outlined">celebration</span>
+            </div>
+            <div class="badge-text">
+                <h4>Free Cappuccino Waiting!</h4>
+                <p>Redeem at any Espresso Cafe</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Benefits -->
+<div class="benefits-section">
+    <div class="section-header"><h2>Member Benefits</h2></div>
+    <div class="benefits-grid">
+        <div class="benefit-card">
+            <div class="benefit-icon"><span class="material-symbols-outlined">auto_awesome</span></div>
+            <div class="benefit-title">Free Drinks</div>
+            <div class="benefit-desc">Every 6th purchase on us</div>
+        </div>
+        <div class="benefit-card">
+            <div class="benefit-icon"><span class="material-symbols-outlined">bolt</span></div>
+            <div class="benefit-title">Instant Bonuses</div>
+            <div class="benefit-desc">Top-up & get extra credit</div>
+        </div>
+        <div class="benefit-card">
+            <div class="benefit-icon"><span class="material-symbols-outlined">qr_code_scanner</span></div>
+            <div class="benefit-title">QR Pay</div>
+            <div class="benefit-desc">Scan & go, no wallet needed</div>
+        </div>
+        <div class="benefit-card">
+            <div class="benefit-icon"><span class="material-symbols-outlined">celebration</span></div>
+            <div class="benefit-title">Birthday Reward</div>
+            <div class="benefit-desc">Special treat on your day</div>
+        </div>
+    </div>
+</div>
+
+<!-- How It Works -->
+<div class="flow-section">
+    <div class="section-header"><h2>How It Works</h2></div>
+    <div class="flow-card">
+        <div class="flow-step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <div class="step-title">Link Your Wallet</div>
+                <div class="step-desc">Connect Apple Pay or Samsung Pay to Espresso app</div>
+            </div>
+        </div>
+        <div class="flow-step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+                <div class="step-title">Tap & Earn</div>
+                <div class="step-desc">Each purchase automatically tracks toward rewards</div>
+            </div>
+        </div>
+        <div class="flow-step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+                <div class="step-title">Get Notified</div>
+                <div class="step-desc">Real-time alerts for rewards and bonuses</div>
+            </div>
+        </div>
+        <div class="flow-step">
+            <div class="step-number">4</div>
+            <div class="step-content">
+                <div class="step-title">Redeem Instantly</div>
+                <div class="step-desc">One tap or QR scan at any Espresso Cafe</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+{% endblock %}
+
+{% block qr_card %}{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.getElementById('topupBtn').addEventListener('click',   () => alert('💰 Top-up screen would open here'));
+    document.getElementById('appleBtn').addEventListener('click',   () => alert('📱 Add to Apple Wallet (demo)'));
+    document.getElementById('samsungBtn').addEventListener('click', () => alert('📱 Add to Samsung Pay (demo)'));
+</script>
+{% endblock %}

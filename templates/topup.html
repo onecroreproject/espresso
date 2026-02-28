@@ -1,0 +1,874 @@
+{% extends "base.html" %}
+
+{% block title %}Espresso · Top Up Wallet{% endblock %}
+
+{% block extra_css %}
+<style>
+    .topup-page {
+        padding: 20px 16px 30px;
+    }
+
+    /* Header */
+    .topup-header {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 24px;
+    }
+
+    .back-btn {
+        width: 44px;
+        height: 44px;
+        border-radius: 14px;
+        background: #fcf0e6;
+        border: 1px solid #e9d9c8;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        color: #5c3b2c;
+        transition: all 0.2s;
+    }
+
+    .back-btn:active {
+        background: #5c3b2c;
+        color: white;
+    }
+
+    .topup-header h1 {
+        font-family: 'Playfair Display', serif;
+        font-size: 28px;
+        color: #3a2417;
+        margin: 0;
+    }
+
+    /* Current Balance Card */
+    .current-balance {
+        background: linear-gradient(135deg, #5c3b2c, #8b5e3c);
+        border-radius: 30px;
+        padding: 20px;
+        margin-bottom: 24px;
+        color: white;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .balance-info {
+        flex: 1;
+    }
+
+    .balance-label {
+        font-size: 13px;
+        opacity: 0.8;
+        margin-bottom: 4px;
+    }
+
+    .balance-value {
+        font-size: 32px;
+        font-weight: 700;
+        font-family: 'Playfair Display', serif;
+        color: #f5c48a;
+    }
+
+    .wallet-icon {
+        width: 60px;
+        height: 60px;
+        background: rgba(255,255,255,0.2);
+        border-radius: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .wallet-icon .material-symbols-outlined {
+        font-size: 32px;
+    }
+
+    /* Selected Amount Card */
+    .selected-amount-card {
+        background: #ffffff;
+        border-radius: 30px;
+        padding: 24px;
+        border: 2px solid #5c3b2c;
+        box-shadow: 0 4px 15px rgba(92, 59, 44, 0.15);
+        margin-bottom: 24px;
+        text-align: center;
+    }
+
+    .selected-label {
+        font-size: 14px;
+        color: #8b6f54;
+        margin-bottom: 8px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .selected-amount {
+        font-size: 48px;
+        font-weight: 700;
+        font-family: 'Playfair Display', serif;
+        color: #5c3b2c;
+        margin-bottom: 8px;
+        line-height: 1;
+    }
+
+    .selected-bonus {
+        font-size: 18px;
+        color: #2e7d32;
+        font-weight: 600;
+        background: #e3f2e9;
+        display: inline-block;
+        padding: 8px 20px;
+        border-radius: 40px;
+    }
+
+    .selected-bonus .material-symbols-outlined {
+        font-size: 18px;
+        vertical-align: middle;
+        margin-right: 4px;
+    }
+
+    .new-balance-preview {
+        margin-top: 16px;
+        padding-top: 16px;
+        border-top: 1px dashed #e9d9c8;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: #3a2417;
+    }
+
+    .preview-label {
+        font-weight: 500;
+    }
+
+    .preview-value {
+        font-weight: 700;
+        font-size: 20px;
+        color: #5c3b2c;
+    }
+
+    /* Payment Methods */
+    .payment-section {
+        background: #ffffff;
+        border-radius: 30px;
+        padding: 20px;
+        border: 1px solid #e9d9c8;
+        margin-bottom: 24px;
+    }
+
+    .section-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 18px;
+        color: #3a2417;
+        margin-bottom: 20px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .section-title .material-symbols-outlined {
+        color: #b48c5c;
+    }
+
+    .payment-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .payment-option {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 16px;
+        border: 2px solid #e9d9c8;
+        border-radius: 20px;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .payment-option.selected {
+        border-color: #5c3b2c;
+        background: #fcf0e6;
+    }
+
+    .payment-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        flex-shrink: 0;
+    }
+
+    .payment-icon.wallet { background: #e8f4fd; color: #2a6dd9; }
+    .payment-icon.apple { background: #000; color: white; font-family: -apple-system; }
+    .payment-icon.samsung { background: #1428a0; color: white; font-weight: 700; font-size: 28px; }
+    .payment-icon.card { background: #fdeae8; color: #c0392b; }
+
+    .payment-info {
+        flex: 1;
+    }
+
+    .payment-name {
+        font-weight: 600;
+        color: #3a2417;
+        margin-bottom: 4px;
+    }
+
+    .payment-desc {
+        font-size: 12px;
+        color: #8b6f54;
+    }
+
+    .payment-radio {
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        border: 2px solid #c4a882;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .payment-option.selected .payment-radio {
+        border-color: #5c3b2c;
+    }
+
+    .payment-option.selected .payment-radio::after {
+        content: '';
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: #5c3b2c;
+    }
+
+    /* Pay Button */
+    .pay-btn {
+        width: 100%;
+        background: linear-gradient(135deg, #5c3b2c, #8b5e3c);
+        color: white;
+        border: none;
+        border-radius: 40px;
+        padding: 20px;
+        font-size: 18px;
+        font-weight: 700;
+        font-family: 'Montserrat', sans-serif;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        box-shadow: 0 10px 25px rgba(92,59,44,0.3);
+        transition: all 0.2s;
+    }
+
+    .pay-btn:active {
+        transform: scale(0.98);
+        opacity: 0.9;
+    }
+
+    .pay-btn .material-symbols-outlined {
+        font-size: 24px;
+    }
+
+    /* Card Modal */
+    .card-modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.5);
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        z-index: 2000;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s;
+    }
+
+    .card-modal-overlay.active {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .card-modal-content {
+        background: #ffffff;
+        width: 100%;
+        max-width: 450px;
+        border-radius: 32px 32px 0 0;
+        padding: 24px 20px 30px;
+        transform: translateY(100%);
+        transition: transform 0.3s ease;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+
+    .card-modal-overlay.active .card-modal-content {
+        transform: translateY(0);
+    }
+
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .modal-header h3 {
+        font-size: 22px;
+        font-weight: 700;
+        color: #3a2417;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .close-modal {
+        background: none;
+        border: none;
+        font-size: 28px;
+        cursor: pointer;
+        color: #8b6f54;
+        padding: 0 8px;
+    }
+
+    /* Card Preview */
+    .card-preview {
+        background: linear-gradient(135deg, #1a1f2e, #2a2f3f);
+        border-radius: 20px;
+        padding: 20px;
+        margin-bottom: 24px;
+        color: white;
+        position: relative;
+        min-height: 160px;
+    }
+
+    .card-chip {
+        width: 40px;
+        height: 30px;
+        background: linear-gradient(135deg, #d4af37, #b8860b);
+        border-radius: 8px;
+        margin-bottom: 20px;
+    }
+
+    .card-number-display {
+        font-family: 'Courier New', monospace;
+        font-size: 18px;
+        letter-spacing: 2px;
+        margin-bottom: 20px;
+    }
+
+    .card-details-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .card-holder-display {
+        text-transform: uppercase;
+        font-size: 12px;
+        opacity: 0.8;
+    }
+
+    .card-expiry-display {
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    /* Modal Form */
+    .modal-input-group {
+        margin-bottom: 16px;
+    }
+
+    .modal-input-label {
+        font-size: 13px;
+        font-weight: 600;
+        color: #3a2417;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .modal-input-label .material-symbols-outlined {
+        font-size: 16px;
+        color: #b48c5c;
+    }
+
+    .modal-input-field {
+        width: 100%;
+        padding: 16px 18px;
+        border: 2px solid #e9d9c8;
+        border-radius: 16px;
+        font-size: 15px;
+        font-family: 'Montserrat', sans-serif;
+        transition: all 0.2s;
+    }
+
+    .modal-input-field:focus {
+        outline: none;
+        border-color: #5c3b2c;
+    }
+
+    .modal-input-row {
+        display: flex;
+        gap: 12px;
+    }
+
+    .modal-input-row .modal-input-group {
+        flex: 1;
+    }
+
+    .modal-error {
+        color: #c0392b;
+        font-size: 12px;
+        margin-top: 4px;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .modal-pay-btn {
+        width: 100%;
+        background: #5c3b2c;
+        color: white;
+        border: none;
+        border-radius: 40px;
+        padding: 18px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        margin-top: 20px;
+    }
+
+    .modal-pay-btn:active {
+        background: #6f4a2e;
+    }
+
+    /* Success Modal */
+    .success-modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(92,59,44,0.95);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 2100;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s;
+    }
+
+    .success-modal-overlay.active {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .success-modal-content {
+        background: white;
+        border-radius: 32px;
+        padding: 30px 20px;
+        text-align: center;
+        max-width: 300px;
+        width: 100%;
+    }
+
+    .success-icon {
+        width: 70px;
+        height: 70px;
+        background: #27ae60;
+        border-radius: 35px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 16px;
+        color: white;
+        font-size: 32px;
+    }
+
+    .success-title {
+        font-size: 22px;
+        font-weight: 700;
+        color: #3a2417;
+        margin-bottom: 8px;
+    }
+
+    .success-text {
+        color: #8b6f54;
+        margin-bottom: 20px;
+    }
+
+    .go-to-wallet {
+        width: 100%;
+        background: #5c3b2c;
+        color: white;
+        border: none;
+        border-radius: 40px;
+        padding: 16px;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    @media (max-width: 480px) {
+        .modal-input-row {
+            flex-direction: column;
+            gap: 0;
+        }
+        .selected-amount {
+            font-size: 40px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="topup-page">
+    <!-- Header -->
+    <div class="topup-header">
+        
+        <h1>Top Up Wallet</h1>
+    </div>
+
+    <!-- Current Balance -->
+    <div class="current-balance">
+        <div class="balance-info">
+            <div class="balance-label">Current Balance</div>
+            <div class="balance-value">BD 42.50</div>
+        </div>
+        <div class="wallet-icon">
+            <span class="material-symbols-outlined">account_balance_wallet</span>
+        </div>
+    </div>
+
+    <!-- Selected Amount Card -->
+    <div class="selected-amount-card">
+        <div class="selected-label">Selected Amount</div>
+        <div class="selected-amount" id="selectedAmount">BD 25.00</div>
+        <div class="selected-bonus" id="selectedBonus">
+            <span class="material-symbols-outlined">celebration</span>
+            +5.000 Bonus
+        </div>
+        <div class="new-balance-preview">
+            <span class="preview-label">New Balance</span>
+            <span class="preview-value" id="newBalance">BD 72.50</span>
+        </div>
+    </div>
+
+    <!-- Payment Methods -->
+    <div class="payment-section">
+        <div class="section-title">
+            <span class="material-symbols-outlined">credit_card</span>
+            Payment Method
+        </div>
+
+        <div class="payment-grid">
+            <!-- Espresso Wallet -->
+           
+            <!-- Apple Pay -->
+            <div class="payment-option" data-method="apple" onclick="selectPayment(this)">
+                <div class="payment-icon apple">
+                    <i class="fab fa-apple"></i>
+                </div>
+                <div class="payment-info">
+                    <div class="payment-name">Apple Pay</div>
+                    <div class="payment-desc">Pay with Face ID or Touch ID</div>
+                </div>
+                <div class="payment-radio"></div>
+            </div>
+
+            <!-- Samsung Pay -->
+            <div class="payment-option" data-method="samsung" onclick="selectPayment(this)">
+                <div class="payment-icon samsung">
+                    S
+                </div>
+                <div class="payment-info">
+                    <div class="payment-name">Samsung Pay</div>
+                    <div class="payment-desc">Pay with fingerprint or PIN</div>
+                </div>
+                <div class="payment-radio"></div>
+            </div>
+
+            <!-- Credit/Debit Card -->
+            <div class="payment-option" data-method="card" onclick="selectPayment(this)">
+                <div class="payment-icon card">
+                    <span class="material-symbols-outlined">credit_card</span>
+                </div>
+                <div class="payment-info">
+                    <div class="payment-name">Credit / Debit Card</div>
+                    <div class="payment-desc">Visa, Mastercard, RuPay</div>
+                </div>
+                <div class="payment-radio"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pay Button -->
+    <button class="pay-btn" onclick="processPayment()">
+        <span class="material-symbols-outlined">lock</span>
+        Pay <span id="payAmount">BD 25.00</span>
+    </button>
+</div>
+
+<!-- Card Entry Modal -->
+<div class="card-modal-overlay" id="cardModal">
+    <div class="card-modal-content">
+        <div class="modal-header">
+            <h3>
+                <span class="material-symbols-outlined">credit_card</span>
+                Enter Card Details
+            </h3>
+            <button class="close-modal" onclick="closeCardModal()">&times;</button>
+        </div>
+
+        <!-- Card Preview -->
+        <div class="card-preview">
+            <div class="card-chip"></div>
+            <div class="card-number-display" id="modalCardNumber">•••• •••• •••• ••••</div>
+            <div class="card-details-row">
+                <div class="card-holder-display" id="modalCardHolder">CARD HOLDER</div>
+                <div class="card-expiry-display" id="modalCardExpiry">MM/YY</div>
+            </div>
+        </div>
+
+        <!-- Card Number -->
+        <div class="modal-input-group">
+            <div class="modal-input-label">
+                <span class="material-symbols-outlined">numbers</span>
+                Card Number
+            </div>
+            <input type="text" class="modal-input-field" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19" oninput="formatCardNumber(this)">
+            <div class="modal-error" id="cardError" style="display: none;">
+                <span class="material-symbols-outlined">error</span> Invalid card number
+            </div>
+        </div>
+
+        <!-- Card Holder -->
+        <div class="modal-input-group">
+            <div class="modal-input-label">
+                <span class="material-symbols-outlined">badge</span>
+                Card Holder
+            </div>
+            <input type="text" class="modal-input-field" id="cardHolder" placeholder="JOHN DOE" oninput="updateCardPreview()">
+        </div>
+
+        <!-- Expiry and CVV -->
+        <div class="modal-input-row">
+            <div class="modal-input-group">
+                <div class="modal-input-label">
+                    <span class="material-symbols-outlined">calendar_month</span>
+                    Expiry
+                </div>
+                <input type="text" class="modal-input-field" id="expiryDate" placeholder="MM/YY" maxlength="5" oninput="formatExpiry(this)">
+                <div class="modal-error" id="expiryError" style="display: none;">Invalid</div>
+            </div>
+
+            <div class="modal-input-group">
+                <div class="modal-input-label">
+                    <span class="material-symbols-outlined">lock</span>
+                    CVV
+                </div>
+                <input type="password" class="modal-input-field" id="cvv" placeholder="•••" maxlength="3" oninput="validateCVV(this)">
+                <div class="modal-error" id="cvvError" style="display: none;">Invalid</div>
+            </div>
+        </div>
+
+        <!-- Pay Button -->
+        <button class="modal-pay-btn" onclick="processCardPayment()">
+            <span class="material-symbols-outlined">lock</span>
+            Pay <span id="modalPayAmount">BD 25.00</span>
+        </button>
+    </div>
+</div>
+
+<!-- Success Modal -->
+<div class="success-modal-overlay" id="successModal">
+    <div class="success-modal-content">
+        <div class="success-icon">
+            <span class="material-symbols-outlined">check_circle</span>
+        </div>
+        <div class="success-title">Payment Successful!</div>
+        <div class="success-text" id="successMessage">BD 30.00 added to your wallet</div>
+        <button class="go-to-wallet" onclick="goToWallet()">
+            <span class="material-symbols-outlined">account_balance_wallet</span>
+            Go to Wallet
+        </button>
+    </div>
+</div>
+
+<!-- Font Awesome for Apple logo -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+<script>
+    // Get amount from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    let selectedAmount = parseFloat(urlParams.get('amount')) || 25;
+    let selectedBonus = selectedAmount * 0.15; // 15% bonus
+    let currentBalance = 42.50;
+    let newBalance = currentBalance + selectedAmount + selectedBonus;
+    let selectedMethod = 'wallet';
+
+    // Update display with selected amount
+    document.getElementById('selectedAmount').textContent = `BD ${selectedAmount.toFixed(3)}`;
+    document.getElementById('selectedBonus').innerHTML = `
+        <span class="material-symbols-outlined">celebration</span>
+        +${selectedBonus.toFixed(3)} Bonus
+    `;
+    document.getElementById('newBalance').textContent = `BD ${newBalance.toFixed(3)}`;
+    document.getElementById('payAmount').textContent = `BD ${selectedAmount.toFixed(3)}`;
+    document.getElementById('modalPayAmount').textContent = `BD ${selectedAmount.toFixed(3)}`;
+    document.getElementById('successMessage').textContent = `BD ${(selectedAmount + selectedBonus).toFixed(3)} added to your wallet`;
+
+    function goBack() {
+        window.history.back();
+    }
+
+    function selectPayment(element) {
+        document.querySelectorAll('.payment-option').forEach(p => p.classList.remove('selected'));
+        element.classList.add('selected');
+        selectedMethod = element.dataset.method;
+    }
+
+    function processPayment() {
+        if (selectedMethod === 'card') {
+            openCardModal();
+        } else {
+            // Simulate payment processing for other methods
+            processWalletPayment();
+        }
+    }
+
+    function processWalletPayment() {
+        const payBtn = document.querySelector('.pay-btn');
+        payBtn.disabled = true;
+        payBtn.innerHTML = '<span class="material-symbols-outlined">hourglass_empty</span> Processing...';
+
+        setTimeout(() => {
+            document.getElementById('successModal').classList.add('active');
+            
+            payBtn.disabled = false;
+            payBtn.innerHTML = `<span class="material-symbols-outlined">lock</span> Pay <span id="payAmount">BD ${selectedAmount.toFixed(3)}</span>`;
+        }, 1500);
+    }
+
+    // Card Modal Functions
+    function openCardModal() {
+        document.getElementById('cardModal').classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeCardModal() {
+        document.getElementById('cardModal').classList.remove('active');
+        document.body.style.overflow = '';
+        resetCardForm();
+    }
+
+    function resetCardForm() {
+        document.getElementById('cardNumber').value = '';
+        document.getElementById('cardHolder').value = '';
+        document.getElementById('expiryDate').value = '';
+        document.getElementById('cvv').value = '';
+        document.getElementById('modalCardNumber').textContent = '•••• •••• •••• ••••';
+        document.getElementById('modalCardHolder').textContent = 'CARD HOLDER';
+        document.getElementById('modalCardExpiry').textContent = 'MM/YY';
+    }
+
+    function formatCardNumber(input) {
+        let value = input.value.replace(/\D/g, '');
+        let formattedValue = '';
+        
+        for (let i = 0; i < value.length; i++) {
+            if (i > 0 && i % 4 === 0) {
+                formattedValue += ' ';
+            }
+            formattedValue += value[i];
+        }
+        
+        input.value = formattedValue;
+        document.getElementById('modalCardNumber').textContent = formattedValue || '•••• •••• •••• ••••';
+    }
+
+    function formatExpiry(input) {
+        let value = input.value.replace(/\D/g, '');
+        
+        if (value.length >= 2) {
+            value = value.substring(0, 2) + '/' + value.substring(2, 4);
+        }
+        
+        input.value = value;
+        document.getElementById('modalCardExpiry').textContent = value || 'MM/YY';
+    }
+
+    function validateCVV(input) {
+        const value = input.value.replace(/\D/g, '');
+        input.value = value;
+    }
+
+    function updateCardPreview() {
+        const holder = document.getElementById('cardHolder').value || 'CARD HOLDER';
+        document.getElementById('modalCardHolder').textContent = holder.toUpperCase();
+    }
+
+    function processCardPayment() {
+        // Validate card details
+        const cardNumber = document.getElementById('cardNumber').value.replace(/\s/g, '');
+        const cardHolder = document.getElementById('cardHolder').value;
+        const expiry = document.getElementById('expiryDate').value;
+        const cvv = document.getElementById('cvv').value;
+
+        if (cardNumber.length !== 16) {
+            document.getElementById('cardError').style.display = 'flex';
+            return;
+        }
+
+        if (!cardHolder) {
+            alert('Please enter card holder name');
+            return;
+        }
+
+        if (expiry.length !== 5) {
+            document.getElementById('expiryError').style.display = 'flex';
+            return;
+        }
+
+        if (cvv.length !== 3) {
+            document.getElementById('cvvError').style.display = 'flex';
+            return;
+        }
+
+        closeCardModal();
+        processWalletPayment();
+    }
+
+    function goToWallet() {
+        window.location.href = "{{ url_for('wallet') }}";
+    }
+
+    // Close modals on overlay click
+    document.getElementById('cardModal').addEventListener('click', function(e) {
+        if (e.target === this) closeCardModal();
+    });
+
+    document.getElementById('successModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            document.getElementById('successModal').classList.remove('active');
+        }
+    });
+</script>
+{% endblock %}
+
+{% block qr_card %}{% endblock %}

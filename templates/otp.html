@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Verify OTP — Espresso</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0,1">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: #fcf8f3;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header */
+    .header {
+      background: #ffffff;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #f0e4d6;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+    }
+
+    .header img {
+      height: 36px;
+      object-fit: contain;
+    }
+
+    .header-logo-text {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: #3a2417;
+    }
+
+    .back-btn {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      color: #5c3b2c;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 8px 14px;
+      border-radius: 40px;
+      background: #fcf0e6;
+      transition: background 0.2s;
+    }
+
+    .back-btn:active { background: #e8d5c2; }
+    .back-btn .material-symbols-outlined { font-size: 20px; }
+
+    /* Page body */
+    .page {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 40px 28px 48px;
+    }
+
+    /* Icon */
+    .icon-ring {
+      width: 90px; height: 90px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #5c3b2c, #a0603a);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      box-shadow: 0 12px 30px rgba(92,59,44,0.35);
+    }
+
+    .icon-ring .material-symbols-outlined { font-size: 42px; color: white; }
+
+    .page-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 26px;
+      font-weight: 700;
+      color: #3a2417;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .page-sub {
+      font-size: 14px;
+      color: #7d5d43;
+      line-height: 1.6;
+      text-align: center;
+      margin-bottom: 36px;
+    }
+
+    .page-sub strong { color: #3a2417; font-weight: 600; }
+
+    /* OTP Boxes */
+    .otp-inputs {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      margin-bottom: 28px;
+    }
+
+    .otp-box {
+      width: 64px; height: 72px;
+      border: 2px solid #e9d9c8;
+      border-radius: 18px;
+      background: #ffffff;
+      font-size: 28px;
+      font-weight: 700;
+      font-family: 'Montserrat', sans-serif;
+      color: #3a2417;
+      text-align: center;
+      outline: none;
+      caret-color: #5c3b2c;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      -webkit-appearance: none;
+    }
+
+    .otp-box:focus {
+      border-color: #5c3b2c;
+      box-shadow: 0 0 0 4px rgba(92,59,44,0.12);
+    }
+
+    .otp-box.filled {
+      border-color: #a0603a;
+      background: #fcf0e6;
+    }
+
+    /* Timer & Resend */
+    .timer-row {
+      text-align: center;
+      font-size: 13px;
+      color: #9b856e;
+      margin-bottom: 6px;
+    }
+
+    .timer-row span { font-weight: 700; color: #5c3b2c; }
+
+    .resend-row {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .resend-btn {
+      background: none;
+      border: none;
+      color: #5c3b2c;
+      font-size: 14px;
+      font-weight: 600;
+      font-family: 'Montserrat', sans-serif;
+      cursor: pointer;
+      text-decoration: underline;
+      padding: 0;
+    }
+
+    .resend-btn:disabled { color: #bba08a; text-decoration: none; cursor: default; }
+
+    /* Verify button */
+    .btn-verify {
+      width: 100%;
+      background: linear-gradient(135deg, #5c3b2c, #a0603a);
+      color: white;
+      border: none;
+      border-radius: 18px;
+      padding: 18px;
+      font-size: 16px;
+      font-weight: 700;
+      font-family: 'Montserrat', sans-serif;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(92,59,44,0.35);
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-verify:active { transform: scale(0.98); opacity: 0.9; }
+    .btn-verify:disabled { background: #cdb9a6; box-shadow: none; cursor: default; }
+    .btn-verify .material-symbols-outlined { font-size: 20px; }
+
+    /* Progress */
+    .progress {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      margin-top: 32px;
+    }
+
+    .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #e9d9c8;
+      transition: all 0.3s;
+    }
+
+    .dot.done   { background: #5c3b2c; }
+    .dot.active { background: #a0603a; width: 24px; border-radius: 4px; }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <span class="header-logo-text">Espresso</span>
+    <a href="register.html" class="back-btn">
+      <span class="material-symbols-outlined">arrow_back</span> Back
+    </a>
+  </div>
+
+  <div class="page">
+
+    <div class="icon-ring">
+      <span class="material-symbols-outlined">sms</span>
+    </div>
+
+    <h2 class="page-title">Check Your Phone</h2>
+    <p class="page-sub">We sent a 4-digit code to<br><strong>+91 98765 XXXXX</strong></p>
+
+    <div class="otp-inputs">
+      <input class="otp-box" type="text" inputmode="numeric" maxlength="1" id="o1" autocomplete="one-time-code">
+      <input class="otp-box" type="text" inputmode="numeric" maxlength="1" id="o2">
+      <input class="otp-box" type="text" inputmode="numeric" maxlength="1" id="o3">
+      <input class="otp-box" type="text" inputmode="numeric" maxlength="1" id="o4">
+    </div>
+
+    <div class="timer-row">Code expires in <span id="countdown">01:30</span></div>
+    <div class="resend-row">
+      <button class="resend-btn" id="resendBtn" disabled>Resend Code</button>
+    </div>
+
+    <button class="btn-verify" id="verifyBtn" disabled onclick="verifyOTP()">
+      <span class="material-symbols-outlined">verified</span>
+      Verify & Continue
+    </button>
+
+    <div class="progress">
+      <div class="dot done"></div>
+      <div class="dot done"></div>
+      <div class="dot active"></div>
+      <div class="dot"></div>
+    </div>
+
+  </div>
+
+  <script>
+    const boxes = document.querySelectorAll('.otp-box');
+
+    boxes.forEach((box, i) => {
+      box.addEventListener('input', function () {
+        this.value = this.value.replace(/\D/g, '').slice(0, 1);
+        this.classList.toggle('filled', this.value !== '');
+        if (this.value && i < boxes.length - 1) boxes[i + 1].focus();
+        checkAll();
+      });
+      box.addEventListener('keydown', function (e) {
+        if (e.key === 'Backspace' && !this.value && i > 0) boxes[i - 1].focus();
+      });
+    });
+
+    function checkAll() {
+      document.getElementById('verifyBtn').disabled = ![...boxes].every(b => b.value);
+    }
+
+    let secs = 90;
+    const countEl = document.getElementById('countdown');
+    const resendBtn = document.getElementById('resendBtn');
+
+    const timer = setInterval(() => {
+      secs--;
+      const m = String(Math.floor(secs / 60)).padStart(2, '0');
+      const s = String(secs % 60).padStart(2, '0');
+      countEl.textContent = `${m}:${s}`;
+      if (secs <= 0) {
+        clearInterval(timer);
+        countEl.textContent = '00:00';
+        resendBtn.disabled = false;
+      }
+    }, 1000);
+
+    resendBtn.addEventListener('click', function () {
+      this.disabled = true;
+      secs = 90;
+      alert('OTP resent!');
+    });
+
+    function verifyOTP() {
+      window.location.href = 'home';
+    }
+
+    boxes[0].focus();
+  </script>
+</body>
+</html>

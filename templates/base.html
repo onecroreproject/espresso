@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>{% block title %}Espresso{% endblock %}</title>
+    
+    <!-- Google Fonts & Material Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0,1" />
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    {% block extra_css %}{% endblock %}
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: #fcf8f3;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .content-wrapper {
+            flex: 1;
+            padding-bottom: 90px;
+            width: 100%;
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+
+        /* ── HEADER ── */
+        .home-header {
+            background: #ffffff;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #f0e4d6;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+        }
+
+        .header-logo {
+            max-width: min(140px, 35vw);
+            height: auto;
+            object-fit: contain;
+        }
+
+        /* Home greeting — name + wave only */
+        .header-greeting {
+            font-size: 14px;
+            font-weight: 500;
+            color: #ab6c4f;
+            background: #fcf0e6;
+            padding: 8px 16px;
+            border-radius: 40px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .header-greeting span {
+            font-weight: 700;
+            color: #3a2417;
+        }
+
+        /* Back button — shown on all non-home pages */
+        .header-back {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: #5c3b2c;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 8px 14px;
+            border-radius: 40px;
+            background: #fcf0e6;
+            white-space: nowrap;
+            transition: background 0.2s;
+        }
+
+        .header-back:active { background: #e8d5c2; }
+        .header-back .material-symbols-outlined { font-size: 20px; }
+
+        /* ── BOTTOM NAV ── */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #ffffff;
+            border-top: 1px solid #f0e4d6;
+            padding: 8px 12px 20px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 1000;
+            border-radius: 30px 30px 0 0;
+            box-shadow: 0 -5px 20px rgba(92, 59, 44, 0.08);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #9b856e;
+            font-size: 11px;
+            font-weight: 500;
+            padding: 6px 0 4px;
+            min-width: 44px;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .nav-item .material-symbols-outlined {
+            font-size: 22px;
+            margin-bottom: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-item span:last-child { font-size: 10px; letter-spacing: 0.3px; }
+
+        .nav-item.active { color: #5c3b2c; }
+        .nav-item.active .material-symbols-outlined { font-weight: 700; transform: translateY(-1px); }
+
+        .nav-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 4px;
+            background: #5c3b2c;
+            border-radius: 50%;
+        }
+
+        .nav-item:hover { color: #5c3b2c; }
+
+        /* QR center button */
+        .nav-item.qr-center {
+            background: #5c3b2c;
+            color: white;
+            border-radius: 40px;
+            padding: 8px 16px;
+            margin-top: -28px;
+            box-shadow: 0 4px 15px rgba(92, 59, 44, 0.4);
+            min-width: 64px;
+            border: 3px solid #fcf8f3;
+        }
+
+        .nav-item.qr-center .material-symbols-outlined { font-size: 28px; margin-bottom: 2px; }
+        .nav-item.qr-center span:last-child { font-size: 10px; font-weight: 600; }
+        .nav-item.qr-center.active { background: #4a3225; }
+        .nav-item.qr-center.active::after { display: none; }
+        .nav-item.qr-center:hover { background: #4a3225; transform: translateY(-2px); }
+
+        /* ── UTILITY ── */
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 20px;
+            color: #3a2417;
+            margin-bottom: 16px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .carousel {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            gap: 16px;
+            padding: 4px 4px 20px;
+            scrollbar-width: thin;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .carousel::-webkit-scrollbar { height: 4px; }
+        .carousel::-webkit-scrollbar-thumb { background-color: #b48c5c; border-radius: 20px; }
+
+        .category-pills {
+            display: flex;
+            overflow-x: auto;
+            gap: 10px;
+            padding: 16px 16px 8px;
+            scrollbar-width: none;
+        }
+
+        .category-pills::-webkit-scrollbar { display: none; }
+
+        .category-pill {
+            padding: 8px 20px;
+            background: #ffffff;
+            border: 1px solid #e9d9c8;
+            border-radius: 40px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #5c3b2c;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .category-pill:hover  { background: #fcf0e6; }
+        .category-pill.active { background: #5c3b2c; color: white; border-color: #5c3b2c; }
+
+        /* QR card */
+        .qr-card {
+            background: linear-gradient(145deg, #ffffff, #fbf5ee);
+            border-radius: 30px;
+            padding: 20px 16px;
+            margin: 8px 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            border: 1px solid #e9d9c8;
+            box-shadow: 0 6px 14px -6px rgba(92, 59, 44, 0.15);
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.2s ease;
+        }
+
+        .qr-card:hover { transform: translateY(-2px); box-shadow: 0 8px 20px -6px rgba(92, 59, 44, 0.25); }
+
+        .qr-code-icon {
+            min-width: 70px;
+            width: 70px;
+            height: 70px;
+            background: #5c3b2c;
+            border-radius: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .qr-code-icon .material-symbols-outlined { font-size: 36px; }
+        .qr-text h4 { font-size: 16px; font-weight: 700; color: #3a2417; margin-bottom: 4px; }
+        .qr-text p  { font-size: 13px; color: #7d5d43; }
+
+        /* Safe area */
+        @supports (padding-bottom: env(safe-area-inset-bottom)) {
+            .bottom-nav { padding-bottom: calc(12px + env(safe-area-inset-bottom)); }
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .nav-item span:last-child { font-size: 9px; }
+            .nav-item.qr-center { padding: 8px 12px; min-width: 56px; }
+            .nav-item.qr-center .material-symbols-outlined { font-size: 24px; }
+        }
+
+        @media (max-width: 360px) {
+            .nav-item span:last-child { font-size: 8px; }
+            .nav-item .material-symbols-outlined { font-size: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="content-wrapper">
+
+        <!-- ── HEADER ──
+             Home  → logo left  + greeting right
+             Other → logo left  + back button right
+        -->
+        <div class="home-header">
+            <img src="{{ url_for('static', filename='logo.png') }}" alt="Espresso" class="header-logo"
+                 onerror="this.src='https://via.placeholder.com/140x40?text=Espresso'">
+
+            {% if request.endpoint == 'home' %}
+                <!-- Home: name + wave only -->
+                <div class="header-greeting">
+                    <span>{% block user_name %}Sarah{% endblock %}</span> 👋
+                </div>
+            {% else %}
+                <!-- All other pages: back button -->
+                <a href="{{ url_for('home') }}" class="header-back">
+                    <span class="material-symbols-outlined">arrow_back</span> back
+                </a>
+            {% endif %}
+        </div>
+
+        {% block content %}{% endblock %}
+
+        {% block qr_card %}
+      
+        {% endblock %}
+    </div>
+
+    <!-- BOTTOM NAVIGATION -->
+    <nav class="bottom-nav">
+        <a href="{{ url_for('home') }}"    class="nav-item {% if request.endpoint == 'home'    %}active{% endif %}">
+            <span class="material-symbols-outlined">home</span>
+            <span>Home</span>
+        </a>
+        <a href="{{ url_for('menu') }}"    class="nav-item {% if request.endpoint == 'menu'    %}active{% endif %}">
+            <span class="material-symbols-outlined">restaurant_menu</span>
+            <span>Menu</span>
+        </a>
+        <a href="{{ url_for('order') }}"   class="nav-item {% if request.endpoint == 'order'   %}active{% endif %}">
+            <span class="material-symbols-outlined">shopping_bag</span>
+            <span>Order</span>
+        </a>
+        <a href="{{ url_for('qr') }}"      class="nav-item qr-center {% if request.endpoint == 'qr' %}active{% endif %}">
+            <span class="material-symbols-outlined">qr_code_scanner</span>
+            <span>QR</span>
+        </a>
+        <a href="{{ url_for('reward') }}"  class="nav-item {% if request.endpoint == 'reward'  %}active{% endif %}">
+            <span class="material-symbols-outlined">card_giftcard</span>
+            <span>Reward</span>
+        </a>
+        <a href="{{ url_for('wallet') }}"  class="nav-item {% if request.endpoint == 'wallet'  %}active{% endif %}">
+            <span class="material-symbols-outlined">account_balance_wallet</span>
+            <span>Wallet</span>
+        </a>
+        <a href="{{ url_for('profile') }}" class="nav-item {% if request.endpoint == 'profile' %}active{% endif %}">
+            <span class="material-symbols-outlined">person</span>
+            <span>Profile</span>
+        </a>
+    </nav>
+
+    <script>
+        function addToOrder(item) {
+            alert(`🛒 ${item} added to your order`);
+        }
+
+        document.querySelectorAll('.category-pill').forEach(pill => {
+            pill.addEventListener('click', function () {
+                document.querySelectorAll('.category-pill').forEach(p => p.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

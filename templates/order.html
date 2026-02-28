@@ -1,0 +1,1197 @@
+{% extends "base.html" %}
+
+{% block title %}Espresso · Cafe Order{% endblock %}
+
+{% block extra_css %}
+<style>
+    .items-section {
+        padding: 20px 16px 8px;
+    }
+
+    .section-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 18px;
+        color: #3a2417;
+        margin-bottom: 16px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .order-item-row {
+        display: flex;
+        align-items: center;
+        gap: clamp(8px, 2.5vw, 12px);
+        padding: clamp(10px, 3vw, 16px);
+        background: #ffffff;
+        border-radius: 24px;
+        margin-bottom: 10px;
+        border: 1px solid #e9d9c8;
+        box-shadow: 0 2px 8px rgba(92, 59, 44, 0.06);
+        position: relative;
+        width: 100%;
+        min-width: 0;
+    }
+
+    .order-item-image {
+        width: clamp(52px, 14vw, 68px);
+        height: clamp(52px, 14vw, 68px);
+        border-radius: 50%;
+        overflow: hidden;
+        border: 2px solid #ffffff;
+        box-shadow: 0 4px 10px rgba(92, 59, 44, 0.1);
+        flex-shrink: 0;
+    }
+
+    .order-item-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .order-item-details {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .order-item-name {
+        font-size: clamp(13px, 3.8vw, 16px);
+        font-weight: 600;
+        color: #3a2417;
+        margin-bottom: 4px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .order-item-meta {
+        font-size: clamp(10px, 2.8vw, 12px);
+        color: #8b6f54;
+        background: #fcf0e6;
+        padding: 3px 9px;
+        border-radius: 30px;
+        display: inline-block;
+        white-space: nowrap;
+    }
+
+    .order-item-right {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 6px;
+        flex-shrink: 0;
+    }
+
+    .order-item-price {
+        font-weight: 700;
+        color: #5c3b2c;
+        font-size: clamp(13px, 3.8vw, 16px);
+        white-space: nowrap;
+    }
+
+    .order-item-actions {
+        display: flex;
+        align-items: center;
+        gap: 2px;
+        background: #fcf0e6;
+        padding: 3px;
+        border-radius: 40px;
+    }
+
+    .item-qty-btn {
+        width: clamp(26px, 7vw, 30px);
+        height: clamp(26px, 7vw, 30px);
+        border-radius: 50%;
+        border: none;
+        background: #ffffff;
+        color: #5c3b2c;
+        font-size: clamp(16px, 4.5vw, 18px);
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        line-height: 1;
+    }
+
+    .item-qty-btn:active { background: #5c3b2c; color: white; }
+
+    .item-qty {
+        font-weight: 600;
+        min-width: 20px;
+        text-align: center;
+        font-size: clamp(13px, 3.5vw, 15px);
+        color: #5c3b2c;
+    }
+
+    .cancel-item-btn {
+        position: absolute;
+        top: -7px;
+        right: -7px;
+        width: 26px;
+        height: 26px;
+        border-radius: 13px;
+        background: #c0392b;
+        border: 2px solid white;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: 0 2px 8px rgba(192, 57, 43, 0.3);
+        transition: all 0.2s;
+        z-index: 10;
+    }
+
+    .cancel-item-btn:hover { transform: scale(1.1); background: #e74c3c; }
+    .cancel-item-btn .material-symbols-outlined { font-size: 14px; }
+
+    /* Order Tracker */
+    .order-tracker {
+        background: #ffffff;
+        margin: 16px;
+        padding: 20px;
+        border-radius: 30px;
+        border: 1px solid #e9d9c8;
+    }
+
+    .tracker-steps {
+        display: flex;
+        justify-content: space-between;
+        position: relative;
+        margin: 20px 0 10px;
+    }
+
+    .tracker-steps::before {
+        content: '';
+        position: absolute;
+        top: 25px;
+        left: 50px;
+        right: 50px;
+        height: 3px;
+        background: #e9d9c8;
+        z-index: 1;
+    }
+
+    .tracker-step {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+        z-index: 2;
+        flex: 1;
+    }
+
+    .step-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 25px;
+        background: #fcf0e6;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 8px;
+        border: 3px solid #ffffff;
+        box-shadow: 0 4px 10px rgba(92, 59, 44, 0.1);
+    }
+
+    .step-icon.active {
+        background: #5c3b2c;
+        color: white;
+    }
+
+    .step-icon.completed {
+        background: #27ae60;
+        color: white;
+    }
+
+    .step-icon .material-symbols-outlined {
+        font-size: 24px;
+    }
+
+    .step-label {
+        font-size: 12px;
+        font-weight: 500;
+        color: #8b6f54;
+        text-align: center;
+    }
+
+    .step-label.active {
+        color: #5c3b2c;
+        font-weight: 600;
+    }
+
+    .tracker-time {
+        text-align: center;
+        margin-top: 16px;
+        padding: 12px;
+        background: #fcf8f3;
+        border-radius: 40px;
+        font-size: 14px;
+        color: #5c3b2c;
+        font-weight: 500;
+    }
+
+    .tracker-time .material-symbols-outlined {
+        font-size: 16px;
+        margin-right: 4px;
+        vertical-align: middle;
+    }
+
+    /* Bill */
+    .bill-section {
+        padding: 16px;
+        background: #ffffff;
+        margin: 16px;
+        border-radius: 30px;
+        border: 1px solid #e9d9c8;
+    }
+
+    .bill-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 12px;
+        font-size: 15px;
+        color: #3a2417;
+    }
+
+    .bill-row.total {
+        font-size: 20px;
+        font-weight: 700;
+        color: #5c3b2c;
+        padding-top: 16px;
+        margin-top: 8px;
+        border-top: 2px dashed #d0bcab;
+    }
+
+    .bill-divider {
+        height: 1px;
+        background: linear-gradient(90deg, transparent, #d0bcab, transparent);
+        margin: 16px 0;
+    }
+
+    .bill-note {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #8b6f54;
+        font-size: 13px;
+        padding: 12px;
+        background: #fcf8f3;
+        border-radius: 25px;
+        margin-top: 16px;
+    }
+
+    /* Tip Section */
+    .tip-section {
+        padding: 16px;
+        background: #ffffff;
+        margin: 16px;
+        border-radius: 30px;
+        border: 1px solid #e9d9c8;
+    }
+
+    .tip-options {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+        margin: 16px 0;
+    }
+
+    .tip-checkbox {
+        display: none;
+    }
+
+    .tip-label {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 12px 8px;
+        background: #fcf0e6;
+        border-radius: 30px;
+        border: 2px solid transparent;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-weight: 500;
+        color: #5c3b2c;
+    }
+
+    .tip-checkbox:checked + .tip-label {
+        background: #5c3b2c;
+        color: white;
+        border-color: #e9d9c8;
+        transform: scale(1.02);
+        box-shadow: 0 4px 12px rgba(92, 59, 44, 0.2);
+    }
+
+    .tip-percent {
+        font-size: 16px;
+        font-weight: 700;
+    }
+
+    .tip-amount {
+        font-size: 12px;
+        margin-top: 4px;
+    }
+
+    .tip-checkbox:checked + .tip-label .tip-amount {
+        color: rgba(255, 255, 255, 0.9);
+    }
+
+    .custom-tip {
+        margin-top: 12px;
+        display: flex;
+        gap: 8px;
+    }
+
+    .custom-tip-input {
+        flex: 1;
+        padding: 12px 16px;
+        border: 2px solid #e9d9c8;
+        border-radius: 40px;
+        font-size: 14px;
+        font-family: 'Montserrat', sans-serif;
+    }
+
+    .custom-tip-input:focus {
+        outline: none;
+        border-color: #5c3b2c;
+    }
+
+    .apply-tip-btn {
+        padding: 12px 24px;
+        background: #5c3b2c;
+        color: white;
+        border: none;
+        border-radius: 40px;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    .history-btn {
+        background: #fcf0e6;
+        color: #5c3b2c;
+        border: 1px solid #e9d9c8;
+        padding: 16px;
+        border-radius: 40px;
+        font-size: 15px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        cursor: pointer;
+        margin: 16px;
+        width: calc(100% - 32px);
+    }
+
+    .history-btn:active { background: #5c3b2c; color: white; }
+
+    .place-order-btn {
+        background: #5c3b2c;
+        color: white;
+        border: none;
+        padding: 18px;
+        border-radius: 40px;
+        font-size: 18px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        cursor: pointer;
+        margin: 16px;
+        width: calc(100% - 32px);
+        box-shadow: 0 4px 15px rgba(92, 59, 44, 0.3);
+        transition: all 0.2s;
+    }
+
+    .place-order-btn:active { transform: scale(0.98); background: #6f4a2e; }
+
+    /* Edit Modal */
+    .modal-overlay {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: rgba(0,0,0,0.5);
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        z-index: 2000;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s;
+    }
+
+    .modal-overlay.active { opacity: 1; visibility: visible; }
+
+    .modal-content {
+        background: #ffffff;
+        width: 100%;
+        max-width: 450px;
+        border-radius: 40px 40px 0 0;
+        padding: 24px 20px 30px;
+        transform: translateY(100%);
+        transition: transform 0.3s ease;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+
+    .modal-overlay.active .modal-content { transform: translateY(0); }
+
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #f0e4d6;
+    }
+
+    .modal-header h3 {
+        font-size: 22px;
+        font-weight: 700;
+        color: #3a2417;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .close-modal { background: none; border: none; font-size: 28px; cursor: pointer; color: #8b6f54; }
+
+    .modal-product {
+        display: flex;
+        gap: 16px;
+        margin-bottom: 24px;
+        padding: 16px;
+        background: #fcf8f3;
+        border-radius: 30px;
+    }
+
+    .modal-product-image {
+        width: 80px;
+        height: 80px;
+        border-radius: 40px;
+        overflow: hidden;
+        border: 3px solid #ffffff;
+        box-shadow: 0 4px 10px rgba(92, 59, 44, 0.1);
+    }
+
+    .modal-product-image img { width: 100%; height: 100%; object-fit: cover; }
+
+    .modal-product-info { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+
+    .modal-product-name { font-size: 18px; font-weight: 700; color: #3a2417; margin-bottom: 4px; }
+    .modal-product-price { font-size: 20px; font-weight: 700; color: #5c3b2c; }
+
+    .edit-option { margin-bottom: 24px; }
+
+    .edit-label {
+        font-size: 16px;
+        font-weight: 600;
+        color: #3a2417;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .size-options { display: flex; gap: 8px; }
+
+    .size-btn {
+        flex: 1;
+        padding: 14px 0;
+        border: 2px solid #e9d9c8;
+        border-radius: 40px;
+        background: #ffffff;
+        font-size: 14px;
+        font-weight: 600;
+        color: #5c3b2c;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .size-btn.active { background: #5c3b2c; color: white; border-color: #5c3b2c; }
+
+    .extras-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+
+    .extra-item {
+        padding: 14px;
+        border: 2px solid #e9d9c8;
+        border-radius: 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 500;
+        transition: all 0.2s;
+    }
+
+    .extra-item.active { background: #fcf0e6; border-color: #5c3b2c; }
+    .extra-price { color: #5c3b2c; font-weight: 600; }
+
+    .instructions-input {
+        width: 100%;
+        padding: 14px 18px;
+        border: 2px solid #e9d9c8;
+        border-radius: 40px;
+        font-size: 14px;
+        font-family: 'Montserrat', sans-serif;
+    }
+
+    .instructions-input:focus { outline: none; border-color: #5c3b2c; }
+
+    .modal-actions { display: flex; gap: 10px; margin-top: 24px; }
+
+    .save-btn {
+        flex: 2;
+        background: #5c3b2c;
+        color: white;
+        border: none;
+        padding: 16px;
+        border-radius: 40px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    .delete-btn {
+        flex: 1;
+        background: #fee;
+        color: #c0392b;
+        border: none;
+        padding: 16px;
+        border-radius: 40px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+    }
+
+    /* History Modal */
+    .history-modal-overlay {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: rgba(0,0,0,0.5);
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        z-index: 2100;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s;
+    }
+
+    .history-modal-overlay.active { opacity: 1; visibility: visible; }
+
+    .history-modal-content {
+        background: #ffffff;
+        width: 100%;
+        max-width: 450px;
+        border-radius: 40px 40px 0 0;
+        padding: 24px 20px 30px;
+        transform: translateY(100%);
+        transition: transform 0.3s ease;
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+
+    .history-modal-overlay.active .history-modal-content { transform: translateY(0); }
+
+    .history-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 16px;
+        background: #fcf8f3;
+        border-radius: 30px;
+        margin-bottom: 12px;
+    }
+
+    .history-item-image {
+        width: 60px;
+        height: 60px;
+        border-radius: 30px;
+        overflow: hidden;
+        border: 2px solid #ffffff;
+        box-shadow: 0 2px 8px rgba(92, 59, 44, 0.1);
+    }
+
+    .history-item-image img { width: 100%; height: 100%; object-fit: cover; }
+
+    .history-item-details { flex: 1; }
+    .history-item-name { font-weight: 600; color: #3a2417; font-size: 15px; margin-bottom: 4px; }
+    .history-item-meta { font-size: 12px; color: #8b6f54; }
+    .history-item-price { font-weight: 700; color: #5c3b2c; font-size: 16px; margin-right: 8px; }
+
+    .reorder-btn-small {
+        background: #5c3b2c;
+        border: none;
+        width: 36px;
+        height: 36px;
+        border-radius: 18px;
+        color: white;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 8px rgba(92, 59, 44, 0.2);
+        transition: all 0.2s;
+    }
+
+    .reorder-btn-small:hover { transform: scale(1.1); background: #6f4a2e; }
+    .reorder-btn-small .material-symbols-outlined { font-size: 18px; }
+
+    @media (max-width: 480px) {
+        .tip-options { grid-template-columns: repeat(2, 1fr); }
+        .order-item-image { width: 60px; height: 60px; }
+        .modal-product-image { width: 70px; height: 70px; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Order Tracker -->
+<div class="order-tracker">
+    <div class="section-title">
+        <span class="material-symbols-outlined">pending_actions</span> Order Status
+    </div>
+    <div class="tracker-steps">
+        <div class="tracker-step">
+            <div class="step-icon completed">
+                <span class="material-symbols-outlined">check_circle</span>
+            </div>
+            <span class="step-label completed">Ordered</span>
+        </div>
+        <div class="tracker-step">
+            <div class="step-icon active">
+                <span class="material-symbols-outlined">coffee_maker</span>
+            </div>
+            <span class="step-label active">Preparing</span>
+        </div>
+        <div class="tracker-step">
+            <div class="step-icon">
+                <span class="material-symbols-outlined">local_shipping</span>
+            </div>
+            <span class="step-label">Ready</span>
+        </div>
+        <div class="tracker-step">
+            <div class="step-icon">
+                <span class="material-symbols-outlined">celebration</span>
+            </div>
+            <span class="step-label">Served</span>
+        </div>
+    </div>
+    <div class="tracker-time">
+        <span class="material-symbols-outlined">schedule</span> Estimated ready: 5-7 minutes
+    </div>
+</div>
+
+<!-- Your Items -->
+<div class="items-section">
+    <div class="section-title">
+        <span class="material-symbols-outlined">restaurant_menu</span> Your Items
+    </div>
+
+    <!-- Item 1 - Espresso -->
+    <div class="order-item-row" data-item-id="1">
+        <div class="cancel-item-btn" onclick="cancelItem(this, 'Espresso')">
+            <span class="material-symbols-outlined">close</span>
+        </div>
+        <div class="order-item-image" onclick="openEditModal('espresso')">
+            <img src="{{ url_for('static', filename='imgg.jpeg') }}" alt="Espresso">
+        </div>
+        <div class="order-item-details" onclick="openEditModal('espresso')">
+            <div class="order-item-name">Espresso</div>
+            <div class="order-item-meta">Small · Classic</div>
+        </div>
+        <div class="order-item-right" onclick="event.stopPropagation()">
+            <div class="order-item-price">BD 2.500</div>
+            <div class="order-item-actions">
+                <button class="item-qty-btn" onclick="updateQty(this, -1)">−</button>
+                <span class="item-qty">1</span>
+                <button class="item-qty-btn" onclick="updateQty(this, 1)">+</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Item 2 - Cappuccino -->
+    <div class="order-item-row" data-item-id="2">
+        <div class="cancel-item-btn" onclick="cancelItem(this, 'Cappuccino')">
+            <span class="material-symbols-outlined">close</span>
+        </div>
+        <div class="order-item-image" onclick="openEditModal('cappuccino')">
+            <img src="{{ url_for('static', filename='imgg3.jpeg') }}" alt="Cappuccino">
+        </div>
+        <div class="order-item-details" onclick="openEditModal('cappuccino')">
+            <div class="order-item-name">Cappuccino</div>
+            <div class="order-item-meta">Medium · Oat Milk</div>
+        </div>
+        <div class="order-item-right" onclick="event.stopPropagation()">
+            <div class="order-item-price">BD 3.500</div>
+            <div class="order-item-actions">
+                <button class="item-qty-btn" onclick="updateQty(this, -1)">−</button>
+                <span class="item-qty">2</span>
+                <button class="item-qty-btn" onclick="updateQty(this, 1)">+</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Item 3 - Butter Croissant -->
+    <div class="order-item-row" data-item-id="3">
+        <div class="cancel-item-btn" onclick="cancelItem(this, 'Croissant')">
+            <span class="material-symbols-outlined">close</span>
+        </div>
+        <div class="order-item-image" onclick="openEditModal('croissant')">
+            <img src="{{ url_for('static', filename='imgg9.jpeg') }}" alt="Croissant">
+        </div>
+        <div class="order-item-details" onclick="openEditModal('croissant')">
+            <div class="order-item-name">Butter Croissant</div>
+            <div class="order-item-meta">Fresh baked</div>
+        </div>
+        <div class="order-item-right" onclick="event.stopPropagation()">
+            <div class="order-item-price">BD 1.800</div>
+            <div class="order-item-actions">
+                <button class="item-qty-btn" onclick="updateQty(this, -1)">−</button>
+                <span class="item-qty">1</span>
+                <button class="item-qty-btn" onclick="updateQty(this, 1)">+</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Item 4 - Iced Latte -->
+    <div class="order-item-row" data-item-id="4">
+        <div class="cancel-item-btn" onclick="cancelItem(this, 'Iced Latte')">
+            <span class="material-symbols-outlined">close</span>
+        </div>
+        <div class="order-item-image" onclick="openEditModal('latte')">
+            <img src="{{ url_for('static', filename='imgg5.jpeg') }}" alt="Latte">
+        </div>
+        <div class="order-item-details" onclick="openEditModal('latte')">
+            <div class="order-item-name">Iced Latte</div>
+            <div class="order-item-meta">Large · Vanilla</div>
+        </div>
+        <div class="order-item-right" onclick="event.stopPropagation()">
+            <div class="order-item-price">BD 3.500</div>
+            <div class="order-item-actions">
+                <button class="item-qty-btn" onclick="updateQty(this, -1)">−</button>
+                <span class="item-qty">1</span>
+                <button class="item-qty-btn" onclick="updateQty(this, 1)">+</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Item 5 - Chocolate Cake -->
+    <div class="order-item-row" data-item-id="5">
+        <div class="cancel-item-btn" onclick="cancelItem(this, 'Chocolate Cake')">
+            <span class="material-symbols-outlined">close</span>
+        </div>
+        <div class="order-item-image" onclick="openEditModal('cake')">
+            <img src="{{ url_for('static', filename='imgg10.jpeg') }}" alt="Chocolate Cake">
+        </div>
+        <div class="order-item-details" onclick="openEditModal('cake')">
+            <div class="order-item-name">Chocolate Cake</div>
+            <div class="order-item-meta">Slice · Warm</div>
+        </div>
+        <div class="order-item-right" onclick="event.stopPropagation()">
+            <div class="order-item-price">BD 3.000</div>
+            <div class="order-item-actions">
+                <button class="item-qty-btn" onclick="updateQty(this, -1)">−</button>
+                <span class="item-qty">1</span>
+                <button class="item-qty-btn" onclick="updateQty(this, 1)">+</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bill -->
+<div class="bill-section">
+    <div class="bill-details">
+        <div class="bill-row">
+            <span>Subtotal (4 items)</span>
+            <span>BD 11.300</span>
+        </div>
+        <div class="bill-row">
+            <span>Service charge (10%)</span>
+            <span>BD 1.130</span>
+        </div>
+        <div class="bill-row">
+            <span>VAT (5%)</span>
+            <span>BD 0.565</span>
+        </div>
+        <div class="bill-row" id="tipRow" style="display: none;">
+            <span>Tip (<span id="tipPercentage">0</span>%)</span>
+            <span id="tipAmount">BD 0.000</span>
+        </div>
+        <div class="bill-divider"></div>
+        <div class="bill-row total">
+            <span>Total Amount</span>
+            <span id="totalAmount">BD 12.995</span>
+        </div>
+        <div class="bill-note">
+            <span class="material-symbols-outlined">info</span>
+            <span>Includes table service & taxes</span>
+        </div>
+    </div>
+</div>
+
+<!-- Tip Section -->
+<div class="tip-section">
+    <div class="section-title">
+        <span class="material-symbols-outlined">volunteer_activism</span> Add a Tip
+    </div>
+    <div class="tip-options">
+        <input type="checkbox" id="tip5" class="tip-checkbox" name="tip" value="5" onchange="updateTip(this)">
+        <label for="tip5" class="tip-label">
+            <span class="tip-percent">5%</span>
+            <span class="tip-amount">BD 0.650</span>
+        </label>
+
+        <input type="checkbox" id="tip10" class="tip-checkbox" name="tip" value="10" onchange="updateTip(this)">
+        <label for="tip10" class="tip-label">
+            <span class="tip-percent">10%</span>
+            <span class="tip-amount">BD 1.300</span>
+        </label>
+
+        <input type="checkbox" id="tip15" class="tip-checkbox" name="tip" value="15" onchange="updateTip(this)">
+        <label for="tip15" class="tip-label">
+            <span class="tip-percent">15%</span>
+            <span class="tip-amount">BD 1.950</span>
+        </label>
+
+        <input type="checkbox" id="tip20" class="tip-checkbox" name="tip" value="20" onchange="updateTip(this)">
+        <label for="tip20" class="tip-label">
+            <span class="tip-percent">20%</span>
+            <span class="tip-amount">BD 2.600</span>
+        </label>
+    </div>
+    <div class="custom-tip">
+        <input type="number" class="custom-tip-input" id="customTip" placeholder="Custom amount (BD)" min="0" step="0.100">
+        <button class="apply-tip-btn" onclick="applyCustomTip()">Apply</button>
+    </div>
+</div>
+
+<!-- History Button -->
+<button class="history-btn" onclick="openHistoryModal()">
+    <span class="material-symbols-outlined">history</span> View Recent Orders
+</button>
+
+<!-- Place Order -->
+<button class="place-order-btn" onclick="processPayment()">
+    <span class="material-symbols-outlined">payment</span>
+    Pay Now · <span id="payButtonAmount">BD 12.995</span>
+</button>
+
+<!-- Edit Modal -->
+<div class="modal-overlay" id="editModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3><span class="material-symbols-outlined">edit</span> Customize Item</h3>
+            <button class="close-modal" onclick="closeEditModal()">&times;</button>
+        </div>
+        <div class="modal-product">
+            <div class="modal-product-image">
+                <img src="{{ url_for('static', filename='imgg3.jpeg') }}" alt="Product" id="modalProductImage">
+            </div>
+            <div class="modal-product-info">
+                <div class="modal-product-name" id="modalProductName">Cappuccino</div>
+                <div class="modal-product-price" id="modalProductPrice">BD 3.000</div>
+            </div>
+        </div>
+        <div class="edit-option">
+            <div class="edit-label"><span class="material-symbols-outlined">straighten</span> Select Size</div>
+            <div class="size-options">
+                <button class="size-btn active" onclick="selectSize(this, 'small')">Small</button>
+                <button class="size-btn" onclick="selectSize(this, 'medium')">Medium</button>
+                <button class="size-btn" onclick="selectSize(this, 'large')">Large</button>
+            </div>
+        </div>
+        <div class="edit-option">
+            <div class="edit-label"><span class="material-symbols-outlined">add_circle</span> Add Extras</div>
+            <div class="extras-grid">
+                <div class="extra-item" onclick="toggleExtra(this)"><span>Extra Shot</span><span class="extra-price">+0.500</span></div>
+                <div class="extra-item" onclick="toggleExtra(this)"><span>Soy Milk</span><span class="extra-price">+0.300</span></div>
+                <div class="extra-item" onclick="toggleExtra(this)"><span>Vanilla</span><span class="extra-price">+0.200</span></div>
+                <div class="extra-item" onclick="toggleExtra(this)"><span>Caramel</span><span class="extra-price">+0.200</span></div>
+            </div>
+        </div>
+        <div class="edit-option">
+            <div class="edit-label"><span class="material-symbols-outlined">notes</span> Special Instructions</div>
+            <input type="text" class="instructions-input" placeholder="e.g., extra hot, less ice">
+        </div>
+        <div class="modal-actions">
+            <button class="save-btn" onclick="saveEdit()">Save Changes</button>
+            <button class="delete-btn" onclick="deleteItem()">
+                <span class="material-symbols-outlined">delete</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- History Modal -->
+<div class="history-modal-overlay" id="historyModal">
+    <div class="history-modal-content">
+        <div class="modal-header">
+            <h3><span class="material-symbols-outlined">history</span> Recent Orders</h3>
+            <button class="close-modal" onclick="closeHistoryModal()">&times;</button>
+        </div>
+        <div class="history-item">
+            <div class="history-item-image">
+                <img src="{{ url_for('static', filename='imgg2.jpeg') }}" alt="Order">
+            </div>
+            <div class="history-item-details">
+                <div class="history-item-name">Double Espresso</div>
+                <div class="history-item-meta">Today · 10:30 AM</div>
+            </div>
+            <div class="history-item-price">BD 3.500</div>
+            <button class="reorder-btn-small" onclick="reorderItem('Double Espresso')">
+                <span class="material-symbols-outlined">repeat</span>
+            </button>
+        </div>
+        <div class="history-item">
+            <div class="history-item-image">
+                <img src="{{ url_for('static', filename='imgg5.jpeg') }}" alt="Order">
+            </div>
+            <div class="history-item-details">
+                <div class="history-item-name">Cold Brew + Pastry</div>
+                <div class="history-item-meta">Yesterday · 3:15 PM</div>
+            </div>
+            <div class="history-item-price">BD 4.800</div>
+            <button class="reorder-btn-small" onclick="reorderItem('Cold Brew Set')">
+                <span class="material-symbols-outlined">repeat</span>
+            </button>
+        </div>
+        <div class="history-item">
+            <div class="history-item-image">
+                <img src="{{ url_for('static', filename='imgg3.jpeg') }}" alt="Order">
+            </div>
+            <div class="history-item-details">
+                <div class="history-item-name">Cappuccino + Cake</div>
+                <div class="history-item-meta">Mar 15 · 2:30 PM</div>
+            </div>
+            <div class="history-item-price">BD 6.500</div>
+            <button class="reorder-btn-small" onclick="reorderItem('Cappuccino Set')">
+                <span class="material-symbols-outlined">repeat</span>
+            </button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block qr_card %}{% endblock %}
+
+{% block extra_js %}
+<script>
+    let subtotal = 11.300;
+    let serviceCharge = 1.130;
+    let vat = 0.565;
+    let baseTotal = 12.995;
+    let currentTip = 0;
+    let currentTipPercent = 0;
+
+    function updateQty(btn, change) {
+        const row = btn.closest('.order-item-row');
+        const qtySpan = row.querySelector('.item-qty');
+        let qty = parseInt(qtySpan.textContent);
+        qty = Math.max(1, qty + change);
+        qtySpan.textContent = qty;
+        calculateTotal();
+    }
+
+    function cancelItem(element, itemName) {
+        const row = element.closest('.order-item-row');
+        if (confirm(`Remove ${itemName} from your order?`)) {
+            row.remove();
+            calculateTotal();
+        }
+    }
+
+    function updateTip(checkbox) {
+        // Uncheck other tip checkboxes
+        document.querySelectorAll('.tip-checkbox').forEach(cb => {
+            if (cb !== checkbox) cb.checked = false;
+        });
+
+        if (checkbox.checked) {
+            const percent = parseInt(checkbox.value);
+            currentTipPercent = percent;
+            currentTip = (baseTotal * percent / 100).toFixed(3);
+            document.getElementById('tipRow').style.display = 'flex';
+            document.getElementById('tipPercentage').textContent = percent;
+            document.getElementById('tipAmount').textContent = `BD ${currentTip}`;
+        } else {
+            currentTip = 0;
+            currentTipPercent = 0;
+            document.getElementById('tipRow').style.display = 'none';
+        }
+
+        updateTotal();
+    }
+
+    function applyCustomTip() {
+        const customTip = parseFloat(document.getElementById('customTip').value);
+        
+        // Uncheck all checkboxes
+        document.querySelectorAll('.tip-checkbox').forEach(cb => cb.checked = false);
+
+        if (customTip > 0) {
+            currentTip = customTip.toFixed(3);
+            currentTipPercent = ((customTip / baseTotal) * 100).toFixed(1);
+            document.getElementById('tipRow').style.display = 'flex';
+            document.getElementById('tipPercentage').textContent = currentTipPercent;
+            document.getElementById('tipAmount').textContent = `BD ${currentTip}`;
+        } else {
+            currentTip = 0;
+            currentTipPercent = 0;
+            document.getElementById('tipRow').style.display = 'none';
+        }
+
+        updateTotal();
+    }
+
+    function calculateTotal() {
+        // Recalculate base total based on items and quantities
+        // This is a simplified version - you'd need to loop through items
+        baseTotal = 12.995; // Placeholder
+        updateTotal();
+    }
+
+    function updateTotal() {
+        const total = (baseTotal + parseFloat(currentTip)).toFixed(3);
+        document.getElementById('totalAmount').textContent = `BD ${total}`;
+        document.getElementById('payButtonAmount').textContent = `BD ${total}`;
+    }
+
+    function processPayment() {
+        const total = document.getElementById('totalAmount').textContent;
+        const tipAmount = currentTip > 0 ? `BD ${currentTip}` : 'No tip';
+        const tipPercent = currentTipPercent > 0 ? ` (${currentTipPercent}%)` : '';
+        
+        // Save order data for receipt/confirmation
+        const orderData = {
+            items: getOrderItems(),
+            subtotal: baseTotal - serviceCharge - vat,
+            serviceCharge: serviceCharge,
+            vat: vat,
+            tip: currentTip,
+            tipPercent: currentTipPercent,
+            total: total.replace('BD ', ''),
+            timestamp: new Date().toISOString()
+        };
+        
+        localStorage.setItem('currentOrder', JSON.stringify(orderData));
+        
+        // Show payment processing simulation
+        alert(`✅ Let's Pay\n\nTotal: ${total}\nTip: ${tipAmount}${tipPercent}\n\n Getting your order!`);
+        
+
+         window.location.href = "{{ url_for('payment') }}";
+    }
+
+    function getOrderItems() {
+        const items = [];
+        document.querySelectorAll('.order-item-row').forEach(row => {
+            const name = row.querySelector('.order-item-name').textContent;
+            const meta = row.querySelector('.order-item-meta').textContent;
+            const price = row.querySelector('.order-item-price').textContent.replace('BD ', '');
+            const qty = row.querySelector('.item-qty').textContent;
+            items.push({ name, meta, price, qty });
+        });
+        return items;
+    }
+
+    const itemImages = {
+        espresso:   "{{ url_for('static', filename='imgg.jpeg') }}",
+        cappuccino: "{{ url_for('static', filename='imgg3.jpeg') }}",
+        croissant:  "{{ url_for('static', filename='imgg9.jpeg') }}",
+        latte:      "{{ url_for('static', filename='imgg5.jpeg') }}",
+        cake:       "{{ url_for('static', filename='imgg10.jpeg') }}"
+    };
+
+    const itemNames = {
+        espresso:   'Espresso',
+        cappuccino: 'Cappuccino',
+        croissant:  'Butter Croissant',
+        latte:      'Iced Latte',
+        cake:       'Chocolate Cake'
+    };
+
+    function openEditModal(itemName) {
+        document.getElementById('modalProductName').textContent = itemNames[itemName] || itemName;
+        document.getElementById('modalProductImage').src = itemImages[itemName] || '';
+        document.getElementById('editModal').classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeEditModal() {
+        document.getElementById('editModal').classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    function selectSize(btn, size) {
+        document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+    }
+
+    function toggleExtra(element) { element.classList.toggle('active'); }
+
+    function saveEdit() {
+        alert('Changes saved to item');
+        closeEditModal();
+    }
+
+    function deleteItem() {
+        if (confirm('Remove this item from your order?')) {
+            alert('Item removed');
+            closeEditModal();
+        }
+    }
+
+    function openHistoryModal() {
+        document.getElementById('historyModal').classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeHistoryModal() {
+        document.getElementById('historyModal').classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    function reorderItem(item) {
+        alert(`🔄 ${item} added to your order`);
+        closeHistoryModal();
+    }
+
+    document.getElementById('editModal').addEventListener('click', function(e) {
+        if (e.target === this) closeEditModal();
+    });
+
+    document.getElementById('historyModal').addEventListener('click', function(e) {
+        if (e.target === this) closeHistoryModal();
+    });
+
+    document.querySelectorAll('.modal-content, .history-modal-content').forEach(el => {
+        el.addEventListener('click', e => e.stopPropagation());
+    });
+
+    // Pre-calculate tip amounts
+    window.addEventListener('load', function() {
+        const tip5 = baseTotal * 0.05;
+        const tip10 = baseTotal * 0.10;
+        const tip15 = baseTotal * 0.15;
+        const tip20 = baseTotal * 0.20;
+        
+        document.querySelector('label[for="tip5"] .tip-amount').textContent = `BD ${tip5.toFixed(3)}`;
+        document.querySelector('label[for="tip10"] .tip-amount').textContent = `BD ${tip10.toFixed(3)}`;
+        document.querySelector('label[for="tip15"] .tip-amount').textContent = `BD ${tip15.toFixed(3)}`;
+        document.querySelector('label[for="tip20"] .tip-amount').textContent = `BD ${tip20.toFixed(3)}`;
+    });
+</script>
+{% endblock %}
