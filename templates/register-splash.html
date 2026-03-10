@@ -2,323 +2,211 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>espresso · loyalty card</title>
-  <!-- fonts + material icons (round) -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0,1" />
-  <!-- Tailwind v3 via CDN -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>espresso · visual carousel</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0,1" />
   <style>
-    @keyframes fade { from { opacity: 0.4; } to { opacity: 1; } }
-    .fade-content { animation: fade 0.2s; }
-    .progress-dot {
-      width: 8px;
-      height: 8px;
-      background: #dacbbc;
-      border-radius: 20px;
-      transition: all 0.25s ease;
+    body { font-family: 'Inter', sans-serif; }
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-4px); }
     }
-    .progress-dot.active {
-      background: #a67c52;
-      width: 36px;
+    .float-animation {
+      animation: float 4s ease-in-out infinite;
     }
-    /* perk row text uses Quicksand */
-    .perk-text {
-      font-family: 'Quicksand', sans-serif;
-      font-weight: 500;
-      color: #2f261f;
+    /* keep material symbols available, but we won't use them on slide 1 & 2 */
+    .material-symbols-rounded {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
     }
-    /* carousel titles: force uppercase + keep quicksand */
-    .carousel-title {
-      font-family: 'Quicksand', sans-serif;
-      font-weight: 700;
-      font-size: 30px;
-      color: #2f261f;
-      text-transform: uppercase;
-      letter-spacing: 0.02em;
+    /* consistent image circle style */
+    .perk-image {
+      width: 56px;
+      height: 56px;
+      object-fit: cover;
+      border-radius: 9999px;
+      background-color: #f5f1eb;
+      border: 1.5px dashed #d1d5db;
+      padding: 0.25rem;
     }
-    .carousel-title span {
-      color: #a67c52;
-      font-style: italic;
-      text-transform: uppercase;  /* ensure italic part also uppercase */
+    .perk-image-large {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 9999px;
+      border: 2px dashed #d1d5db;
+      padding: 0.5rem;
+      background-color: #f5f1eb;
+    }
+    /* layout consistency */
+    .slide-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 380px; /* gives predictable space */
     }
   </style>
 </head>
-<body class="bg-[#f3ede7] font-sans text-[#2c241e] min-h-screen flex items-start justify-center p-7 md:p-8">
-<div class="w-full max-w-[680px] mx-auto">
-
-  <!-- LOGO (full size) -->
-  <img src="{{ url_for('static', filename='logo.png') }}" alt="Espresso" 
-       class="block max-w-[200px] w-full h-auto mx-auto mb-6 object-contain"
-       onerror="this.src='https://via.placeholder.com/400x120/FAF5F0/7B5C41?text=ESPRESSO+CO.'; this.onerror=null;">
-
-  <!-- wallet bonuses table -->
-  <div class="bg-white/70 border border-[#e0d3c9] rounded-3xl p-4 mb-8 shadow-sm">
-    <div class="flex justify-around items-center text-center">
-      <div class="flex-1">
-        <span class="text-sm font-medium text-[#735f4e]">TOP‑UP</span>
-        <div class="text-2xl font-bold text-[#3e2e21]">10 <span class="text-base text-[#a67c52]">BD</span></div>
-        <span class="text-sm text-[#a67c52] font-semibold">→ 11.5</span>
-      </div>
-      <div class="flex-1 border-x border-[#eddacb]">
-        <span class="text-sm font-medium text-[#735f4e]">TOP‑UP</span>
-        <div class="text-2xl font-bold text-[#3e2e21]">15 <span class="text-base text-[#a67c52]">BD</span></div>
-        <span class="text-sm text-[#a67c52] font-semibold">→ 17.5</span>
-      </div>
-      <div class="flex-1">
-        <span class="text-sm font-medium text-[#735f4e]">TOP‑UP</span>
-        <div class="text-2xl font-bold text-[#3e2e21]">25 <span class="text-base text-[#a67c52]">BD</span></div>
-        <span class="text-sm text-[#a67c52] font-semibold">→ 30</span>
-      </div>
+<body class="bg-[#f5f1eb] p-0 m-0">
+  
+  <!-- Main Card Container -->
+  <div class="w-full min-h-screen md:min-h-0 md:max-w-sm md:mx-auto md:my-8 bg-[#f5f1eb] flex flex-col justify-between p-8 shadow-xl md:rounded-3xl relative overflow-hidden">
+    
+    <!-- Back Button -->
+    <button class="absolute top-8 left-8 text-2xl font-light text-gray-600 z-10">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 19l-7-7 7-7" />
+      </svg>
+    </button>
+    
+    <!-- TOP LOGO - CENTERED -->
+    <div class="absolute top-28 left-0 right-0 flex justify-center z-10">
+      <img src="static/logo.png" alt="Espresso Logo" class="h-12 float-animation" 
+           onerror="this.src='data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22260%22%20height%3D%2280%22%20viewBox%3D%220%200%20260%2080%22%3E%3Crect%20width%3D%22260%22%20height%3D%2280%22%20fill%3D%22%23f9f1e7%22%2F%3E%3Ctext%20x%3D%2230%22%20y%3D%2252%22%20font-family%3D%22Montserrat%22%20font-size%3D%2232%22%20fill%3D%22%238b5a2b%22%3EESPRESSO%3C%2Ftext%3E%3C%2Fsvg%3E';">
     </div>
-    <div class="text-center text-sm text-[#8d7a68] border-t border-dashed border-[#dacbbc] mt-3 pt-2 flex items-center justify-center gap-1">
-      <span class="material-symbols-rounded text-base">bolt</span> instant bonus · loaded to wallet
-    </div>
-  </div>
-
-  <!-- CAROUSEL SECTION (3 slides) - titles now ALL CAPS via carousel-title class -->
-  <div id="carouselSection">
-    <!-- progress dots -->
-    <div class="flex justify-center items-center gap-3 mb-5">
-      <span class="progress-dot active" id="dot1"></span>
-      <span class="progress-dot" id="dot2"></span>
-      <span class="progress-dot" id="dot3"></span>
-    </div>
-
-    <!-- touch area for swiping -->
-    <div id="touchArea" class="w-full cursor-default">
-      <!-- SLIDE 1 – sixth cup: UPPERCASE title -->
-      <div id="slide1" class="slide-panel fade-content block">
-        <div class="carousel-title mb-1">SIXTH CUP <span>ON US</span></div>
-        <div class="flex items-center gap-5 bg-[#faf5f0] rounded-[60px] p-4 md:p-5 my-4 border border-[#eddacb]">
-          <span class="material-symbols-rounded text-4xl text-[#a67c52]">emoji_objects</span>
-          <span class="perk-text">After 6 purchases → free drink auto‑credited</span>
+    
+    <!-- CAROUSEL SECTION - adjusted top margin -->
+    <div class="relative w-full overflow-hidden mt-40 flex-1 flex items-center">
+      <!-- Carousel Track -->
+      <div class="flex transition-transform duration-300 ease-out w-full" id="carouselTrack">
+        
+        <!-- PAGE 1: 6th Cup Free — now using image instead of icons -->
+        <div class="w-full flex-shrink-0 px-2">
+          <div class="slide-content">
+            <div class="text-center mt-4">
+              <h1 class="text-[26px] leading-tight font-normal text-gray-800">
+                6th cup <span class="font-semibold">free</span>
+              </h1>
+              <p class="text-gray-500 text-sm mt-2">Collect stamps & get 1 free Drink</p>
+            </div>
+            
+            <!-- image row replaces icon row: exactly same spacing as before, but now all images -->
+              <div class="flex justify-center items-center mt-16">
+              <div class="w-48 h-48 rounded-full bg-[#f5f1eb] flex items-center justify-center border-2 border-dashed border-gray-300 p-4">
+                <img src="static/coffee-bottle-bottle-drink-svgrepo-com.svg" alt="Coffee Cup" class="w-32 h-32 object-contain rounded-full" onerror="this.src='data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22128%22%20height%3D%22128%22%20viewBox%3D%220%200%20128%20128%22%3E%3Ccircle%20cx%3D%2264%22%20cy%3D%2264%22%20r%3D%2260%22%20fill%3D%22%23f5f1eb%22%20stroke%3D%22%23d1d5db%22%20stroke-width%3D%222%22%20stroke-dasharray%3D%224%204%22%2F%3E%3Ctext%20x%3D%2232%22%20y%3D%2280%22%20font-size%3D%2220%22%20fill%3D%22%239ca3af%22%3Ecoffee%3C%2Ftext%3E%3C%2Fsvg%3E';">
+              </div>
+            </div>
+            <!-- Progress text -->
+            <p class="text-center text-sm text-gray-500 mt-8">6 collected next Drink free collected ·</p>
+          </div>
         </div>
-        <div class="flex items-center gap-5 bg-[#faf5f0] rounded-[60px] p-4 md:p-5 my-4 border border-[#eddacb]">
-          <span class="material-symbols-rounded text-4xl text-[#a67c52]">smartphone</span>
-          <span class="perk-text">Apple Pay / Samsung Pay & in‑app count</span>
+        
+        <!-- PAGE 2: Top-up Bonus Money — now using image instead of money/material icons -->
+        <div class="w-full flex-shrink-0 px-2">
+          <div class="slide-content">
+            <div class="text-center mt-4">
+              <h1 class="text-[26px] leading-tight font-normal text-gray-800">
+                Top-up & get <span class="font-semibold">bonus</span>
+              </h1>
+              <p class="text-gray-500 text-sm mt-2">Extra money on every reload</p>
+            </div>
+            
+            <!-- all images row (replaces previous bolt/savings icons) -->
+             <div class="flex justify-center items-center mt-16">
+              <div class="w-48 h-48 rounded-full bg-[#f5f1eb] flex items-center justify-center border-2 border-dashed border-gray-300 p-4">
+                <img src="static/money-bag.svg" alt="Coffee Cup" class="w-32 h-32 object-contain rounded-full" onerror="this.src='data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22128%22%20height%3D%22128%22%20viewBox%3D%220%200%20128%20128%22%3E%3Ccircle%20cx%3D%2264%22%20cy%3D%2264%22%20r%3D%2260%22%20fill%3D%22%23f5f1eb%22%20stroke%3D%22%23d1d5db%22%20stroke-width%3D%222%22%20stroke-dasharray%3D%224%204%22%2F%3E%3Ctext%20x%3D%2232%22%20y%3D%2280%22%20font-size%3D%2220%22%20fill%3D%22%239ca3af%22%3Ecoffee%3C%2Ftext%3E%3C%2Fsvg%3E';">
+              </div>
+            </div>
+            
+            
+            <!-- descriptive text -->
+            <p class="text-center text-sm text-gray-500 mt-8">Top-up to unlock bonus levels</p>
+          </div>
         </div>
-        <div class="flex items-center gap-5 bg-[#faf5f0] rounded-[60px] p-4 md:p-5 my-4 border border-[#eddacb]">
-          <span class="material-symbols-rounded text-4xl text-[#a67c52]">qr_code_scanner</span>
-          <span class="perk-text">Redeem via QR or tap at counter</span>
-        </div>
-        <div class="flex items-center gap-5 bg-[#faf5f0] rounded-[60px] p-4 md:p-5 my-4 border border-[#eddacb]">
-          <span class="material-symbols-rounded text-4xl text-[#a67c52]">wallet</span>
-          <span class="perk-text">Digital card shows progress “4/6”</span>
-        </div>
-      </div>
-
-      <!-- SLIDE 2 – load & earn: UPPERCASE title -->
-      <div id="slide2" class="slide-panel fade-content hidden">
-        <div class="carousel-title mb-1">LOAD & <span>EARN EXTRA</span></div>
-        <div class="flex items-center gap-5 bg-[#faf5f0] rounded-[60px] p-4 md:p-5 my-4 border border-[#eddacb]">
-          <span class="material-symbols-rounded text-4xl text-[#a67c52]">add_card</span>
-          <span class="perk-text"><strong>10 BD</strong> → get 11.5 · <strong>15 BD</strong> → 17.5 · <strong>25 BD</strong> → 30</span>
-        </div>
-        <div class="flex items-center gap-5 bg-[#faf5f0] rounded-[60px] p-4 md:p-5 my-4 border border-[#eddacb]">
-          <span class="material-symbols-rounded text-4xl text-[#a67c52]">schedule</span>
-          <span class="perk-text">Bonus credited instantly, visible in wallet</span>
-        </div>
-        <div class="flex items-center gap-5 bg-[#faf5f0] rounded-[60px] p-4 md:p-5 my-4 border border-[#eddacb]">
-          <span class="material-symbols-rounded text-4xl text-[#a67c52]">currency_exchange</span>
-          <span class="perk-text">Use balance for any order — no minimum</span>
-        </div>
-        <div class="flex items-center gap-5 bg-[#faf5f0] rounded-[60px] p-4 md:p-5 my-4 border border-[#eddacb]">
-          <span class="material-symbols-rounded text-4xl text-[#a67c52]">account_balance_wallet</span>
-          <span class="perk-text">Auto top‑up available in settings</span>
-        </div>
-      </div>
-
-      <!-- SLIDE 3 – tap · scan · earn: UPPERCASE title -->
-      <div id="slide3" class="slide-panel fade-content hidden">
-        <div class="carousel-title mb-1">TAP. SCAN. <span>EARN.</span></div>
-        <div class="flex items-center gap-5 bg-[#faf5f0] rounded-[60px] p-4 md:p-5 my-4 border border-[#eddacb]">
-          <span class="material-symbols-rounded text-4xl text-[#a67c52]">contactless</span>
-          <span class="perk-text">Digital loyalty in Apple Pay / Samsung Pay</span>
-        </div>
-        <div class="flex items-center gap-5 bg-[#faf5f0] rounded-[60px] p-4 md:p-5 my-4 border border-[#eddacb]">
-          <span class="material-symbols-rounded text-4xl text-[#a67c52]">quick_reference</span>
-          <span class="perk-text">Flow: link wallet → pay → auto‑update → notify</span>
-        </div>
-        <div class="flex items-center gap-5 bg-[#faf5f0] rounded-[60px] p-4 md:p-5 my-4 border border-[#eddacb]">
-          <span class="material-symbols-rounded text-4xl text-[#a67c52]">notifications_active</span>
-          <span class="perk-text">Push when reward ready & balance low</span>
-        </div>
-        <div class="flex items-center gap-5 bg-[#faf5f0] rounded-[60px] p-4 md:p-5 my-4 border border-[#eddacb]">
-          <span class="material-symbols-rounded text-4xl text-[#a67c52]">redeem</span>
-          <span class="perk-text">One‑tap redeem at POS or via app</span>
+        
+        <!-- PAGE 3: Customize & Pickup - WITH COFFEE CUP IMAGE CENTERED (larger hero) -->
+        <div class="w-full flex-shrink-0 px-2">
+          <div class="slide-content">
+            <div class="text-center mt-4">
+              <h1 class="text-[26px] leading-tight font-normal text-gray-800">
+                Customize & <span class="font-semibold">pickup</span>
+              </h1>
+              <p class="text-gray-500 text-sm mt-2">Ready when you are</p>
+            </div>
+            
+            <!-- Centered large coffee cup image (hero style) -->
+            <div class="flex justify-center items-center mt-16">
+              <div class="w-48 h-48 rounded-full bg-[#f5f1eb] flex items-center justify-center border-2 border-dashed border-gray-300 p-4">
+                <img src="static/coffee_cup.jpg" alt="Coffee Cup" class="w-32 h-32 object-contain rounded-full" onerror="this.src='data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22128%22%20height%3D%22128%22%20viewBox%3D%220%200%20128%20128%22%3E%3Ccircle%20cx%3D%2264%22%20cy%3D%2264%22%20r%3D%2260%22%20fill%3D%22%23f5f1eb%22%20stroke%3D%22%23d1d5db%22%20stroke-width%3D%222%22%20stroke-dasharray%3D%224%204%22%2F%3E%3Ctext%20x%3D%2232%22%20y%3D%2280%22%20font-size%3D%2220%22%20fill%3D%22%239ca3af%22%3Ecoffee%3C%2Ftext%3E%3C%2Fsvg%3E';">
+              </div>
+            </div>
+            
+            <!-- Pickup message -->
+            <p class="text-center text-sm text-gray-500 mt-8">Customize · fresh pack · 5-8 min</p>
+          </div>
         </div>
       </div>
     </div>
-
-    <!-- next button -->
-    <div class="flex justify-center mt-8">
-      <button id="nextBtn" class="bg-transparent border-2 border-[#a67c52] text-[#a67c52] font-semibold py-3 px-9 rounded-[60px] text-base inline-flex items-center gap-2 shadow-[0_2px_10px_rgba(166,124,82,0.1)] hover:bg-[#a67c52] hover:text-white transition duration-150">
-        <span>next</span>
-        <span class="material-symbols-rounded text-xl">arrow_forward</span>
+ 
+    <!-- BOTTOM SECTION -->
+    <div class="w-full space-y-6 mt-auto pt-8 pb-4">
+      <!-- Carousel Indicators (dots) -->
+      <div class="flex justify-center gap-1.5" id="dotContainer">
+        <span class="w-6 h-1.5 bg-black rounded-full cursor-pointer" onclick="goToSlide(0)"></span>
+        <span class="w-1.5 h-1.5 bg-gray-300 rounded-full cursor-pointer" onclick="goToSlide(1)"></span>
+        <span class="w-1.5 h-1.5 bg-gray-300 rounded-full cursor-pointer" onclick="goToSlide(2)"></span>
+      </div>
+      
+      <!-- Next Button - navigates to /register -->
+      <button class="w-full bg-black text-white text-lg py-4 rounded-xl hover:bg-gray-900 transition-all font-medium" id="nextBtn">
+        Next
       </button>
     </div>
   </div>
 
-  <!-- REGISTER SECTION (hidden) -->
-  <div id="registerSection" class="hidden">
-    <div class="flex justify-center mt-4">
-      <span class="material-symbols-rounded text-7xl text-[#a67c52]">coffee</span>
-    </div>
-    <div class="font-quicksand font-bold text-4xl md:text-5xl text-[#2f261f] leading-tight text-center mt-2 tracking-tight">
-      Your Perfect Cup <br><em class="text-[#a67c52] not-italic font-semibold">awaits you</em>
-    </div>
-    <p class="font-sans text-sm text-[#6f523b] max-w-[260px] mx-auto text-center mt-2 leading-relaxed tracking-wide">
-      Join thousands · unlock rewards & early access
-    </p>
-
-    <div class="flex flex-wrap justify-center gap-2 my-6">
-      <span class="bg-[#f2e6dc] rounded-[60px] py-2 px-4 md:px-5 text-sm font-semibold inline-flex items-center gap-1.5 text-[#4b3829] border border-[#dac2ab]">
-        <span class="material-symbols-rounded text-base">card_giftcard</span>Free Rewards
-      </span>
-      <span class="bg-[#f2e6dc] rounded-[60px] py-2 px-4 md:px-5 text-sm font-semibold inline-flex items-center gap-1.5 text-[#4b3829] border border-[#dac2ab]">
-        <span class="material-symbols-rounded text-base">bolt</span>Fast Ordering
-      </span>
-      <span class="bg-[#f2e6dc] rounded-[60px] py-2 px-4 md:px-5 text-sm font-semibold inline-flex items-center gap-1.5 text-[#4b3829] border border-[#dac2ab]">
-        <span class="material-symbols-rounded text-base">local_offer</span>Member Deals
-      </span>
-    </div>
-
-    <div class="flex flex-col items-center gap-3 max-w-[320px] mx-auto">
-      <a href="register" class="bg-[#a67c52] text-white w-full py-3.5 px-7 rounded-[60px] font-semibold text-center shadow-[0_12px_24px_-12px_#a67c52] hover:brightness-105 transition">create my account</a>
-      <a href="login" class="bg-white border border-[#dac1ab] text-[#4a3a2b] w-full py-3.5 px-7 rounded-[60px] font-medium text-center hover:bg-[#fefcf9] transition">i already have an account</a>
-      <p class="text-xs text-[#a28d7a] mt-2">by continuing you agree to <a href="#" class="underline text-[#7b5c41]">Terms</a> & <a href="#" class="underline text-[#7b5c41]">Privacy</a></p>
-    </div>
-  </div>
-</div>
-
-<!-- JavaScript (identical) -->
-<script>
-  (function() {
-    const carousel = document.getElementById('carouselSection');
-    const register = document.getElementById('registerSection');
-
-    const s1 = document.getElementById('slide1');
-    const s2 = document.getElementById('slide2');
-    const s3 = document.getElementById('slide3');
-    const slides = [s1, s2, s3];
-
-    const dot1 = document.getElementById('dot1');
-    const dot2 = document.getElementById('dot2');
-    const dot3 = document.getElementById('dot3');
-    const dots = [dot1, dot2, dot3];
-
-    let currentIdx = 0;
-    const total = 3;
-
-    function showSlide(index) {
-      slides.forEach(s => s.classList.add('hidden'));
-      slides[index].classList.remove('hidden');
+  <script>
+    let currentSlide = 0;
+    const track = document.getElementById('carouselTrack');
+    const dots = document.querySelectorAll('#dotContainer span');
+    const nextBtn = document.getElementById('nextBtn');
+    
+    function goToSlide(index) {
+      if (index < 0) index = 0;
+      if (index > 2) index = 2;
+      
+      currentSlide = index;
+      
+      track.style.transform = `translateX(-${currentSlide * 100}%)`;
+      
       dots.forEach((dot, i) => {
-        if (i === index) dot.classList.add('active');
-        else dot.classList.remove('active');
+        if (i === currentSlide) {
+          dot.className = 'w-6 h-1.5 bg-black rounded-full cursor-pointer';
+        } else {
+          dot.className = 'w-1.5 h-1.5 bg-gray-300 rounded-full cursor-pointer';
+        }
       });
+      
+      nextBtn.textContent = (currentSlide === 2) ? 'Next' : 'Next';
     }
-
-    function goToRegister() {
-      carousel.style.display = 'none';
-      register.classList.remove('hidden');
-    }
-
-    function nextSlide() {
-      if (currentIdx === total - 1) {
-        goToRegister();
-        return;
-      }
-      currentIdx++;
-      showSlide(currentIdx);
-    }
-
-    function prevSlide() {
-      if (currentIdx > 0) {
-        currentIdx--;
-        showSlide(currentIdx);
-      }
-    }
-
-    showSlide(0);
-    register.classList.add('hidden');
-
-    let interval = setInterval(() => {
-      if (!register.classList.contains('hidden')) {
-        clearInterval(interval);
-        return;
-      }
-      if (currentIdx < total - 1) nextSlide();
-    }, 3400);
-
-    const btn = document.getElementById('nextBtn');
-    btn.addEventListener('click', (e) => {
-      e.preventDefault();
-      if (!register.classList.contains('hidden')) return;
-      clearInterval(interval);
-      if (currentIdx === total - 1) {
-        goToRegister();
+    
+    nextBtn.addEventListener('click', () => {
+      if (currentSlide < 2) {
+        goToSlide(currentSlide + 1);
       } else {
-        nextSlide();
-        interval = setInterval(() => {
-          if (!register.classList.contains('hidden')) { clearInterval(interval); return; }
-          if (currentIdx < total - 1) nextSlide();
-        }, 3400);
+        window.location.href = '/register';
       }
     });
-
-    const touchArea = document.getElementById('touchArea');
-    let startX = 0, endX = 0;
-    const minDist = 40;
-
-    touchArea.addEventListener('touchstart', (e) => {
-      if (!register.classList.contains('hidden')) return;
-      startX = e.touches[0].screenX;
+    
+    // Touch swipe support
+    let touchStartX = 0;
+    let touchEndX = 0;
+    
+    track.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
     }, { passive: true });
-
-    touchArea.addEventListener('touchend', (e) => {
-      if (!register.classList.contains('hidden')) return;
-      endX = e.changedTouches[0].screenX;
-      const dist = endX - startX;
-      if (Math.abs(dist) < minDist) return;
-      clearInterval(interval);
-      if (dist > 0) { if (currentIdx > 0) prevSlide(); } 
-      else { if (currentIdx < total - 1) nextSlide(); }
-      if (register.classList.contains('hidden')) {
-        interval = setInterval(() => {
-          if (!register.classList.contains('hidden')) { clearInterval(interval); return; }
-          if (currentIdx < total - 1) nextSlide();
-        }, 3400);
+    
+    track.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      const diff = touchStartX - touchEndX;
+      if (Math.abs(diff) > 50) {
+        if (diff > 0 && currentSlide < 2) goToSlide(currentSlide + 1);
+        else if (diff < 0 && currentSlide > 0) goToSlide(currentSlide - 1);
       }
-    });
-
-    let mouseDown = false, mouseStart = 0;
-    touchArea.addEventListener('mousedown', (e) => {
-      if (!register.classList.contains('hidden')) return;
-      mouseDown = true;
-      mouseStart = e.screenX;
-      e.preventDefault();
-    });
-    window.addEventListener('mouseup', (e) => {
-      if (!mouseDown || !register.classList.contains('hidden')) return;
-      mouseDown = false;
-      const dist = e.screenX - mouseStart;
-      if (Math.abs(dist) < minDist) return;
-      clearInterval(interval);
-      if (dist > 0) { if (currentIdx > 0) prevSlide(); } 
-      else { if (currentIdx < total - 1) nextSlide(); }
-      if (register.classList.contains('hidden')) {
-        interval = setInterval(() => {
-          if (!register.classList.contains('hidden')) { clearInterval(interval); return; }
-          if (currentIdx < total - 1) nextSlide();
-        }, 3400);
-      }
-    });
-    touchArea.addEventListener('dragstart', (e) => e.preventDefault());
-  })();
-</script>
-<!-- Carousel titles are now ALL CAPS (uppercase) as requested -->
+    }, { passive: true });
+    
+    // Initialize
+    goToSlide(0);
+  </script>
 </body>
 </html>

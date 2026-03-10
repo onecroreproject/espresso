@@ -4,506 +4,622 @@
 
 {% block extra_css %}
 <style>
-    /* Hero */
-    .hero-section {
-        background: linear-gradient(135deg, #5c3b2c, #3a2417);
-        color: white;
-        padding: 32px 20px;
-        text-align: center;
-        margin-bottom: 20px;
-    }
-
-    .hero-title {
-        font-family: 'Playfair Display', serif;
-        font-size: 32px;
-        font-weight: 700;
-        margin-bottom: 8px;
-    }
-
-    .hero-subtitle {
-        font-size: 16px;
-        opacity: 0.9;
-        margin-bottom: 24px;
-    }
-
-    .wallet-card {
-        background: rgba(255,255,255,0.15);
-        backdrop-filter: blur(10px);
-        border-radius: 30px;
-        padding: 20px;
-        margin: 0 auto;
-        max-width: 300px;
-        border: 1px solid rgba(255,255,255,0.2);
-    }
-
-    .wallet-balance { font-size: 36px; font-weight: 700; margin-bottom: 8px; }
-    .wallet-label   { font-size: 14px; opacity: 0.8; }
-    .wallet-meta    { display: flex; justify-content: center; gap: 16px; margin-top: 12px; font-size: 13px; }
-
-    /* Progress */
-    .progress-section { padding: 0 16px 20px; }
-
-    .progress-card {
-        background: #ffffff;
-        border-radius: 30px;
-        padding: 20px;
-        border: 1px solid #e9d9c8;
-        box-shadow: 0 4px 15px rgba(92, 59, 44, 0.1);
-    }
-
-    .progress-title {
-        font-size: 18px;
-        font-weight: 600;
-        color: #3a2417;
-        margin-bottom: 16px;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-
-    .progress-stats {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 12px;
-        color: #8b6f54;
-        font-size: 13px;
-    }
-
-    .progress-bar-bg {
-        height: 12px;
-        background: #f0e4d6;
-        border-radius: 30px;
-        overflow: hidden;
-        margin-bottom: 16px;
-    }
-
-    .progress-bar-fill {
-        height: 100%;
-        width: 66%;
-        background: linear-gradient(90deg, #d4a373, #5c3b2c);
-        border-radius: 30px;
-    }
-
-    .reward-badge {
-        background: #fcf0e6;
-        border-radius: 30px;
-        padding: 16px;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-    }
-
-    .badge-icon {
-        width: 48px;
-        height: 48px;
-        background: #5c3b2c;
-        border-radius: 24px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        flex-shrink: 0;
-    }
-
-    .badge-text h4 { font-size: 16px; font-weight: 600; color: #3a2417; }
-    .badge-text p  { font-size: 13px; color: #8b6f54; }
-
-    /* Top-Up Table */
-    .topup-section { padding: 0 16px 20px; }
-
-    .section-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 16px;
-    }
-
-    .section-header h2 {
-        font-family: 'Playfair Display', serif;
-        font-size: 22px;
-        color: #3a2417;
-        font-weight: 700;
-    }
-
-    .table-container {
-        background: #ffffff;
-        border-radius: 30px;
-        padding: 20px;
-        border: 1px solid #e9d9c8;
-    }
-
-    .bonus-table { width: 100%; border-collapse: collapse; }
-
-    .bonus-table th {
-        text-align: left;
-        padding: 12px 0;
-        color: #8b6f54;
-        font-weight: 500;
-        font-size: 14px;
-        border-bottom: 2px solid #f0e4d6;
-    }
-
-    .bonus-table td {
-        padding: 16px 0;
-        border-bottom: 1px solid #f0e4d6;
-        font-weight: 500;
-    }
-
-    .bonus-table tr:last-child td { border-bottom: none; }
-
-    .topup-amount { color: #3a2417; font-weight: 600; }
-    .bonus-amount { color: #5c3b2c; font-weight: 700; }
-
-    .bonus-badge {
-        background: #fcf0e6;
-        color: #5c3b2c;
-        padding: 4px 12px;
-        border-radius: 30px;
-        font-size: 12px;
-        font-weight: 600;
-    }
-
-    .topup-btn {
-        background: #5c3b2c;
-        color: white;
-        border: none;
-        padding: 14px 24px;
-        border-radius: 40px;
-        font-weight: 600;
-        width: 100%;
-        margin-top: 16px;
-        cursor: pointer;
-        font-family: 'Montserrat', sans-serif;
-        font-size: 15px;
-        transition: background 0.2s;
-    }
-
-    .topup-btn:active { background: #6f4a2e; }
-
-    /* Payment Integration */
-    .payment-integration { padding: 0 16px 20px; }
-
-    .integration-card {
-        background: #ffffff;
-        border-radius: 30px;
-        padding: 20px;
-        border: 1px solid #e9d9c8;
-    }
-
-    .integration-label {
-        text-align: center;
-        margin-bottom: 16px;
-    }
-
-    .integration-label span {
-        background: #fcf0e6;
-        padding: 6px 16px;
-        border-radius: 40px;
-        font-size: 13px;
-        font-weight: 600;
-        color: #5c3b2c;
-    }
-
-    .wallet-icons {
-        display: flex;
-        gap: 20px;
-        justify-content: center;
-        margin: 20px 0;
-    }
-
-    .wallet-icon {
-        width: 60px;
-        height: 60px;
-        border-radius: 16px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        font-size: 30px;
-    }
-
-    .wallet-icon.apple { 
-        background: #000; 
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    }
-    
-    .wallet-icon.samsung { 
-        background: #1428a0; 
-        font-family: 'Montserrat', sans-serif;
-        font-weight: 700;
-        font-size: 28px;
-    }
-
-    .integration-text {
-        text-align: center;
-        color: #3a2417;
-        font-size: 14px;
-        line-height: 1.6;
-    }
-
-    .wallet-btns {
-        display: flex;
-        gap: 10px;
-        margin-top: 20px;
-    }
-
-    .wallet-btn {
-        flex: 1;
-        padding: 12px;
-        border-radius: 40px;
-        font-weight: 600;
-        cursor: pointer;
-        font-family: 'Montserrat', sans-serif;
-        font-size: 13px;
-        transition: background 0.2s;
-        background: transparent;
-    }
-
-    .wallet-btn.apple-btn  { border: 2px solid #5c3b2c; color: #5c3b2c; }
-    .wallet-btn.samsung-btn { border: 2px solid #1428a0; color: #1428a0; }
-    .wallet-btn:active { opacity: 0.8; }
-
-    /* Benefits */
-    .benefits-section { padding: 0 16px 20px; }
-
-    .benefits-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 12px;
-    }
-
-    .benefit-card {
-        background: #ffffff;
-        border-radius: 25px;
-        padding: 20px 12px;
-        border: 1px solid #e9d9c8;
-        text-align: center;
-    }
-
-    .benefit-icon {
-        width: 48px;
-        height: 48px;
-        background: #fcf0e6;
-        border-radius: 24px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 0 auto 12px;
-        color: #5c3b2c;
-    }
-
-    .benefit-title { font-weight: 600; color: #3a2417; margin-bottom: 4px; }
-    .benefit-desc  { font-size: 12px; color: #8b6f54; }
-
-    /* Flow */
-    .flow-section { padding: 0 16px 20px; }
-
-    .flow-card {
-        background: #ffffff;
-        border-radius: 30px;
-        padding: 20px;
-        border: 1px solid #e9d9c8;
-    }
-
-    .flow-step {
-        display: flex;
-        gap: 16px;
-        margin-bottom: 20px;
-        position: relative;
-    }
-
-    .flow-step:last-child { margin-bottom: 0; }
-
-    .flow-step:not(:last-child)::before {
-        content: '';
-        position: absolute;
-        left: 20px;
-        top: 40px;
-        width: 2px;
-        height: calc(100% - 20px);
-        background: #f0e4d6;
-    }
-
-    .step-number {
-        width: 40px;
-        height: 40px;
-        background: #5c3b2c;
-        border-radius: 20px;
-        color: white;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: 700;
-        z-index: 2;
-        flex-shrink: 0;
-    }
-
-    .step-content { flex: 1; }
-    .step-title { font-weight: 600; color: #3a2417; margin-bottom: 4px; }
-    .step-desc  { font-size: 13px; color: #8b6f54; }
-
-    /* Security */
-    .security-section { padding: 0 16px 20px; }
-
-    .security-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 10px;
-    }
-
-    .security-item {
-        background: #ffffff;
-        border-radius: 20px;
-        padding: 16px 8px;
-        text-align: center;
-        border: 1px solid #e9d9c8;
-    }
-
-    .security-icon { color: #5c3b2c; margin-bottom: 8px; }
-    .security-text { font-size: 11px; font-weight: 600; color: #3a2417; }
-
-    /* Future */
-    .future-section { padding: 0 16px 20px; }
-
-    .future-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 10px;
-    }
-
-    .future-item {
-        background: linear-gradient(145deg, #ffffff, #fcf0e6);
-        border-radius: 25px;
-        padding: 16px 8px;
-        text-align: center;
-        border: 1px solid #e9d9c8;
+    /* Simple Paper Style Rewards Page - Fixed Card at Top */
+    .rewards-wrapper {
+        min-height: 100vh;
+        background: #d9c8b8;
+        padding: 20px 16px 0;
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 6px;
+        position: relative;
+        overflow: hidden; /* Prevent scrolling */
     }
 
-    .future-item .material-symbols-outlined { font-size: 32px; color: #5c3b2c; }
-    .future-item span:last-child { font-size: 12px; font-weight: 600; color: #3a2417; }
+    /* Paper texture background */
+    .rewards-wrapper::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-image: 
+            repeating-linear-gradient(45deg, rgba(139, 111, 84, 0.03) 0px, rgba(139, 111, 84, 0.03) 2px, transparent 2px, transparent 8px);
+        pointer-events: none;
+    }
 
-    /* Responsive */
-    @media (max-width: 480px) {
-        .benefits-grid  { grid-template-columns: 1fr; }
-        .security-grid  { grid-template-columns: repeat(2, 1fr); }
-        .future-grid    { grid-template-columns: repeat(2, 1fr); }
-        .hero-title     { font-size: 28px; }
+    /* Simple Paper Card - Fixed at Top */
+    .paper-card {
+        background: #fcf8f3;
+        border-radius: 16px;
+        padding: 30px 20px 25px;
+        box-shadow: 
+            0 5px 0 0 #b48c5c,
+            0 12px 25px rgba(58, 36, 23, 0.25);
+        width: 100%;
+        max-width: 320px;
+        margin: 0 auto;
+        position: relative;
+        top: 20px;
+        border: 1px solid #e9d9c8;
+        z-index: 10;
+    }
+
+    /* Subtle paper fold effect */
+    .paper-card::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 10px;
+        right: 10px;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, #d4b99c, transparent);
+    }
+
+    /* Simple Pin/Tack */
+    .paper-pin {
+        position: absolute;
+        top: -8px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 30px;
+        height: 30px;
+        background: #a38264;
+        border-radius: 50% 50% 40% 40%;
+        box-shadow: 0 3px 0 0 #5c3b2c;
+        z-index: 20;
+    }
+
+    .paper-pin::before {
+        content: '';
+        position: absolute;
+        top: 3px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 10px;
+        height: 10px;
+        background: #f0e4d6;
+        border-radius: 50%;
+    }
+
+    /* Simple Header */
+    .paper-header {
+        text-align: center;
+        margin-bottom: 25px;
+        position: relative;
+        padding-bottom: 15px;
+        border-bottom: 2px dotted #d4b99c;
+    }
+
+    .store-name {
+        font-family: 'Playfair Display', serif;
+        font-size: 24px;
+        font-weight: 700;
+        color: #3a2417;
+        letter-spacing: 0.5px;
+        margin-bottom: 4px;
+    }
+
+    .paper-title {
+        font-size: 12px;
+        color: #8b6f54;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-weight: 500;
+    }
+
+    .paper-date {
+        font-size: 9px;
+        color: #b48c5c;
+        margin-top: 8px;
+        font-family: monospace;
+    }
+
+    /* Simple Counter */
+    .counter-paper {
+        background: white;
+        border-radius: 12px;
+        padding: 15px;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border: 1px solid #e9d9c8;
+        box-shadow: 0 2px 0 0 #d4b99c;
+    }
+
+    .counter-icon-paper {
+        background: #f0e4d6;
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .counter-icon-paper .material-symbols-outlined {
+        font-size: 24px;
+        color: #5c3b2c;
+    }
+
+    .counter-number-paper {
+        font-size: 34px;
+        font-weight: 700;
+        color: #5c3b2c;
+        line-height: 1;
+        font-family: 'Playfair Display', serif;
+    }
+
+    .counter-label-paper {
+        font-size: 10px;
+        color: #8b6f54;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        text-align: right;
+    }
+
+    /* Simple Divider */
+    .simple-divider {
+        height: 1px;
+        background: repeating-linear-gradient(90deg, #d4b99c, #d4b99c 4px, transparent 4px, transparent 8px);
+        margin: 20px 0;
+    }
+
+    /* Simple Progress */
+    .progress-paper {
+        background: white;
+        border-radius: 16px;
+        padding: 18px 15px;
+        margin-bottom: 20px;
+        border: 1px solid #e9d9c8;
+    }
+
+    .progress-header-paper {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+        font-size: 12px;
+        color: #8b6f54;
+    }
+
+    .progress-label {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .progress-label .material-symbols-outlined {
+        font-size: 16px;
+        color: #b48c5c;
+    }
+
+    .progress-percent-paper {
+        background: #f0e4d6;
+        padding: 3px 8px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 600;
+        color: #5c3b2c;
+    }
+
+    /* Simple Progress Bar */
+    .track-paper {
+        background: #f0e4d6;
+        height: 12px;
+        border-radius: 20px;
+        padding: 2px;
+        margin-bottom: 10px;
+    }
+
+    .fill-paper {
+        height: 100%;
+        border-radius: 20px;
+        background: #5c3b2c;
+        transition: width 0.5s ease;
+        position: relative;
+    }
+
+    .fill-paper::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 4px;
+        height: 100%;
+        background: #8b5e3c;
+        border-radius: 2px;
+    }
+
+    .stats-paper {
+        display: flex;
+        justify-content: space-between;
+        font-size: 14px;
+        font-weight: 600;
+        color: #3a2417;
+        font-family: monospace;
+        padding: 0 2px;
+    }
+
+    .stat-item {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .stat-divider {
+        color: #d4b99c;
+    }
+
+    /* Simple Reward Ticket */
+    .reward-paper {
+        background: #ffffff;
+        border-radius: 16px;
+        padding: 16px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        border: 1px solid #e9d9c8;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        position: relative;
+    }
+
+    .reward-paper.available {
+        background: #5c3b2c;
+        border-color: #d4a373;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 0 0 #3a2417;
+    }
+
+    .reward-icon-paper {
+        width: 48px;
+        height: 48px;
+        background: #f0e4d6;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .reward-paper.available .reward-icon-paper {
+        background: #fcf0e6;
+    }
+
+    .reward-icon-paper .material-symbols-outlined {
+        font-size: 24px;
+        color: #5c3b2c;
+    }
+
+    .reward-text-paper h4 {
+        font-size: 16px;
+        font-weight: 600;
+        color: #3a2417;
+        margin-bottom: 2px;
+    }
+
+    .reward-paper.available .reward-text-paper h4 {
+        color: white;
+    }
+
+    .reward-text-paper p {
+        font-size: 11px;
+        color: #8b6f54;
+    }
+
+    .reward-paper.available .reward-text-paper p {
+        color: #f0e4d6;
+    }
+
+    /* Simple Footer - Fixed at bottom */
+    .paper-footer {
+        text-align: center;
+        margin-top: 30px;
+        font-size: 8px;
+        color: #d4b99c;
+        font-family: monospace;
+        letter-spacing: 1px;
+        position: fixed;
+        bottom: 20px;
+        left: 0;
+        right: 0;
+    }
+
+    /* Simple Toast */
+    .toast-container {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 3000;
+        width: 90%;
+        max-width: 280px;
+    }
+
+    .toast {
+        background: #fcf8f3;
+        border: 1px solid #5c3b2c;
+        color: #3a2417;
+        padding: 12px 16px;
+        border-radius: 30px;
+        box-shadow: 0 3px 0 0 #5c3b2c;
+        font-weight: 500;
+        transform: translateY(100px);
+        opacity: 0;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 12px;
+    }
+
+    .toast.show {
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+    .toast.success {
+        background: #27ae60;
+        border-color: #1e8449;
+        color: white;
+        box-shadow: 0 3px 0 0 #1e8449;
+    }
+
+    .toast-icon {
+        font-size: 18px;
+    }
+
+    .toast-close {
+        background: none;
+        border: none;
+        color: currentColor;
+        font-size: 16px;
+        cursor: pointer;
+        opacity: 0.7;
+        padding: 0 4px;
+    }
+
+    /* Small screen adjustments */
+    @media (max-width: 340px) {
+        .paper-card {
+            padding: 25px 15px 20px;
+        }
+        
+        .counter-number-paper {
+            font-size: 28px;
+        }
     }
 </style>
-<!-- Font Awesome for Apple Pay icon only -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 {% endblock %}
 
 {% block content %}
-<!-- Hero -->
-<div>
-    
-</div>
-<br>
-<!-- Progress -->
-<div class="progress-section">
-    <div class="progress-card">
-        <div class="progress-title">
-            <span class="material-symbols-outlined">local_cafe</span>
-            Rewards Progress
+<!-- Toast Container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- Simple Paper Style Rewards Page - Card at Top, No Scroll -->
+<div class="rewards-wrapper">
+    <div class="paper-card">
+        <!-- Simple Pin -->
+        <div class="paper-pin"></div>
+
+        <!-- Simple Header -->
+        <div class="paper-header">
+            <div class="store-name">ESPRESSO</div>
+            <div class="paper-title">REWARDS CARD</div>
+            <div class="paper-date" id="currentDate"></div>
         </div>
-        <div class="progress-stats">
-            <span>4 of 6 purchases</span>
-            <span>1 free drink incoming</span>
+
+        <!-- Simple Counter -->
+        <div class="counter-paper">
+            <div class="counter-icon-paper">
+                <span class="material-symbols-outlined">coffee</span>
+            </div>
+            <div style="text-align: right;">
+                <div class="counter-number-paper" id="freeDrinks">0</div>
+                <div class="counter-label-paper">FREE DRINKS</div>
+            </div>
         </div>
-        <div class="progress-bar-bg">
-            <div class="progress-bar-fill"></div>
+
+        <!-- Simple Divider -->
+        <div class="simple-divider"></div>
+
+        <!-- Simple Progress -->
+        <div class="progress-paper">
+            <div class="progress-header-paper">
+                <span class="progress-label">
+                    <span class="material-symbols-outlined">local_activity</span>
+                    STAMP CARD
+                </span>
+                <span class="progress-percent-paper" id="progressPercent">0%</span>
+            </div>
+
+            <!-- Simple Progress Bar -->
+            <div class="track-paper">
+                <div class="fill-paper" id="progressBar" style="width: 0%;"></div>
+            </div>
+
+            <div class="stats-paper">
+                <span class="stat-item">
+                    <span id="purchaseCount">0</span>
+                </span>
+                <span class="stat-divider">✦</span>
+                <span class="stat-item">
+                    <span>6</span>
+                </span>
+                <span class="stat-divider">✦</span>
+                <span class="stat-item">
+                    <span id="remainingCount">6</span>
+                    <span style="font-size: 10px; color: #8b6f54;">left</span>
+                </span>
+            </div>
         </div>
-        <div class="reward-badge">
-            <div class="badge-icon">
+
+        <!-- Simple Reward Ticket -->
+        <div class="reward-paper" id="rewardBadge">
+            <div class="reward-icon-paper">
                 <span class="material-symbols-outlined">celebration</span>
             </div>
-            <div class="badge-text">
-                <h4>Free Cappuccino Waiting!</h4>
-                <p>Redeem at any Espresso Cafe</p>
+            <div class="reward-text-paper">
+                <h4 id="rewardTitle">Free Drink</h4>
+                <p id="rewardMessage">Collect 6 stamps</p>
             </div>
         </div>
     </div>
-</div>
 
-
-<!-- Benefits -->
-<div class="benefits-section">
-    <div class="section-header"><h2>Member Benefits</h2></div>
-    <div class="benefits-grid">
-        <div class="benefit-card">
-            <div class="benefit-icon"><span class="material-symbols-outlined">auto_awesome</span></div>
-            <div class="benefit-title">Free Drinks</div>
-            <div class="benefit-desc">Every 6th purchase on us</div>
-        </div>
-        <div class="benefit-card">
-            <div class="benefit-icon"><span class="material-symbols-outlined">bolt</span></div>
-            <div class="benefit-title">Instant Bonuses</div>
-            <div class="benefit-desc">Top-up & get extra credit</div>
-        </div>
-        <div class="benefit-card">
-            <div class="benefit-icon"><span class="material-symbols-outlined">qr_code_scanner</span></div>
-            <div class="benefit-title">QR Pay</div>
-            <div class="benefit-desc">Scan & go, no wallet needed</div>
-        </div>
-        <div class="benefit-card">
-            <div class="benefit-icon"><span class="material-symbols-outlined">celebration</span></div>
-            <div class="benefit-title">Birthday Reward</div>
-            <div class="benefit-desc">Special treat on your day</div>
-        </div>
+    <!-- Simple Footer - Fixed at bottom -->
+    <div class="paper-footer">
+        ✦  KEEP COLLECTING  ✦
     </div>
 </div>
 
-<!-- How It Works -->
-<div class="flow-section">
-    <div class="section-header"><h2>How It Works</h2></div>
-    <div class="flow-card">
-        <div class="flow-step">
-            <div class="step-number">1</div>
-            <div class="step-content">
-                <div class="step-title">Link Your Wallet</div>
-                <div class="step-desc">Connect Apple Pay or Samsung Pay to Espresso app</div>
-            </div>
-        </div>
-        <div class="flow-step">
-            <div class="step-number">2</div>
-            <div class="step-content">
-                <div class="step-title">Tap & Earn</div>
-                <div class="step-desc">Each purchase automatically tracks toward rewards</div>
-            </div>
-        </div>
-        <div class="flow-step">
-            <div class="step-number">3</div>
-            <div class="step-content">
-                <div class="step-title">Get Notified</div>
-                <div class="step-desc">Real-time alerts for rewards and bonuses</div>
-            </div>
-        </div>
-        <div class="flow-step">
-            <div class="step-number">4</div>
-            <div class="step-content">
-                <div class="step-title">Redeem Instantly</div>
-                <div class="step-desc">One tap or QR scan at any Espresso Cafe</div>
-            </div>
-        </div>
-    </div>
-</div>
+<script>
+    // Set current date
+    document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-US', { 
+        year: 'numeric', 
+        month: '2-digit', 
+        day: '2-digit' 
+    }).replace(/\//g, '.');
 
+    // Toast notification system
+    function showToast(message, type = 'success', duration = 3000) {
+        const container = document.getElementById('toastContainer');
+        const toastId = 'toast_' + Date.now();
+        
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        toast.id = toastId;
+        
+        let icon = 'check_circle';
+        if (type === 'warning') icon = 'warning';
+        if (type === 'error') icon = 'error';
+        
+        toast.innerHTML = `
+            <span class="material-symbols-outlined toast-icon">${icon}</span>
+            <span class="toast-message">${message}</span>
+            <button class="toast-close" onclick="closeToast('${toastId}')">×</button>
+        `;
+        
+        container.appendChild(toast);
+        
+        setTimeout(() => toast.classList.add('show'), 10);
+        
+        setTimeout(() => {
+            closeToast(toastId);
+        }, duration);
+    }
 
+    function closeToast(id) {
+        const toast = document.getElementById(id);
+        if (toast) {
+            toast.classList.remove('show');
+            setTimeout(() => {
+                if (toast.parentNode) {
+                    toast.parentNode.removeChild(toast);
+                }
+            }, 300);
+        }
+    }
 
+    // Reward system - Free Drinks Only
+    let purchaseCount = 0;
+    let freeDrinksAvailable = 0;
 
+    // Load data from localStorage
+    function loadRewardsData() {
+        const savedData = localStorage.getItem('rewardsData');
+        if (savedData) {
+            const data = JSON.parse(savedData);
+            purchaseCount = data.purchaseCount || 0;
+            freeDrinksAvailable = data.freeDrinksAvailable || 0;
+        } else {
+            // Initialize from order history
+            updateFromOrderHistory();
+        }
+        
+        updateDisplay();
+    }
+
+    // Update purchase count from order history
+    function updateFromOrderHistory() {
+        const orderHistory = JSON.parse(localStorage.getItem('orderHistory')) || [];
+        
+        // Count all orders
+        purchaseCount = orderHistory.length;
+        
+        // Calculate free drinks available (every 6 orders)
+        freeDrinksAvailable = Math.floor(purchaseCount / 6);
+        
+        saveRewardsData();
+    }
+
+    // Save rewards data to localStorage
+    function saveRewardsData() {
+        const data = {
+            purchaseCount: purchaseCount,
+            freeDrinksAvailable: freeDrinksAvailable
+        };
+        localStorage.setItem('rewardsData', JSON.stringify(data));
+    }
+
+    // Update display
+    function updateDisplay() {
+        // Update free drinks counter
+        document.getElementById('freeDrinks').textContent = freeDrinksAvailable;
+        
+        // Calculate progress for next free drink
+        const purchasesThisCycle = purchaseCount % 6;
+        const progress = (purchasesThisCycle / 6) * 100;
+        const remaining = 6 - purchasesThisCycle;
+        
+        // Update progress display
+        document.getElementById('purchaseCount').textContent = purchasesThisCycle;
+        document.getElementById('remainingCount').textContent = remaining;
+        document.getElementById('progressPercent').textContent = `${Math.round(progress)}%`;
+        document.getElementById('progressBar').style.width = `${progress}%`;
+        
+        // Check if free drink is available
+        const hasFreeDrink = freeDrinksAvailable > 0;
+        
+        const rewardBadge = document.getElementById('rewardBadge');
+        
+        if (hasFreeDrink) {
+            rewardBadge.classList.add('available');
+            document.getElementById('rewardTitle').textContent = '✨ FREE COFFEE!';
+            document.getElementById('rewardMessage').textContent = 'Ready to redeem';
+        } else {
+            rewardBadge.classList.remove('available');
+            document.getElementById('rewardTitle').textContent = 'Free Cappuccino';
+            document.getElementById('rewardMessage').textContent = 
+                remaining === 0 ? 'Start ordering' : `${remaining} stamps needed`;
+        }
+    }
+
+    // Listen for new orders
+    window.addEventListener('storage', function(e) {
+        if (e.key === 'orderHistory') {
+            updateFromOrderHistory();
+            updateDisplay();
+            showToast('Stamps updated!', 'success');
+        }
+    });
+
+    // Add click handler to badge
+    document.getElementById('rewardBadge').addEventListener('click', function() {
+        if (freeDrinksAvailable > 0) {
+            showToast(`🎉 ${freeDrinksAvailable} free drink(s) ready!`, 'success', 3000);
+        } else {
+            const remaining = 6 - (purchaseCount % 6);
+            showToast(`${remaining} more stamp${remaining > 1 ? 's' : ''} needed`, 'warning');
+        }
+    });
+
+    // Initialize on page load
+    window.addEventListener('load', function() {
+        loadRewardsData();
+    });
+</script>
 {% endblock %}
 
 {% block qr_card %}{% endblock %}
-
-{% block extra_js %}
-<script>
-    document.getElementById('topupBtn').addEventListener('click',   () => alert('💰 Top-up screen would open here'));
-    document.getElementById('appleBtn').addEventListener('click',   () => alert('📱 Add to Apple Wallet (demo)'));
-    document.getElementById('samsungBtn').addEventListener('click', () => alert('📱 Add to Samsung Pay (demo)'));
-</script>
-{% endblock %}

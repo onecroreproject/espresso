@@ -65,13 +65,14 @@
             font-size: 16px;
             background: #fcf9f7;
             font-family: 'Montserrat', sans-serif;
-            transition: border 0.2s;
+            transition: border 0.2s, box-shadow 0.2s;
             outline: none;
         }
 
         .input-field:focus {
             border-color: #8b5a2b;
             background: #ffffff;
+            box-shadow: 0 0 0 3px rgba(139, 90, 43, 0.1);
         }
 
         .input-field::placeholder {
@@ -79,17 +80,26 @@
             font-weight: 300;
         }
 
+        /* validation error style (applied to fields) */
+        .input-field.error-field,
+        .phone-block.error-field {
+            border-color: #c73b3b;
+            background: #fff6f5;
+            box-shadow: 0 0 0 2px rgba(199, 59, 59, 0.1);
+        }
+
         /* phone block - exactly like login page */
         .phone-block {
             background: #fcf9f7;
             border-radius: 60px;
             border: 1.5px solid #d4b99b;
-            margin-bottom: 24px;
+            margin-bottom: 20px;
             padding: 6px 6px 6px 18px;
             display: flex;
             align-items: center;
             gap: 8px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+            transition: border 0.2s, box-shadow 0.2s;
         }
 
         /* country dropdown styled as pill (inline, not modal) */
@@ -190,6 +200,40 @@
             border-bottom: 2px solid #8b5a2b;
         }
 
+        /* inline validation tooltip style (appears below fields) — new subtle style */
+        .field-feedback {
+            font-size: 13px;
+            font-weight: 500;
+            margin: -8px 0 16px 16px;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #c73b3b;
+            background: transparent;
+            animation: fadeIn 0.15s ease;
+        }
+        .field-feedback .material-symbols-outlined {
+            font-size: 18px;
+            color: #c73b3b;
+        }
+        .field-feedback.success {
+            color: #2f7d4f;
+        }
+        .field-feedback.success .material-symbols-outlined {
+            color: #2f7d4f;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Hide feedback containers by default */
+        .feedback-hidden {
+            display: none;
+        }
+
         @media (max-width: 480px) {
             .register-container { padding: 10px 10px 20px; }
             .country-dropdown { min-width: 95px; }
@@ -205,17 +249,19 @@
 
         <div class="espresso-tagline"> ☕ JOIN ESPRESSO FAMILY</div>
 
-        <!-- FORM with name, email and phone -->
+        <!-- FORM with name, email and phone (no global message area) -->
         <form id="registerForm" onsubmit="event.preventDefault(); handleRegister();">
             
-            <!-- Name input field -->
+            <!-- Name input field + its own feedback line -->
             <input type="text" id="fullName" class="input-field" placeholder="FULL NAME" value="Demo User" required>
+            <div id="nameFeedback" class="field-feedback feedback-hidden"></div>
             
-            <!-- Email input field (NEW) -->
+            <!-- Email input field + its own feedback line -->
             <input type="email" id="email" class="input-field" placeholder="EMAIL ADDRESS" value="demo@espresso.com" required>
+            <div id="emailFeedback" class="field-feedback feedback-hidden"></div>
             
-            <!-- Phone block with inline country dropdown (same as login page) -->
-            <div class="phone-block">
+            <!-- Phone block with inline country dropdown -->
+            <div class="phone-block" id="phoneBlock">
                 <div class="country-dropdown">
                     <select id="countrySelect" class="country-selector">
                         <option value="bh" data-code="+973" selected>🇧🇭 +973</option>
@@ -238,6 +284,7 @@
                 </div>
                 <input type="tel" id="phoneNumber" class="phone-input-simple" placeholder="Phone number" value="3600 1234" required>
             </div>
+            <div id="phoneFeedback" class="field-feedback feedback-hidden"></div>
 
             <!-- REGISTER button -->
             <button type="submit" class="register-btn">
@@ -258,6 +305,65 @@
         const phoneInput = document.getElementById('phoneNumber');
         const fullNameInput = document.getElementById('fullName');
         const emailInput = document.getElementById('email');
+        const phoneBlock = document.getElementById('phoneBlock');
+
+        // Feedback containers
+        const nameFeedback = document.getElementById('nameFeedback');
+        const emailFeedback = document.getElementById('emailFeedback');
+        const phoneFeedback = document.getElementById('phoneFeedback');
+
+        // Helper to hide all feedback divs and reset field styling
+        function clearAllFeedback() {
+            // hide all feedback containers
+            [nameFeedback, emailFeedback, phoneFeedback].forEach(el => {
+                el.classList.add('feedback-hidden');
+                el.innerHTML = ''; // clear content
+                el.classList.remove('success'); // remove any success class
+            });
+            // remove error styling from fields
+            fullNameInput.classList.remove('error-field');
+            emailInput.classList.remove('error-field');
+            phoneBlock.classList.remove('error-field');
+            phoneInput.classList.remove('error-field');
+        }
+
+        // Show feedback for a specific field
+        function showFieldFeedback(field, message, isSuccess = false) {
+            const feedbackMap = {
+                'name': nameFeedback,
+                'email': emailFeedback,
+                'phone': phoneFeedback
+            };
+            const fieldFeedback = feedbackMap[field];
+            if (!fieldFeedback) return;
+
+            // Clear any previous content and make visible
+            fieldFeedback.innerHTML = ''; 
+            fieldFeedback.classList.remove('feedback-hidden', 'success');
+
+            // Create icon and text
+            const iconSpan = document.createElement('span');
+            iconSpan.className = 'material-symbols-outlined';
+            iconSpan.textContent = isSuccess ? 'check_circle' : 'error';
+            fieldFeedback.appendChild(iconSpan);
+            fieldFeedback.appendChild(document.createTextNode(message));
+
+            if (isSuccess) {
+                fieldFeedback.classList.add('success');
+            }
+        }
+
+        // Mark field as error (visual border)
+        function markFieldError(fieldName) {
+            if (fieldName === 'name') {
+                fullNameInput.classList.add('error-field');
+            } else if (fieldName === 'email') {
+                emailInput.classList.add('error-field');
+            } else if (fieldName === 'phone') {
+                phoneBlock.classList.add('error-field');
+                phoneInput.classList.add('error-field');
+            }
+        }
 
         // login link
         document.getElementById('loginPromptBtn').addEventListener('click', function(e) {
@@ -265,59 +371,96 @@
             window.location.href = 'login';
         });
 
-        // REGISTER function
+        // Format phone number as user types (basic)
+        phoneInput.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/[^\d\s]/g, '');
+            e.target.value = value;
+        });
+
+        // Clear feedback when user focuses on a field (optional)
+        fullNameInput.addEventListener('focus', () => {
+            fullNameInput.classList.remove('error-field');
+            nameFeedback.classList.add('feedback-hidden');
+        });
+        emailInput.addEventListener('focus', () => {
+            emailInput.classList.remove('error-field');
+            emailFeedback.classList.add('feedback-hidden');
+        });
+        phoneInput.addEventListener('focus', () => {
+            phoneBlock.classList.remove('error-field');
+            phoneInput.classList.remove('error-field');
+            phoneFeedback.classList.add('feedback-hidden');
+        });
+
+        // REGISTER function without alerts and without unified message area
         function handleRegister() {
             const selectedOption = countrySelect.options[countrySelect.selectedIndex];
             const countryCode = selectedOption.getAttribute('data-code');
             const phone = phoneInput.value.trim();
             const fullName = fullNameInput.value.trim();
             const email = emailInput.value.trim();
-            
-            // Basic validation
+
+            // Reset previous errors and feedback
+            clearAllFeedback();
+
+            let isValid = true;
+
+            // Validate name
             if (!fullName) {
-                alert('❌ Please enter your full name');
-                return;
-            }
-            
+                showFieldFeedback('name', 'Full name is required');
+                markFieldError('name');
+                isValid = false;
+            } 
+
+            // Validate email
             if (!email) {
-                alert('❌ Please enter your email address');
-                return;
+                showFieldFeedback('email', 'Email address is required');
+                markFieldError('email');
+                isValid = false;
+            } else if (!email.includes('@') || !email.includes('.')) {
+                showFieldFeedback('email', 'Enter a valid email (e.g., name@domain.com)');
+                markFieldError('email');
+                isValid = false;
             }
-            
-            // Validate email format
-            if (!email.includes('@') || !email.includes('.')) {
-                alert('❌ Please enter a valid email address');
-                return;
-            }
-            
+
+            // Validate phone
             if (!phone) {
-                alert('❌ Please enter your phone number');
-                return;
+                showFieldFeedback('phone', 'Phone number is required');
+                markFieldError('phone');
+                isValid = false;
+            } else {
+                const phoneDigits = phone.replace(/\D/g, '');
+                if (phoneDigits.length < 8) {
+                    showFieldFeedback('phone', 'Phone must have at least 8 digits');
+                    markFieldError('phone');
+                    isValid = false;
+                }
             }
-            
-            // Validate phone number (simple check)
-            const phoneDigits = phone.replace(/\D/g, '');
-            if (phoneDigits.length < 8) {
-                alert('❌ Please enter a valid phone number (at least 8 digits)');
-                return;
-            }
-            
+
+            // If any field invalid, stop
+            if (!isValid) return;
+
+            // If all valid, show success feedback per field and simulate redirect (OTP page)
             const fullPhone = countryCode + ' ' + phone;
             console.log('Registering:', fullName, email, fullPhone);
-            
-            // In a real app you'd send data to server
-            alert(`✅ Registration successful!\n\nWelcome, ${fullName}!\nWe've sent a verification code to:\n📧 ${email}\n📱 ${fullPhone}`);
-            
-            // Redirect to OTP page for verification
-            window.location.href = 'otp';
-        }
 
-        // Format phone number as user types
-        phoneInput.addEventListener('input', function(e) {
-            // Remove non-digits but keep spaces/formatting minimal
-            let value = e.target.value.replace(/[^\d\s]/g, '');
-            e.target.value = value;
-        });
+            // Show success inline under each field (clean, no global message)
+            showFieldFeedback('name', 'Name looks good', true);
+            showFieldFeedback('email', 'Email verified', true);
+            showFieldFeedback('phone', 'Phone number valid', true);
+
+            // Remove error borders if any
+            fullNameInput.classList.remove('error-field');
+            emailInput.classList.remove('error-field');
+            phoneBlock.classList.remove('error-field');
+            phoneInput.classList.remove('error-field');
+
+            // In a real app you'd send data to server and then redirect.
+            // For demo, we redirect after a short delay to show the success feedback.
+            setTimeout(() => {
+                window.location.href = 'otp';
+            }, 1500);
+        }
     </script>
 </body>
 </html>

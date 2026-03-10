@@ -50,6 +50,14 @@
         justify-content: center;
         border: 2px solid #5c3b2c;
         cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .edit-avatar:active {
+        background: #5c3b2c;
+    }
+    .edit-avatar:active .material-symbols-outlined {
+        color: white;
     }
 
     .edit-avatar .material-symbols-outlined { font-size: 16px; color: #5c3b2c; }
@@ -62,6 +70,21 @@
         color: #3a2417;
         margin-bottom: 4px;
         font-family: 'Playfair Display', serif;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .edit-name {
+        font-size: 14px;
+        color: #b48c5c;
+        cursor: pointer;
+        transition: color 0.2s;
+    }
+
+    .edit-name:active {
+        color: #5c3b2c;
     }
 
     .profile-email {
@@ -74,6 +97,17 @@
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+        cursor: pointer;
+        transition: color 0.2s;
+    }
+
+    .profile-email:active {
+        color: #5c3b2c;
+    }
+
+    .profile-email .material-symbols-outlined {
+        font-size: 16px;
+        flex-shrink: 0;
     }
 
     .profile-badge {
@@ -86,6 +120,10 @@
         display: inline-flex;
         align-items: center;
         gap: 6px;
+    }
+
+    .profile-badge .material-symbols-outlined {
+        font-size: 16px;
     }
 
     /* Stats */
@@ -102,6 +140,12 @@
         padding: 16px 8px;
         text-align: center;
         border: 1px solid #e9d9c8;
+        transition: all 0.2s;
+    }
+
+    .stat-card:active {
+        transform: scale(0.98);
+        background: #fcf0e6;
     }
 
     .stat-value {
@@ -119,6 +163,20 @@
 
     /* Menu List */
     .menu-section { padding: 0 16px 24px; }
+
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+    }
+
+    .section-header h2 {
+        font-family: 'Playfair Display', serif;
+        font-size: 18px;
+        color: #3a2417;
+        font-weight: 700;
+    }
 
     .menu-grid {
         background: #ffffff;
@@ -157,7 +215,16 @@
     .menu-content { flex: 1; min-width: 0; }
     .menu-title { font-weight: 600; color: #3a2417; margin-bottom: 4px; }
     .menu-subtitle { font-size: 12px; color: #8b6f54; }
-    .menu-value { font-weight: 600; color: #5c3b2c; margin-right: 8px; white-space: nowrap; }
+    .menu-value { 
+        font-weight: 600; 
+        color: #5c3b2c; 
+        margin-right: 8px; 
+        white-space: nowrap;
+        background: #fcf0e6;
+        padding: 4px 10px;
+        border-radius: 30px;
+        font-size: 13px;
+    }
     .menu-arrow { color: #d0bcab; }
 
     /* Address */
@@ -171,6 +238,12 @@
         display: flex;
         align-items: center;
         gap: 16px;
+        transition: all 0.2s;
+        cursor: pointer;
+    }
+
+    .address-card:active {
+        background: #fcf0e6;
     }
 
     .address-icon {
@@ -186,7 +259,14 @@
     }
 
     .address-details { flex: 1; min-width: 0; }
-    .address-type { font-weight: 600; color: #3a2417; margin-bottom: 4px; }
+    .address-type { 
+        font-weight: 600; 
+        color: #3a2417; 
+        margin-bottom: 4px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
     .address-text { font-size: 13px; color: #8b6f54; margin-bottom: 4px; }
 
     .address-default {
@@ -197,6 +277,24 @@
         display: inline-block;
         font-weight: 600;
         color: #5c3b2c;
+    }
+
+    .add-address {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 16px;
+        background: #fcf0e6;
+        border-radius: 40px;
+        margin-top: 12px;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .add-address:active {
+        background: #5c3b2c;
+        color: white;
     }
 
     /* Preferences */
@@ -215,9 +313,12 @@
         align-items: center;
         padding: 14px 0;
         border-bottom: 1px solid #f0e4d6;
+        cursor: pointer;
+        transition: background 0.2s;
     }
 
     .pref-item:last-child { border-bottom: none; }
+    .pref-item:active { background: #fcf0e6; }
 
     .pref-left { display: flex; align-items: center; gap: 12px; }
 
@@ -236,7 +337,13 @@
     .pref-text { font-weight: 500; color: #3a2417; }
 
     /* Toggle */
-    .switch { position: relative; display: inline-block; width: 52px; height: 28px; }
+    .switch { 
+        position: relative; 
+        display: inline-block; 
+        width: 52px; 
+        height: 28px;
+        pointer-events: auto;
+    }
     .switch input { opacity: 0; width: 0; height: 0; }
 
     .slider {
@@ -286,6 +393,133 @@
 
     .logout-btn:active { background: #c0392b; color: white; }
 
+    /* Toast Notifications */
+    .toast-container {
+        position: fixed;
+        bottom: 100px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 3000;
+        width: 90%;
+        max-width: 300px;
+        pointer-events: none;
+    }
+
+    .toast {
+        background: #5c3b2c;
+        color: white;
+        padding: 12px 20px;
+        border-radius: 50px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        font-weight: 500;
+        transform: translateY(100px);
+        opacity: 0;
+        transition: all 0.3s ease;
+        text-align: center;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    .toast.show {
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+    .toast.success {
+        background: #27ae60;
+    }
+
+    .toast .material-symbols-outlined {
+        font-size: 18px;
+    }
+
+    /* Edit Modal */
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.5);
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        z-index: 2000;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s;
+    }
+
+    .modal-overlay.active {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .modal-content {
+        background: #ffffff;
+        width: 100%;
+        max-width: 450px;
+        border-radius: 32px 32px 0 0;
+        padding: 24px 20px 30px;
+        transform: translateY(100%);
+        transition: transform 0.3s ease;
+    }
+
+    .modal-overlay.active .modal-content {
+        transform: translateY(0);
+    }
+
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .modal-header h3 {
+        font-size: 20px;
+        font-weight: 700;
+        color: #3a2417;
+    }
+
+    .close-modal {
+        background: none;
+        border: none;
+        font-size: 28px;
+        cursor: pointer;
+        color: #8b6f54;
+    }
+
+    .modal-input {
+        width: 100%;
+        padding: 16px;
+        border: 2px solid #e9d9c8;
+        border-radius: 20px;
+        font-size: 16px;
+        margin-bottom: 16px;
+        font-family: 'Montserrat', sans-serif;
+    }
+
+    .modal-input:focus {
+        outline: none;
+        border-color: #5c3b2c;
+    }
+
+    .modal-save-btn {
+        width: 100%;
+        background: #5c3b2c;
+        color: white;
+        border: none;
+        padding: 16px;
+        border-radius: 40px;
+        font-weight: 600;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
     /* Responsive */
     @media (max-width: 480px) {
         .profile-card { flex-direction: column; text-align: center; }
@@ -297,47 +531,58 @@
 {% endblock %}
 
 {% block content %}
+<!-- Toast Container -->
+<div class="toast-container" id="toastContainer"></div>
+
 <!-- Profile Card -->
 <div class="profile-section">
     <div class="profile-card">
-        <div class="profile-avatar">
-            S
-            <div class="edit-avatar" onclick="editAvatar()">
+        <div class="profile-avatar" id="profileAvatar">
+            <span id="avatarInitial">S</span>
+            <div class="edit-avatar" onclick="openEditModal('avatar')">
                 <span class="material-symbols-outlined">edit</span>
             </div>
         </div>
         <div class="profile-info">
-            <div class="profile-name">Sarah Ahmed</div>
-            <div class="profile-email">
-                <span class="material-symbols-outlined" style="font-size:16px;flex-shrink:0;">mail</span>
-                sarah.a@espresso.com
+            <div class="profile-name">
+                <span id="profileName">Sarah Ahmed</span>
+                <span class="edit-name" onclick="openEditModal('name')">
+                    <span class="material-symbols-outlined" style="font-size:18px;">edit</span>
+                </span>
             </div>
-            <div class="profile-badge">
-                <span class="material-symbols-outlined" style="font-size:16px;">military_tech</span>
-                Gold Member · 2,450 pts
+            <div class="profile-email" onclick="openEditModal('email')">
+                <span class="material-symbols-outlined" style="font-size:16px;">mail</span>
+                <span id="profileEmail">sarah.a@espresso.com</span>
+            </div>
+            <div class="profile-badge" id="profileBadge">
+                <span class="material-symbols-outlined">military_tech</span>
+                <span id="membershipLevel">Gold Member</span> · <span id="pointsBalance">2,450</span> pts
             </div>
         </div>
     </div>
 </div>
 
-<!-- Stats -->
+<!-- Stats - Dynamic -->
 <div class="stats-grid">
-    <div class="stat-card">
-        <div class="stat-value">24</div>
+    <div class="stat-card" onclick="viewOrders()">
+        <div class="stat-value" id="orderCount">0</div>
         <div class="stat-label">Orders</div>
     </div>
-    <div class="stat-card">
-        <div class="stat-value">BD 128</div>
+    <div class="stat-card" onclick="viewWallet()">
+        <div class="stat-value" id="walletBalance">BD 0</div>
         <div class="stat-label">Saved</div>
     </div>
-    <div class="stat-card">
-        <div class="stat-value">3</div>
+    <div class="stat-card" onclick="viewRewards()">
+        <div class="stat-value" id="rewardCount">0</div>
         <div class="stat-label">Rewards</div>
     </div>
 </div>
 
 <!-- Menu Items -->
 <div class="menu-section">
+    <div class="section-header">
+        <h2>Account</h2>
+    </div>
     <div class="menu-grid">
         <a href="{{ url_for('order') }}" class="menu-item">
             <div class="menu-icon"><span class="material-symbols-outlined">shopping_bag</span></div>
@@ -345,7 +590,7 @@
                 <div class="menu-title">My Orders</div>
                 <div class="menu-subtitle">View order history & tracking</div>
             </div>
-            <div class="menu-value">12</div>
+            <div class="menu-value" id="ordersValue">0</div>
             <span class="material-symbols-outlined menu-arrow">chevron_right</span>
         </a>
         <a href="{{ url_for('wallet') }}" class="menu-item">
@@ -354,7 +599,7 @@
                 <div class="menu-title">Wallet</div>
                 <div class="menu-subtitle">Balance & transactions</div>
             </div>
-            <div class="menu-value">BD 42.50</div>
+            <div class="menu-value" id="walletValue">BD 0</div>
             <span class="material-symbols-outlined menu-arrow">chevron_right</span>
         </a>
         <a href="{{ url_for('reward') }}" class="menu-item">
@@ -363,7 +608,7 @@
                 <div class="menu-title">Rewards</div>
                 <div class="menu-subtitle">Loyalty points & perks</div>
             </div>
-            <div class="menu-value">2,450</div>
+            <div class="menu-value" id="rewardsValue">0</div>
             <span class="material-symbols-outlined menu-arrow">chevron_right</span>
         </a>
         <a href="{{ url_for('favorites') }}" class="menu-item">
@@ -372,19 +617,19 @@
                 <div class="menu-title">Favorites</div>
                 <div class="menu-subtitle">Your saved items</div>
             </div>
-            <div class="menu-value">6</div>
+            <div class="menu-value" id="favoritesValue">0</div>
             <span class="material-symbols-outlined menu-arrow">chevron_right</span>
         </a>
-        <a href="" class="menu-item">
+        <a href="#" class="menu-item" onclick="showAddresses()">
             <div class="menu-icon"><span class="material-symbols-outlined">location_on</span></div>
             <div class="menu-content">
                 <div class="menu-title">Addresses</div>
                 <div class="menu-subtitle">Delivery locations</div>
             </div>
-            <div class="menu-value">2</div>
+            <div class="menu-value" id="addressCount">1</div>
             <span class="material-symbols-outlined menu-arrow">chevron_right</span>
         </a>
-        <a href="" class="menu-item">
+        <a href="#" class="menu-item" onclick="showPaymentMethods()">
             <div class="menu-icon"><span class="material-symbols-outlined">credit_card</span></div>
             <div class="menu-content">
                 <div class="menu-title">Payment Methods</div>
@@ -397,50 +642,65 @@
 
 <!-- Default Address -->
 <div class="address-section">
-    <div class="address-card">
+    <div class="section-header">
+        <h2>Default Address</h2>
+        <span class="edit-name" onclick="addNewAddress()">
+            <span class="material-symbols-outlined">add_circle</span>
+        </span>
+    </div>
+    <div class="address-card" onclick="editAddress(0)">
         <div class="address-icon">
-            <span class="material-symbols-outlined">home</span>
+            <span class="material-symbols-outlined" id="addressIcon">home</span>
         </div>
         <div class="address-details">
-            <div class="address-type">Home</div>
-            <div class="address-text">245 Coffee Street, Building 12, Downtown</div>
-            <span class="address-default">Default</span>
+            <div class="address-type">
+                <span id="addressType">Home</span>
+            </div>
+            <div class="address-text" id="addressText">245 Coffee Street, Building 12, Downtown</div>
+            <span class="address-default" id="addressDefault">Default</span>
         </div>
-        <span class="material-symbols-outlined" style="color:#d0bcab;cursor:pointer;" onclick="editAddress()">edit</span>
+        <span class="material-symbols-outlined" style="color:#d0bcab;">edit</span>
+    </div>
+    <div class="add-address" onclick="addNewAddress()">
+        <span class="material-symbols-outlined">add</span>
+        <span>Add New Address</span>
     </div>
 </div>
 
 <!-- Preferences -->
 <div class="pref-section">
+    <div class="section-header">
+        <h2>Preferences</h2>
+    </div>
     <div class="pref-card">
-        <div class="pref-item">
+        <div class="pref-item" onclick="toggleNotification()">
             <div class="pref-left">
                 <div class="pref-icon"><span class="material-symbols-outlined">notifications</span></div>
                 <span class="pref-text">Push Notifications</span>
             </div>
-            <label class="switch">
-                <input type="checkbox" checked>
+            <label class="switch" onclick="event.stopPropagation()">
+                <input type="checkbox" id="notificationsToggle" checked onchange="savePreference('notifications', this.checked)">
                 <span class="slider"></span>
             </label>
         </div>
-        <div class="pref-item">
+        <div class="pref-item" onclick="toggleDarkMode()">
             <div class="pref-left">
                 <div class="pref-icon"><span class="material-symbols-outlined">dark_mode</span></div>
                 <span class="pref-text">Dark Mode</span>
             </div>
-            <label class="switch">
-                <input type="checkbox">
+            <label class="switch" onclick="event.stopPropagation()">
+                <input type="checkbox" id="darkModeToggle" onchange="savePreference('darkMode', this.checked)">
                 <span class="slider"></span>
             </label>
         </div>
-        <div class="pref-item">
+        <div class="pref-item" onclick="changeLanguage()">
             <div class="pref-left">
                 <div class="pref-icon"><span class="material-symbols-outlined">language</span></div>
                 <span class="pref-text">Language</span>
             </div>
-            <span style="color:#5c3b2c;font-weight:500;">English</span>
+            <span style="color:#5c3b2c;font-weight:500;" id="currentLanguage">English</span>
         </div>
-        <div class="pref-item">
+        <div class="pref-item" onclick="showPrivacySettings()">
             <div class="pref-left">
                 <div class="pref-icon"><span class="material-symbols-outlined">security</span></div>
                 <span class="pref-text">Privacy & Security</span>
@@ -457,27 +717,382 @@
         Logout
     </button>
 </div>
+
+<!-- Edit Modal -->
+<div class="modal-overlay" id="editModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="modalTitle">Edit</h3>
+            <button class="close-modal" onclick="closeEditModal()">&times;</button>
+        </div>
+        <div id="modalContent">
+            <!-- Dynamic content will be loaded here -->
+        </div>
+    </div>
+</div>
+
 {% endblock %}
 
 {% block qr_card %}{% endblock %}
 
 {% block extra_js %}
 <script>
-    function editAvatar() {
-        alert('📸 Change profile picture');
+    // Toast notification system
+    function showToast(message, type = 'success', duration = 2000) {
+        const container = document.getElementById('toastContainer');
+        const toastId = 'toast_' + Date.now();
+        
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        toast.id = toastId;
+        
+        let icon = type === 'success' ? 'check_circle' : 'info';
+        
+        toast.innerHTML = `
+            <span class="material-symbols-outlined">${icon}</span>
+            <span>${message}</span>
+        `;
+        
+        container.appendChild(toast);
+        
+        setTimeout(() => toast.classList.add('show'), 10);
+        
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => toast.remove(), 300);
+        }, duration);
     }
 
-    function editAddress() {
-        alert('📍 Edit address');
+    // Profile data
+    let profileData = JSON.parse(localStorage.getItem('profileData')) || {
+        name: 'Sarah Ahmed',
+        email: 'sarah.a@espresso.com',
+        avatar: 'S',
+        membershipLevel: 'Gold Member',
+        points: 2450,
+        notifications: true,
+        darkMode: false,
+        language: 'English'
+    };
+
+    let addresses = JSON.parse(localStorage.getItem('addresses')) || [
+        {
+            id: 1,
+            type: 'Home',
+            icon: 'home',
+            address: '245 Coffee Street, Building 12, Downtown',
+            isDefault: true
+        }
+    ];
+
+    // Load data from other parts of the app
+    function loadAppData() {
+        // Load wallet balance
+        const walletBalance = localStorage.getItem('walletBalance');
+        const walletValue = walletBalance ? parseFloat(walletBalance).toFixed(3) : '0.000';
+        
+        // Load order history count
+        const orderHistory = JSON.parse(localStorage.getItem('orderHistory')) || [];
+        const orderCount = orderHistory.length;
+        
+        // Load favorites count
+        const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+        const favoritesCount = favorites.length;
+        
+        // Load rewards data
+        const rewardsData = JSON.parse(localStorage.getItem('rewardsData')) || {};
+        const freeDrinks = rewardsData.freeDrinksAvailable || 0;
+        
+        // Update stats
+        document.getElementById('orderCount').textContent = orderCount;
+        document.getElementById('walletBalance').textContent = `BD ${walletValue}`;
+        document.getElementById('rewardCount').textContent = freeDrinks;
+        
+        // Update menu values
+        document.getElementById('ordersValue').textContent = orderCount;
+        document.getElementById('walletValue').textContent = `BD ${walletValue}`;
+        document.getElementById('rewardsValue').textContent = freeDrinks;
+        document.getElementById('favoritesValue').textContent = favoritesCount;
+        
+        // Update points and membership
+        updateMembershipLevel(orderCount);
     }
 
-    function logout() {
-        if (confirm('Logout from Espresso?')) {
-            alert('👋 Logged out successfully');
-            window.location.href = "{{ url_for('login') }}";
+    // Update membership level based on orders
+    function updateMembershipLevel(orderCount) {
+        let level = 'Bronze';
+        let points = profileData.points;
+        
+        if (orderCount >= 50) {
+            level = 'Diamond';
+            points = 5000 + (orderCount - 50) * 100;
+        } else if (orderCount >= 25) {
+            level = 'Platinum';
+            points = 2500 + (orderCount - 25) * 80;
+        } else if (orderCount >= 10) {
+            level = 'Gold';
+            points = 1000 + (orderCount - 10) * 50;
+        } else if (orderCount >= 5) {
+            level = 'Silver';
+            points = 500 + (orderCount - 5) * 30;
+        } else {
+            points = orderCount * 100;
+        }
+        
+        profileData.membershipLevel = level + ' Member';
+        profileData.points = points;
+        
+        document.getElementById('membershipLevel').textContent = profileData.membershipLevel;
+        document.getElementById('pointsBalance').textContent = points.toLocaleString();
+    }
+
+    // Save profile data
+    function saveProfileData() {
+        localStorage.setItem('profileData', JSON.stringify(profileData));
+    }
+
+    // Edit modal functions
+    function openEditModal(type) {
+        const modal = document.getElementById('editModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalContent = document.getElementById('modalContent');
+        
+        switch(type) {
+            case 'name':
+                modalTitle.textContent = 'Edit Name';
+                modalContent.innerHTML = `
+                    <input type="text" class="modal-input" id="editNameInput" value="${profileData.name}" placeholder="Enter your name">
+                    <button class="modal-save-btn" onclick="saveName()">Save Name</button>
+                `;
+                break;
+            case 'email':
+                modalTitle.textContent = 'Edit Email';
+                modalContent.innerHTML = `
+                    <input type="email" class="modal-input" id="editEmailInput" value="${profileData.email}" placeholder="Enter your email">
+                    <button class="modal-save-btn" onclick="saveEmail()">Save Email</button>
+                `;
+                break;
+            case 'avatar':
+                modalTitle.textContent = 'Change Initial';
+                modalContent.innerHTML = `
+                    <input type="text" class="modal-input" id="editAvatarInput" value="${profileData.avatar}" maxlength="1" placeholder="Enter initial (A-Z)">
+                    <button class="modal-save-btn" onclick="saveAvatar()">Save Initial</button>
+                `;
+                break;
+        }
+        
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeEditModal() {
+        document.getElementById('editModal').classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    function saveName() {
+        const newName = document.getElementById('editNameInput').value;
+        if (newName) {
+            profileData.name = newName;
+            profileData.avatar = newName.charAt(0).toUpperCase();
+            document.getElementById('profileName').textContent = newName;
+            document.getElementById('avatarInitial').textContent = newName.charAt(0).toUpperCase();
+            saveProfileData();
+            showToast('Name updated successfully');
+            closeEditModal();
         }
     }
 
-    // Remove addToOrder function as it's no longer needed
+    function saveEmail() {
+        const newEmail = document.getElementById('editEmailInput').value;
+        if (newEmail && newEmail.includes('@')) {
+            profileData.email = newEmail;
+            document.getElementById('profileEmail').textContent = newEmail;
+            saveProfileData();
+            showToast('Email updated successfully');
+            closeEditModal();
+        } else {
+            showToast('Please enter a valid email', 'warning');
+        }
+    }
+
+    function saveAvatar() {
+        const newAvatar = document.getElementById('editAvatarInput').value.toUpperCase();
+        if (newAvatar && newAvatar.match(/[A-Z]/)) {
+            profileData.avatar = newAvatar;
+            document.getElementById('avatarInitial').textContent = newAvatar;
+            saveProfileData();
+            showToast('Initial updated successfully');
+            closeEditModal();
+        } else {
+            showToast('Please enter a single letter (A-Z)', 'warning');
+        }
+    }
+
+    // Address functions
+    function editAddress(index) {
+        const address = addresses[index];
+        const modal = document.getElementById('editModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalContent = document.getElementById('modalContent');
+        
+        modalTitle.textContent = 'Edit Address';
+        modalContent.innerHTML = `
+            <input type="text" class="modal-input" id="editAddressType" value="${address.type}" placeholder="Address type (Home, Work, etc.)">
+            <input type="text" class="modal-input" id="editAddressText" value="${address.address}" placeholder="Full address">
+            <div style="display: flex; gap: 10px; margin-bottom: 16px;">
+                <label style="display: flex; align-items: center; gap: 8px;">
+                    <input type="checkbox" id="editAddressDefault" ${address.isDefault ? 'checked' : ''}>
+                    <span>Set as default</span>
+                </label>
+            </div>
+            <button class="modal-save-btn" onclick="saveAddress(${index})">Save Address</button>
+        `;
+        
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function saveAddress(index) {
+        const type = document.getElementById('editAddressType').value;
+        const addressText = document.getElementById('editAddressText').value;
+        const isDefault = document.getElementById('editAddressDefault').checked;
+        
+        if (type && addressText) {
+            if (isDefault) {
+                addresses.forEach(a => a.isDefault = false);
+            }
+            
+            addresses[index] = {
+                ...addresses[index],
+                type: type,
+                address: addressText,
+                isDefault: isDefault
+            };
+            
+            localStorage.setItem('addresses', JSON.stringify(addresses));
+            updateAddressDisplay();
+            showToast('Address updated successfully');
+            closeEditModal();
+        }
+    }
+
+    function addNewAddress() {
+        const newAddress = {
+            id: Date.now(),
+            type: 'New Address',
+            icon: 'location_on',
+            address: '',
+            isDefault: false
+        };
+        
+        addresses.push(newAddress);
+        editAddress(addresses.length - 1);
+    }
+
+    function updateAddressDisplay() {
+        const defaultAddress = addresses.find(a => a.isDefault) || addresses[0];
+        if (defaultAddress) {
+            document.getElementById('addressType').textContent = defaultAddress.type;
+            document.getElementById('addressText').textContent = defaultAddress.address;
+            document.getElementById('addressIcon').textContent = defaultAddress.icon || 'home';
+        }
+        document.getElementById('addressCount').textContent = addresses.length;
+    }
+
+    // Preference functions
+    function savePreference(pref, value) {
+        profileData[pref] = value;
+        saveProfileData();
+        showToast(`${pref === 'notifications' ? 'Notifications' : 'Dark mode'} ${value ? 'enabled' : 'disabled'}`);
+    }
+
+    function toggleNotification() {
+        const toggle = document.getElementById('notificationsToggle');
+        toggle.checked = !toggle.checked;
+        savePreference('notifications', toggle.checked);
+    }
+
+    function toggleDarkMode() {
+        const toggle = document.getElementById('darkModeToggle');
+        toggle.checked = !toggle.checked;
+        savePreference('darkMode', toggle.checked);
+    }
+
+    function changeLanguage() {
+        const languages = ['English', 'Arabic', 'French'];
+        const currentIndex = languages.indexOf(profileData.language);
+        const nextLang = languages[(currentIndex + 1) % languages.length];
+        
+        profileData.language = nextLang;
+        document.getElementById('currentLanguage').textContent = nextLang;
+        saveProfileData();
+        showToast(`Language changed to ${nextLang}`);
+    }
+
+    // Navigation functions
+    function viewOrders() {
+        window.location.href = "{{ url_for('order') }}";
+    }
+
+    function viewWallet() {
+        window.location.href = "{{ url_for('wallet') }}";
+    }
+
+    function viewRewards() {
+        window.location.href = "{{ url_for('reward') }}";
+    }
+
+    function showAddresses() {
+        // You could show all addresses in a modal
+        showToast('Address book coming soon', 'info');
+    }
+
+    function showPaymentMethods() {
+        showToast('Payment methods coming soon', 'info');
+    }
+
+    function showPrivacySettings() {
+        showToast('Privacy settings coming soon', 'info');
+    }
+
+    // Logout function
+    function logout() {
+        if (confirm('Logout from Espresso?')) {
+            // Clear session data if needed
+            showToast('👋 Logged out successfully', 'success');
+            setTimeout(() => {
+                window.location.href = "{{ url_for('login') }}";
+            }, 1000);
+        }
+    }
+
+    // Initialize on load
+    window.addEventListener('load', function() {
+        // Load profile data
+        document.getElementById('profileName').textContent = profileData.name;
+        document.getElementById('profileEmail').textContent = profileData.email;
+        document.getElementById('avatarInitial').textContent = profileData.avatar;
+        document.getElementById('membershipLevel').textContent = profileData.membershipLevel;
+        document.getElementById('pointsBalance').textContent = profileData.points.toLocaleString();
+        
+        // Load preferences
+        document.getElementById('notificationsToggle').checked = profileData.notifications;
+        document.getElementById('darkModeToggle').checked = profileData.darkMode;
+        document.getElementById('currentLanguage').textContent = profileData.language;
+        
+        // Load addresses
+        updateAddressDisplay();
+        
+        // Load app data
+        loadAppData();
+    });
+
+    // Close modal when clicking overlay
+    document.getElementById('editModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeEditModal();
+        }
+    });
 </script>
 {% endblock %}

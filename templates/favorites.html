@@ -28,6 +28,7 @@
         cursor: pointer;
         color: #5c3b2c;
         transition: all 0.2s;
+        text-decoration: none;
     }
 
     .back-btn:active {
@@ -122,6 +123,12 @@
         position: relative;
         cursor: pointer;
         transition: all 0.2s;
+        animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
     }
 
     .favorite-card:active {
@@ -152,6 +159,7 @@
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        padding-right: 30px;
     }
 
     .favorite-category {
@@ -195,11 +203,13 @@
         top: 12px;
         right: 12px;
         transition: all 0.2s;
+        z-index: 10;
     }
 
     .remove-fav:active {
         background: #c0392b;
         color: white;
+        transform: scale(0.9);
     }
 
     .remove-fav .material-symbols-outlined {
@@ -244,6 +254,39 @@
         transform: scale(0.95);
     }
 
+    /* Quick Add */
+    .quick-add {
+        display: flex;
+        gap: 8px;
+        margin-top: 10px;
+    }
+
+    .add-to-order {
+        flex: 1;
+        background: #5c3b2c;
+        color: white;
+        border: none;
+        padding: 10px;
+        border-radius: 30px;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        transition: all 0.2s;
+    }
+
+    .add-to-order:active {
+        background: #6f4a2e;
+        transform: scale(0.95);
+    }
+
+    .add-to-order .material-symbols-outlined {
+        font-size: 14px;
+    }
+
     /* Empty State */
     .empty-state {
         text-align: center;
@@ -251,6 +294,7 @@
         background: #fcf9f7;
         border-radius: 40px;
         border: 1px dashed #d4b99b;
+        animation: fadeIn 0.3s ease;
     }
 
     .empty-icon {
@@ -293,33 +337,60 @@
         display: inline-flex;
         align-items: center;
         gap: 8px;
+        transition: all 0.2s;
+        text-decoration: none;
     }
 
-    /* Quick Add */
-    .quick-add {
-        display: flex;
-        gap: 8px;
-        margin-top: 10px;
+    .browse-menu-btn:active {
+        transform: scale(0.95);
+        background: #6f4a2e;
     }
 
-    .add-to-order {
-        flex: 1;
+    /* Toast Notifications */
+    .toast-container {
+        position: fixed;
+        bottom: 100px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 3000;
+        width: 90%;
+        max-width: 300px;
+        pointer-events: none;
+    }
+
+    .toast {
         background: #5c3b2c;
         color: white;
-        border: none;
-        padding: 10px;
-        border-radius: 30px;
-        font-size: 12px;
-        font-weight: 600;
-        cursor: pointer;
+        padding: 12px 20px;
+        border-radius: 50px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        font-weight: 500;
+        transform: translateY(100px);
+        opacity: 0;
+        transition: all 0.3s ease;
+        text-align: center;
+        font-size: 14px;
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 4px;
+        gap: 8px;
     }
 
-    .add-to-order:active {
-        background: #6f4a2e;
+    .toast.show {
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+    .toast.success {
+        background: #27ae60;
+    }
+
+    .toast.warning {
+        background: #e67e22;
+    }
+
+    .toast .material-symbols-outlined {
+        font-size: 18px;
     }
 
     /* Responsive */
@@ -338,19 +409,24 @@
 {% endblock %}
 
 {% block content %}
+<!-- Toast Container -->
+<div class="toast-container" id="toastContainer"></div>
+
 <div class="favorites-page">
     <!-- Header with back button -->
     <div class="favorites-header">
-        
+        <a href="javascript:history.back()" class="back-btn">
+            <span class="material-symbols-outlined">arrow_back</span>
+        </a>
         <h1>My Favorites</h1>
     </div>
 
-    <!-- Stats Card -->
-    <div class="stats-card">
+    <!-- Stats Card - Dynamic -->
+    <div class="stats-card" id="statsCard">
         <div class="stats-left">
             <div class="stats-label">SAVED ITEMS</div>
-            <div class="stats-count">6</div>
-            <div class="stats-sub">favorite drinks & treats</div>
+            <div class="stats-count" id="favoritesCount">0</div>
+            <div class="stats-sub" id="favoritesSub">favorite drinks & treats</div>
         </div>
         <div class="stats-icon">
             <span class="material-symbols-outlined">favorite</span>
@@ -358,178 +434,251 @@
     </div>
 
     <!-- Category Filter -->
-    <div class="categories-scroll">
-        <span class="category-chip active">All Items</span>
-        <span class="category-chip">Espresso</span>
-        <span class="category-chip">Cold Brew</span>
-        <span class="category-chip">Pastries</span>
-        <span class="category-chip">Specialty</span>
-        <span class="category-chip">Seasonal</span>
+    <div class="categories-scroll" id="categoryFilter">
+        <span class="category-chip active" data-category="all">All Items</span>
+        <span class="category-chip" data-category="espresso">Espresso</span>
+        <span class="category-chip" data-category="cold">Cold Brew</span>
+        <span class="category-chip" data-category="pastry">Pastries</span>
+        <span class="category-chip" data-category="brewed">Brewed</span>
     </div>
 
-    <!-- Favorites Grid -->
-    <div class="favorites-grid">
-        <div class="favorite-card">
-            <button class="remove-fav" onclick="removeFavorite('Cappuccino')">
-                <span class="material-symbols-outlined">close</span>
-            </button>
-            <div class="favorite-image">
-                <img src="{{ url_for('static', filename='imgg3.jpeg') }}" alt="Cappuccino">
-            </div>
-            <span class="favorite-category">Espresso</span>
-            <div class="favorite-name">Cappuccino</div>
-            <div class="favorite-price">
-                <span>3.000</span>
-            </div>
-            <div class="quick-add">
-                <button class="add-to-order" onclick="addToOrder('Cappuccino')">
-                    <span class="material-symbols-outlined">add_shopping_cart</span>
-                    Add
-                </button>
-            </div>
-        </div>
-
-        <div class="favorite-card">
-            <button class="remove-fav" onclick="removeFavorite('Croissant')">
-                <span class="material-symbols-outlined">close</span>
-            </button>
-            <div class="favorite-image">
-                <img src="{{ url_for('static', filename='imgg9.jpeg') }}" alt="Croissant">
-            </div>
-            <span class="favorite-category">Pastry</span>
-            <div class="favorite-name">Butter Croissant</div>
-            <div class="favorite-price">
-                <span>1.800</span>
-            </div>
-            <div class="quick-add">
-                <button class="add-to-order" onclick="addToOrder('Croissant')">
-                    <span class="material-symbols-outlined">add_shopping_cart</span>
-                    Add
-                </button>
-            </div>
-        </div>
-
-        <div class="favorite-card">
-            <button class="remove-fav" onclick="removeFavorite('Iced Latte')">
-                <span class="material-symbols-outlined">close</span>
-            </button>
-            <div class="favorite-image">
-                <img src="{{ url_for('static', filename='imgg5.jpeg') }}" alt="Iced Latte">
-            </div>
-            <span class="favorite-category">Cold</span>
-            <div class="favorite-name">Iced Latte</div>
-            <div class="favorite-price">
-                <span>3.500</span>
-            </div>
-            <div class="quick-add">
-                <button class="add-to-order" onclick="addToOrder('Iced Latte')">
-                    <span class="material-symbols-outlined">add_shopping_cart</span>
-                    Add
-                </button>
-            </div>
-        </div>
-
-        <div class="favorite-card">
-            <button class="remove-fav" onclick="removeFavorite('Espresso')">
-                <span class="material-symbols-outlined">close</span>
-            </button>
-            <div class="favorite-image">
-                <img src="{{ url_for('static', filename='imgg.jpeg') }}" alt="Espresso">
-            </div>
-            <span class="favorite-category">Espresso</span>
-            <div class="favorite-name">Espresso</div>
-            <div class="favorite-price">
-                <span>2.500</span>
-            </div>
-            <div class="quick-add">
-                <button class="add-to-order" onclick="addToOrder('Espresso')">
-                    <span class="material-symbols-outlined">add_shopping_cart</span>
-                    Add
-                </button>
-            </div>
-        </div>
-
-        <div class="favorite-card">
-            <button class="remove-fav" onclick="removeFavorite('Chocolate Cake')">
-                <span class="material-symbols-outlined">close</span>
-            </button>
-            <div class="favorite-image">
-                <img src="{{ url_for('static', filename='imgg10.jpeg') }}" alt="Chocolate Cake">
-            </div>
-            <span class="favorite-category">Pastry</span>
-            <div class="favorite-name">Chocolate Cake</div>
-            <div class="favorite-price">
-                <span>3.000</span>
-            </div>
-            <div class="quick-add">
-                <button class="add-to-order" onclick="addToOrder('Chocolate Cake')">
-                    <span class="material-symbols-outlined">add_shopping_cart</span>
-                    Add
-                </button>
-            </div>
-        </div>
-
-        <div class="favorite-card">
-            <button class="remove-fav" onclick="removeFavorite('Cold Brew')">
-                <span class="material-symbols-outlined">close</span>
-            </button>
-            <div class="favorite-image">
-                <img src="{{ url_for('static', filename='imgg5.jpeg') }}" alt="Cold Brew">
-            </div>
-            <span class="favorite-category">Cold</span>
-            <div class="favorite-name">Cold Brew</div>
-            <div class="favorite-price">
-                <span>2.800</span>
-            </div>
-            <div class="quick-add">
-                <button class="add-to-order" onclick="addToOrder('Cold Brew')">
-                    <span class="material-symbols-outlined">add_shopping_cart</span>
-                    Add
-                </button>
-            </div>
-        </div>
+    <!-- Favorites Grid - Dynamic -->
+    <div class="favorites-grid" id="favoritesGrid">
+        <!-- Favorites will be loaded here -->
     </div>
 
-    <!-- Empty State (hidden by default, show when no favorites) -->
-    <div class="empty-state" style="display: none;">
+    <!-- Empty State (shown when no favorites) -->
+    <div class="empty-state" id="emptyState" style="display: none;">
         <div class="empty-icon">
             <span class="material-symbols-outlined">favorite</span>
         </div>
         <div class="empty-title">No favorites yet</div>
-        <div class="empty-text">Save your favorite items for quick ordering</div>
-        <button class="browse-menu-btn" onclick="browseMenu()">
+        <div class="empty-text">Tap the heart icon on menu items to save them here</div>
+        <a href="{{ url_for('menu') }}" class="browse-menu-btn">
             <span class="material-symbols-outlined">restaurant_menu</span>
             Browse Menu
-        </button>
+        </a>
     </div>
 </div>
 
 <script>
-    function goBack() {
-        window.history.back();
+    // Toast notification system
+    function showToast(message, type = 'success', duration = 2000) {
+        const container = document.getElementById('toastContainer');
+        const toastId = 'toast_' + Date.now();
+        
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        toast.id = toastId;
+        
+        let icon = type === 'success' ? 'check_circle' : 'favorite';
+        
+        toast.innerHTML = `
+            <span class="material-symbols-outlined">${icon}</span>
+            <span>${message}</span>
+        `;
+        
+        container.appendChild(toast);
+        
+        setTimeout(() => toast.classList.add('show'), 10);
+        
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => toast.remove(), 300);
+        }, duration);
     }
 
-    function removeFavorite(itemName) {
-        if (confirm(`Remove ${itemName} from favorites?`)) {
-            alert(`✅ ${itemName} removed from favorites`);
+    // Menu items data (same as menu page)
+    const menuItems = [
+        { name: 'Honey Almond Latte', price: 4.200, category: 'espresso', image: "{{ url_for('static', filename='imgg3.jpeg') }}", type: 'drink' },
+        { name: 'Salted Caramel Mocha', price: 4.500, category: 'espresso', image: "{{ url_for('static', filename='imgg4.jpeg') }}", type: 'drink' },
+        { name: 'Lavender Oat Latte', price: 4.300, category: 'espresso', image: "{{ url_for('static', filename='imgg2.jpeg') }}", type: 'drink' },
+        { name: 'Brown Sugar Shaken', price: 3.900, category: 'cold', image: "{{ url_for('static', filename='imgg5.jpeg') }}", type: 'drink' },
+        { name: 'Tiramisu Cup', price: 3.800, category: 'pastry', image: "{{ url_for('static', filename='imgg9.jpeg') }}", type: 'food' },
+        { name: 'Espresso', price: 2.500, category: 'espresso', image: "{{ url_for('static', filename='imgg.jpeg') }}", type: 'drink' },
+        { name: 'Double Espresso', price: 3.500, category: 'espresso', image: "{{ url_for('static', filename='imgg2.jpeg') }}", type: 'drink' },
+        { name: 'Cappuccino', price: 3.000, category: 'espresso', image: "{{ url_for('static', filename='imgg3.jpeg') }}", type: 'drink' },
+        { name: 'Latte', price: 3.200, category: 'espresso', image: "{{ url_for('static', filename='imgg4.jpeg') }}", type: 'drink' },
+        { name: 'Caramel Macchiato', price: 3.500, category: 'espresso', image: "{{ url_for('static', filename='imgg4.jpeg') }}", type: 'drink' },
+        { name: 'Cold Brew', price: 2.800, category: 'cold', image: "{{ url_for('static', filename='imgg5.jpeg') }}", type: 'drink' },
+        { name: 'Iced Latte', price: 3.200, category: 'cold', image: "{{ url_for('static', filename='imgg6.jpeg') }}", type: 'drink' },
+        { name: 'Iced Americano', price: 2.600, category: 'cold', image: "{{ url_for('static', filename='imgg7.jpeg') }}", type: 'drink' },
+        { name: 'Cold Drink', price: 2.200, category: 'cold', image: "{{ url_for('static', filename='imgg8.jpeg') }}", type: 'drink' },
+        { name: 'Pour Over', price: 2.800, category: 'brewed', image: "{{ url_for('static', filename='imgg7.jpeg') }}", type: 'drink' },
+        { name: 'French Press', price: 2.500, category: 'brewed', image: "{{ url_for('static', filename='imgg8.jpeg') }}", type: 'drink' },
+        { name: 'Croissant', price: 1.800, category: 'pastry', image: "{{ url_for('static', filename='imgg9.jpeg') }}", type: 'food' },
+        { name: 'Chocolate Cake', price: 3.000, category: 'pastry', image: "{{ url_for('static', filename='imgg10.jpeg') }}", type: 'food' }
+    ];
+
+    // State
+    let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+    let currentCategory = 'all';
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+    // Load favorites from localStorage
+    function loadFavorites() {
+        favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+        displayFavorites();
+    }
+
+    // Get favorite items with full details
+    function getFavoriteItems() {
+        return menuItems.filter(item => favorites.includes(item.name));
+    }
+
+    // Display favorites
+    function displayFavorites() {
+        const grid = document.getElementById('favoritesGrid');
+        const emptyState = document.getElementById('emptyState');
+        const countElement = document.getElementById('favoritesCount');
+        const subElement = document.getElementById('favoritesSub');
+        
+        let favoriteItems = getFavoriteItems();
+        
+        // Filter by category
+        if (currentCategory !== 'all') {
+            favoriteItems = favoriteItems.filter(item => item.category === currentCategory);
         }
+        
+        // Update stats
+        countElement.textContent = favoriteItems.length;
+        subElement.textContent = favoriteItems.length === 1 ? 'favorite item' : 'favorite items';
+        
+        // Show/hide empty state
+        if (favoriteItems.length === 0) {
+            grid.style.display = 'none';
+            emptyState.style.display = 'block';
+            return;
+        }
+        
+        grid.style.display = 'grid';
+        emptyState.style.display = 'none';
+        
+        // Render favorites
+        grid.innerHTML = favoriteItems.map(item => `
+            <div class="favorite-card" data-name="${item.name}" data-category="${item.category}">
+                <button class="remove-fav" onclick="removeFavorite('${item.name}', event)">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+                <div class="favorite-image" onclick="openItemDetails('${item.name}')">
+                    <img src="${item.image}" alt="${item.name}" onerror="this.src='{{ url_for('static', filename='imgg.jpeg') }}'">
+                </div>
+                <span class="favorite-category">${item.category}</span>
+                <div class="favorite-name" onclick="openItemDetails('${item.name}')">${item.name}</div>
+                <div class="favorite-price" onclick="openItemDetails('${item.name}')">
+                    <span>${item.price.toFixed(3)}</span>
+                </div>
+                <div class="quick-add">
+                    <button class="add-to-order" onclick="addToOrder('${item.name}', event)">
+                        <span class="material-symbols-outlined">add_shopping_cart</span>
+                        Add
+                    </button>
+                </div>
+            </div>
+        `).join('');
     }
 
-    function addToOrder(itemName) {
-        alert(`🛒 ${itemName} added to your order`);
+    // Remove from favorites
+    function removeFavorite(itemName, event) {
+        event.stopPropagation();
+        
+        favorites = favorites.filter(name => name !== itemName);
+        localStorage.setItem('favorites', JSON.stringify(favorites));
+        
+        // Animate removal
+        const card = event.target.closest('.favorite-card');
+        card.style.animation = 'fadeIn 0.3s reverse';
+        setTimeout(() => {
+            displayFavorites();
+            showToast(`Removed from favorites`, 'warning');
+        }, 200);
+        
+        // Trigger storage event for menu page
+        window.dispatchEvent(new Event('storage'));
     }
 
-    function browseMenu() {
-        window.location.href = "{{ url_for('menu') }}";
+    // Add to order/cart
+    function addToOrder(itemName, event) {
+        event.stopPropagation();
+        
+        const item = menuItems.find(i => i.name === itemName);
+        if (!item) return;
+        
+        const cartItem = {
+            id: Date.now() + Math.random(),
+            name: item.name,
+            basePrice: item.price,
+            price: item.price,
+            quantity: 1,
+            totalPrice: item.price,
+            options: {
+                size: 'small',
+                temp: item.type === 'food' ? undefined : 'hot',
+                ice: 'regular',
+                sugar: 'regular',
+                milk: item.type === 'food' ? undefined : 'whole'
+            },
+            image: item.image,
+            type: item.type
+        };
+        
+        cart.push(cartItem);
+        localStorage.setItem('cart', JSON.stringify(cart));
+        
+        // Animate button
+        const btn = event.target.closest('.add-to-order');
+        btn.style.transform = 'scale(0.9)';
+        setTimeout(() => btn.style.transform = 'scale(1)', 100);
+        
+        showToast(`Added to order`, 'success');
+        
+        // Trigger storage event for cart count update
+        window.dispatchEvent(new Event('storage'));
     }
 
-    // Category filter functionality
+    // Open item details (could link to menu with item pre-selected)
+    function openItemDetails(itemName) {
+        // Navigate to menu with item highlighted
+        window.location.href = "{{ url_for('menu') }}?highlight=" + encodeURIComponent(itemName);
+    }
+
+    // Category filter
     document.querySelectorAll('.category-chip').forEach(chip => {
         chip.addEventListener('click', function() {
             document.querySelectorAll('.category-chip').forEach(c => c.classList.remove('active'));
             this.classList.add('active');
-            // In a real app, filter the favorites grid here
+            currentCategory = this.dataset.category;
+            displayFavorites();
         });
+    });
+
+    // Listen for storage events (when favorites change in menu)
+    window.addEventListener('storage', function(e) {
+        if (e.key === 'favorites') {
+            loadFavorites();
+        }
+    });
+
+    // Also check for changes every second (for same-tab updates)
+    setInterval(function() {
+        const currentFavorites = JSON.parse(localStorage.getItem('favorites')) || [];
+        if (JSON.stringify(currentFavorites) !== JSON.stringify(favorites)) {
+            favorites = currentFavorites;
+            displayFavorites();
+        }
+    }, 500);
+
+    // Initialize on load
+    window.addEventListener('load', function() {
+        loadFavorites();
+        
+        // Check for highlight from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const highlightItem = urlParams.get('highlight');
+        if (highlightItem) {
+            // Could scroll to or highlight the item
+            console.log('Highlight:', highlightItem);
+        }
     });
 </script>
 {% endblock %}

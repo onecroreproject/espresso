@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Espresso · Cafe Order{% endblock %}
+{% block title %}Espresso · Your Order{% endblock %}
 
 {% block extra_css %}
 <style>
@@ -17,6 +17,41 @@
         display: flex;
         align-items: center;
         gap: 8px;
+    }
+
+    .empty-cart {
+        text-align: center;
+        padding: 40px 20px;
+        background: #ffffff;
+        border-radius: 30px;
+        border: 1px solid #e9d9c8;
+        margin: 16px;
+    }
+
+    .empty-cart-icon {
+        font-size: 48px;
+        color: #d0bcab;
+        margin-bottom: 16px;
+    }
+
+    .empty-cart h3 {
+        color: #5c3b2c;
+        margin-bottom: 8px;
+    }
+
+    .empty-cart p {
+        color: #8b6f54;
+        margin-bottom: 20px;
+    }
+
+    .continue-shopping {
+        display: inline-block;
+        background: #5c3b2c;
+        color: white;
+        text-decoration: none;
+        padding: 12px 24px;
+        border-radius: 40px;
+        font-weight: 600;
     }
 
     .order-item-row {
@@ -290,7 +325,7 @@
         background: #ffffff;
         margin: 16px;
         border-radius: 30px;
-        border: 1px solid #e9d9c8;
+        border: 1px solid #e9d8c8;
     }
 
     .tip-options {
@@ -409,8 +444,81 @@
     }
 
     .place-order-btn:active { transform: scale(0.98); background: #6f4a2e; }
+    .place-order-btn:disabled { opacity: 0.5; pointer-events: none; }
 
-    /* Edit Modal */
+    /* Toast Notifications */
+    .toast-container {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 3000;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        width: 90%;
+        max-width: 400px;
+        pointer-events: none;
+    }
+
+    .toast {
+        background: #5c3b2c;
+        color: white;
+        padding: 16px 20px;
+        border-radius: 50px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        font-weight: 500;
+        transform: translateY(100px);
+        opacity: 0;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        pointer-events: auto;
+        border: 1px solid #e9d9c8;
+    }
+
+    .toast.show {
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+    .toast.success {
+        background: #27ae60;
+    }
+
+    .toast.warning {
+        background: #e67e22;
+    }
+
+    .toast.error {
+        background: #c0392b;
+    }
+
+    .toast-icon {
+        font-size: 24px;
+    }
+
+    .toast-message {
+        flex: 1;
+        font-size: 14px;
+    }
+
+    .toast-close {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 18px;
+        cursor: pointer;
+        opacity: 0.7;
+        padding: 0 5px;
+    }
+
+    .toast-close:hover {
+        opacity: 1;
+    }
+
+    /* Edit Modal - Matching menu customization */
     .modal-overlay {
         position: fixed;
         top: 0; left: 0;
@@ -446,8 +554,6 @@
         justify-content: space-between;
         align-items: center;
         margin-bottom: 20px;
-        padding-bottom: 10px;
-        border-bottom: 1px solid #f0e4d6;
     }
 
     .modal-header h3 {
@@ -461,34 +567,32 @@
 
     .close-modal { background: none; border: none; font-size: 28px; cursor: pointer; color: #8b6f54; }
 
-    .modal-product {
-        display: flex;
-        gap: 16px;
-        margin-bottom: 24px;
-        padding: 16px;
-        background: #fcf8f3;
-        border-radius: 30px;
-    }
-
     .modal-product-image {
-        width: 80px;
-        height: 80px;
-        border-radius: 40px;
+        width: 100px;
+        height: 100px;
+        border-radius: 24px;
         overflow: hidden;
-        border: 3px solid #ffffff;
-        box-shadow: 0 4px 10px rgba(92, 59, 44, 0.1);
+        margin: 0 auto 16px;
+        border: 3px solid #f0e4d6;
+        box-shadow: 0 8px 16px rgba(92, 59, 44, 0.15);
     }
 
     .modal-product-image img { width: 100%; height: 100%; object-fit: cover; }
 
-    .modal-product-info { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+    .modal-item-name {
+        font-size: 24px;
+        font-weight: 600;
+        color: #5c3b2c;
+        margin-bottom: 20px;
+        text-align: center;
+    }
 
-    .modal-product-name { font-size: 18px; font-weight: 700; color: #3a2417; margin-bottom: 4px; }
-    .modal-product-price { font-size: 20px; font-weight: 700; color: #5c3b2c; }
+    /* Option sections - matching menu */
+    .option-section {
+        margin-bottom: 20px;
+    }
 
-    .edit-option { margin-bottom: 24px; }
-
-    .edit-label {
+    .option-label {
         font-size: 16px;
         font-weight: 600;
         color: #3a2417;
@@ -498,53 +602,90 @@
         gap: 8px;
     }
 
-    .size-options { display: flex; gap: 8px; }
+    .option-buttons {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
 
-    .size-btn {
-        flex: 1;
-        padding: 14px 0;
+    .option-btn {
+        flex: 1 1 auto;
+        min-width: 70px;
+        padding: 12px 0;
         border: 2px solid #e9d9c8;
         border-radius: 40px;
         background: #ffffff;
         font-size: 14px;
-        font-weight: 600;
+        font-weight: 500;
         color: #5c3b2c;
         cursor: pointer;
         transition: all 0.2s;
-    }
-
-    .size-btn.active { background: #5c3b2c; color: white; border-color: #5c3b2c; }
-
-    .extras-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
-
-    .extra-item {
-        padding: 14px;
-        border: 2px solid #e9d9c8;
-        border-radius: 30px;
         display: flex;
-        justify-content: space-between;
         align-items: center;
+        justify-content: center;
+        gap: 4px;
+    }
+
+    .option-btn.active {
+        background: #5c3b2c;
+        color: #ffffff;
+        border-color: #5c3b2c;
+    }
+
+    .option-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    .extra-cost {
+        font-size: 11px;
+        color: #8b6f54;
+        margin-left: 4px;
+    }
+
+    .option-btn.active .extra-cost {
+        color: #ffffff;
+        opacity: 0.9;
+    }
+
+    .quantity-controls {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: #fcf0e6;
+        border-radius: 60px;
+        padding: 6px;
+    }
+
+    .qty-btn {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        border: none;
+        background: #ffffff;
+        font-size: 24px;
+        font-weight: 600;
+        color: #5c3b2c;
         cursor: pointer;
-        font-size: 13px;
-        font-weight: 500;
-        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     }
 
-    .extra-item.active { background: #fcf0e6; border-color: #5c3b2c; }
-    .extra-price { color: #5c3b2c; font-weight: 600; }
-
-    .instructions-input {
-        width: 100%;
-        padding: 14px 18px;
-        border: 2px solid #e9d9c8;
-        border-radius: 40px;
-        font-size: 14px;
-        font-family: 'Montserrat', sans-serif;
+    .qty-number {
+        font-size: 24px;
+        font-weight: 700;
+        color: #5c3b2c;
+        min-width: 50px;
+        text-align: center;
     }
 
-    .instructions-input:focus { outline: none; border-color: #5c3b2c; }
-
-    .modal-actions { display: flex; gap: 10px; margin-top: 24px; }
+    .modal-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 24px;
+    }
 
     .save-btn {
         flex: 2;
@@ -556,6 +697,10 @@
         font-size: 16px;
         font-weight: 600;
         cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
     }
 
     .delete-btn {
@@ -652,12 +797,14 @@
     @media (max-width: 480px) {
         .tip-options { grid-template-columns: repeat(2, 1fr); }
         .order-item-image { width: 60px; height: 60px; }
-        .modal-product-image { width: 70px; height: 70px; }
     }
 </style>
 {% endblock %}
 
 {% block content %}
+<!-- Toast Container -->
+<div class="toast-container" id="toastContainer"></div>
+
 <!-- Order Tracker -->
 <div class="order-tracker">
     <div class="section-title">
@@ -700,114 +847,15 @@
         <span class="material-symbols-outlined">restaurant_menu</span> Your Items
     </div>
 
-    <!-- Item 1 - Espresso -->
-    <div class="order-item-row" data-item-id="1">
-        <div class="cancel-item-btn" onclick="cancelItem(this, 'Espresso')">
-            <span class="material-symbols-outlined">close</span>
-        </div>
-        <div class="order-item-image" onclick="openEditModal('espresso')">
-            <img src="{{ url_for('static', filename='imgg.jpeg') }}" alt="Espresso">
-        </div>
-        <div class="order-item-details" onclick="openEditModal('espresso')">
-            <div class="order-item-name">Espresso</div>
-            <div class="order-item-meta">Small · Classic</div>
-        </div>
-        <div class="order-item-right" onclick="event.stopPropagation()">
-            <div class="order-item-price">BD 2.500</div>
-            <div class="order-item-actions">
-                <button class="item-qty-btn" onclick="updateQty(this, -1)">−</button>
-                <span class="item-qty">1</span>
-                <button class="item-qty-btn" onclick="updateQty(this, 1)">+</button>
-            </div>
-        </div>
+    <div id="cartItemsContainer">
+        <!-- Cart items will be loaded here from localStorage -->
     </div>
 
-    <!-- Item 2 - Cappuccino -->
-    <div class="order-item-row" data-item-id="2">
-        <div class="cancel-item-btn" onclick="cancelItem(this, 'Cappuccino')">
-            <span class="material-symbols-outlined">close</span>
-        </div>
-        <div class="order-item-image" onclick="openEditModal('cappuccino')">
-            <img src="{{ url_for('static', filename='imgg3.jpeg') }}" alt="Cappuccino">
-        </div>
-        <div class="order-item-details" onclick="openEditModal('cappuccino')">
-            <div class="order-item-name">Cappuccino</div>
-            <div class="order-item-meta">Medium · Oat Milk</div>
-        </div>
-        <div class="order-item-right" onclick="event.stopPropagation()">
-            <div class="order-item-price">BD 3.500</div>
-            <div class="order-item-actions">
-                <button class="item-qty-btn" onclick="updateQty(this, -1)">−</button>
-                <span class="item-qty">2</span>
-                <button class="item-qty-btn" onclick="updateQty(this, 1)">+</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Item 3 - Butter Croissant -->
-    <div class="order-item-row" data-item-id="3">
-        <div class="cancel-item-btn" onclick="cancelItem(this, 'Croissant')">
-            <span class="material-symbols-outlined">close</span>
-        </div>
-        <div class="order-item-image" onclick="openEditModal('croissant')">
-            <img src="{{ url_for('static', filename='imgg9.jpeg') }}" alt="Croissant">
-        </div>
-        <div class="order-item-details" onclick="openEditModal('croissant')">
-            <div class="order-item-name">Butter Croissant</div>
-            <div class="order-item-meta">Fresh baked</div>
-        </div>
-        <div class="order-item-right" onclick="event.stopPropagation()">
-            <div class="order-item-price">BD 1.800</div>
-            <div class="order-item-actions">
-                <button class="item-qty-btn" onclick="updateQty(this, -1)">−</button>
-                <span class="item-qty">1</span>
-                <button class="item-qty-btn" onclick="updateQty(this, 1)">+</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Item 4 - Iced Latte -->
-    <div class="order-item-row" data-item-id="4">
-        <div class="cancel-item-btn" onclick="cancelItem(this, 'Iced Latte')">
-            <span class="material-symbols-outlined">close</span>
-        </div>
-        <div class="order-item-image" onclick="openEditModal('latte')">
-            <img src="{{ url_for('static', filename='imgg5.jpeg') }}" alt="Latte">
-        </div>
-        <div class="order-item-details" onclick="openEditModal('latte')">
-            <div class="order-item-name">Iced Latte</div>
-            <div class="order-item-meta">Large · Vanilla</div>
-        </div>
-        <div class="order-item-right" onclick="event.stopPropagation()">
-            <div class="order-item-price">BD 3.500</div>
-            <div class="order-item-actions">
-                <button class="item-qty-btn" onclick="updateQty(this, -1)">−</button>
-                <span class="item-qty">1</span>
-                <button class="item-qty-btn" onclick="updateQty(this, 1)">+</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Item 5 - Chocolate Cake -->
-    <div class="order-item-row" data-item-id="5">
-        <div class="cancel-item-btn" onclick="cancelItem(this, 'Chocolate Cake')">
-            <span class="material-symbols-outlined">close</span>
-        </div>
-        <div class="order-item-image" onclick="openEditModal('cake')">
-            <img src="{{ url_for('static', filename='imgg10.jpeg') }}" alt="Chocolate Cake">
-        </div>
-        <div class="order-item-details" onclick="openEditModal('cake')">
-            <div class="order-item-name">Chocolate Cake</div>
-            <div class="order-item-meta">Slice · Warm</div>
-        </div>
-        <div class="order-item-right" onclick="event.stopPropagation()">
-            <div class="order-item-price">BD 3.000</div>
-            <div class="order-item-actions">
-                <button class="item-qty-btn" onclick="updateQty(this, -1)">−</button>
-                <span class="item-qty">1</span>
-                <button class="item-qty-btn" onclick="updateQty(this, 1)">+</button>
-            </div>
-        </div>
+    <div id="emptyCartMessage" class="empty-cart" style="display: none;">
+        <div class="empty-cart-icon">🛒</div>
+        <h3>Your cart is empty</h3>
+        <p>Add some delicious items from our menu</p>
+        <a href="{{ url_for('menu') }}" class="continue-shopping">Browse Menu</a>
     </div>
 </div>
 
@@ -815,16 +863,16 @@
 <div class="bill-section">
     <div class="bill-details">
         <div class="bill-row">
-            <span>Subtotal (4 items)</span>
-            <span>BD 11.300</span>
+            <span>Subtotal (<span id="itemCount">0</span> items)</span>
+            <span id="subtotalAmount">BD 0.000</span>
         </div>
         <div class="bill-row">
             <span>Service charge (10%)</span>
-            <span>BD 1.130</span>
+            <span id="serviceCharge">BD 0.000</span>
         </div>
         <div class="bill-row">
             <span>VAT (5%)</span>
-            <span>BD 0.565</span>
+            <span id="vat">BD 0.000</span>
         </div>
         <div class="bill-row" id="tipRow" style="display: none;">
             <span>Tip (<span id="tipPercentage">0</span>%)</span>
@@ -833,7 +881,7 @@
         <div class="bill-divider"></div>
         <div class="bill-row total">
             <span>Total Amount</span>
-            <span id="totalAmount">BD 12.995</span>
+            <span id="totalAmount">BD 0.000</span>
         </div>
         <div class="bill-note">
             <span class="material-symbols-outlined">info</span>
@@ -851,25 +899,25 @@
         <input type="checkbox" id="tip5" class="tip-checkbox" name="tip" value="5" onchange="updateTip(this)">
         <label for="tip5" class="tip-label">
             <span class="tip-percent">5%</span>
-            <span class="tip-amount">BD 0.650</span>
+            <span class="tip-amount">BD 0.000</span>
         </label>
 
         <input type="checkbox" id="tip10" class="tip-checkbox" name="tip" value="10" onchange="updateTip(this)">
         <label for="tip10" class="tip-label">
             <span class="tip-percent">10%</span>
-            <span class="tip-amount">BD 1.300</span>
+            <span class="tip-amount">BD 0.000</span>
         </label>
 
         <input type="checkbox" id="tip15" class="tip-checkbox" name="tip" value="15" onchange="updateTip(this)">
         <label for="tip15" class="tip-label">
             <span class="tip-percent">15%</span>
-            <span class="tip-amount">BD 1.950</span>
+            <span class="tip-amount">BD 0.000</span>
         </label>
 
         <input type="checkbox" id="tip20" class="tip-checkbox" name="tip" value="20" onchange="updateTip(this)">
         <label for="tip20" class="tip-label">
             <span class="tip-percent">20%</span>
-            <span class="tip-amount">BD 2.600</span>
+            <span class="tip-amount">BD 0.000</span>
         </label>
     </div>
     <div class="custom-tip">
@@ -884,51 +932,111 @@
 </button>
 
 <!-- Place Order -->
-<button class="place-order-btn" onclick="processPayment()">
+<button class="place-order-btn" id="placeOrderBtn" onclick="processPayment()" disabled>
     <span class="material-symbols-outlined">payment</span>
-    Pay Now · <span id="payButtonAmount">BD 12.995</span>
+    Pay Now · <span id="payButtonAmount">BD 0.000</span>
 </button>
 
-<!-- Edit Modal -->
+<!-- Edit Modal - Matching menu customization -->
 <div class="modal-overlay" id="editModal">
     <div class="modal-content">
         <div class="modal-header">
-            <h3><span class="material-symbols-outlined">edit</span> Customize Item</h3>
+            <h3><span class="material-symbols-outlined">edit</span> Customize</h3>
             <button class="close-modal" onclick="closeEditModal()">&times;</button>
         </div>
-        <div class="modal-product">
-            <div class="modal-product-image">
-                <img src="{{ url_for('static', filename='imgg3.jpeg') }}" alt="Product" id="modalProductImage">
-            </div>
-            <div class="modal-product-info">
-                <div class="modal-product-name" id="modalProductName">Cappuccino</div>
-                <div class="modal-product-price" id="modalProductPrice">BD 3.000</div>
-            </div>
+        <div class="modal-product-image">
+            <img src="" alt="" id="modalImageSrc">
         </div>
-        <div class="edit-option">
-            <div class="edit-label"><span class="material-symbols-outlined">straighten</span> Select Size</div>
-            <div class="size-options">
-                <button class="size-btn active" onclick="selectSize(this, 'small')">Small</button>
-                <button class="size-btn" onclick="selectSize(this, 'medium')">Medium</button>
-                <button class="size-btn" onclick="selectSize(this, 'large')">Large</button>
+        <div class="modal-item-name" id="modalItemName"></div>
+
+        <!-- Size Selection -->
+        <div class="option-section">
+            <div class="option-label">
+                <span class="material-symbols-outlined">straighten</span> size
             </div>
-        </div>
-        <div class="edit-option">
-            <div class="edit-label"><span class="material-symbols-outlined">add_circle</span> Add Extras</div>
-            <div class="extras-grid">
-                <div class="extra-item" onclick="toggleExtra(this)"><span>Extra Shot</span><span class="extra-price">+0.500</span></div>
-                <div class="extra-item" onclick="toggleExtra(this)"><span>Soy Milk</span><span class="extra-price">+0.300</span></div>
-                <div class="extra-item" onclick="toggleExtra(this)"><span>Vanilla</span><span class="extra-price">+0.200</span></div>
-                <div class="extra-item" onclick="toggleExtra(this)"><span>Caramel</span><span class="extra-price">+0.200</span></div>
+            <div class="option-buttons" id="sizeOptions">
+                <button class="option-btn" data-size="small">
+                    <span class="material-symbols-outlined">coffee</span> small
+                </button>
+                <button class="option-btn" data-size="medium">
+                    <span class="material-symbols-outlined">local_cafe</span> medium <span class="extra-cost">+0.500</span>
+                </button>
+                <button class="option-btn" data-size="large">
+                    <i class="fa-solid fa-mug-hot"></i> large <span class="extra-cost">+1.000</span>
+                </button>
             </div>
         </div>
-        <div class="edit-option">
-            <div class="edit-label"><span class="material-symbols-outlined">notes</span> Special Instructions</div>
-            <input type="text" class="instructions-input" placeholder="e.g., extra hot, less ice">
+
+        <!-- Temperature Selection (for drinks) -->
+        <div class="option-section" id="tempSection">
+            <div class="option-label">
+                <span class="material-symbols-outlined">thermostat</span> temperature
+            </div>
+            <div class="option-buttons">
+                <button class="option-btn" data-temp="hot">
+                    <span class="material-symbols-outlined">whatshot</span> hot
+                </button>
+                <button class="option-btn" data-temp="cold">
+                    <span class="material-symbols-outlined">ac_unit</span> cold
+                </button>
+            </div>
         </div>
+
+        <!-- Ice Level (shows when cold is selected) -->
+        <div class="option-section" id="iceSection" style="display: none;">
+            <div class="option-label">
+                <span class="material-symbols-outlined">icecream</span> ice level
+            </div>
+            <div class="option-buttons">
+                <button class="option-btn" data-ice="regular">regular</button>
+                <button class="option-btn" data-ice="less">less ice</button>
+                <button class="option-btn" data-ice="extra">extra ice</button>
+                <button class="option-btn" data-ice="no">no ice</button>
+            </div>
+        </div>
+
+        <!-- Sugar Selection -->
+        <div class="option-section">
+            <div class="option-label">
+                <span class="material-symbols-outlined">cookie</span> sugar
+            </div>
+            <div class="option-buttons">
+                <button class="option-btn" data-sugar="regular">regular</button>
+                <button class="option-btn" data-sugar="less">less</button>
+                <button class="option-btn" data-sugar="half">half</button>
+                <button class="option-btn" data-sugar="no">no sugar</button>
+                <button class="option-btn" data-sugar="extra">extra <span class="extra-cost">+0.200</span></button>
+            </div>
+        </div>
+
+        <!-- Milk Selection -->
+        <div class="option-section" id="milkSection">
+            <div class="option-label">
+                <span class="material-symbols-outlined">spa</span> milk
+            </div>
+            <div class="option-buttons">
+                <button class="option-btn" data-milk="whole">whole</button>
+                <button class="option-btn" data-milk="oat">oat <span class="extra-cost">+0.300</span></button>
+                <button class="option-btn" data-milk="almond">almond <span class="extra-cost">+0.300</span></button>
+                <button class="option-btn" data-milk="skim">skim</button>
+            </div>
+        </div>
+
+        <!-- Quantity -->
+        <div class="option-section">
+            <div class="option-label">quantity</div>
+            <div class="quantity-controls">
+                <button class="qty-btn" id="modalDecrementQty">−</button>
+                <span class="qty-number" id="modalQtyDisplay">1</span>
+                <button class="qty-btn" id="modalIncrementQty">+</button>
+            </div>
+        </div>
+
         <div class="modal-actions">
-            <button class="save-btn" onclick="saveEdit()">Save Changes</button>
-            <button class="delete-btn" onclick="deleteItem()">
+            <button class="save-btn" onclick="saveEdit()">
+                <span class="material-symbols-outlined">check</span> Save Changes
+            </button>
+            <button class="delete-btn" onclick="deleteCurrentItem()">
                 <span class="material-symbols-outlined">delete</span>
             </button>
         </div>
@@ -942,44 +1050,8 @@
             <h3><span class="material-symbols-outlined">history</span> Recent Orders</h3>
             <button class="close-modal" onclick="closeHistoryModal()">&times;</button>
         </div>
-        <div class="history-item">
-            <div class="history-item-image">
-                <img src="{{ url_for('static', filename='imgg2.jpeg') }}" alt="Order">
-            </div>
-            <div class="history-item-details">
-                <div class="history-item-name">Double Espresso</div>
-                <div class="history-item-meta">Today · 10:30 AM</div>
-            </div>
-            <div class="history-item-price">BD 3.500</div>
-            <button class="reorder-btn-small" onclick="reorderItem('Double Espresso')">
-                <span class="material-symbols-outlined">repeat</span>
-            </button>
-        </div>
-        <div class="history-item">
-            <div class="history-item-image">
-                <img src="{{ url_for('static', filename='imgg5.jpeg') }}" alt="Order">
-            </div>
-            <div class="history-item-details">
-                <div class="history-item-name">Cold Brew + Pastry</div>
-                <div class="history-item-meta">Yesterday · 3:15 PM</div>
-            </div>
-            <div class="history-item-price">BD 4.800</div>
-            <button class="reorder-btn-small" onclick="reorderItem('Cold Brew Set')">
-                <span class="material-symbols-outlined">repeat</span>
-            </button>
-        </div>
-        <div class="history-item">
-            <div class="history-item-image">
-                <img src="{{ url_for('static', filename='imgg3.jpeg') }}" alt="Order">
-            </div>
-            <div class="history-item-details">
-                <div class="history-item-name">Cappuccino + Cake</div>
-                <div class="history-item-meta">Mar 15 · 2:30 PM</div>
-            </div>
-            <div class="history-item-price">BD 6.500</div>
-            <button class="reorder-btn-small" onclick="reorderItem('Cappuccino Set')">
-                <span class="material-symbols-outlined">repeat</span>
-            </button>
+        <div id="orderHistory">
+            <!-- Order history will be loaded here -->
         </div>
     </div>
 </div>
@@ -989,32 +1061,199 @@
 
 {% block extra_js %}
 <script>
-    let subtotal = 11.300;
-    let serviceCharge = 1.130;
-    let vat = 0.565;
-    let baseTotal = 12.995;
+    // Cart management
+    let cart = [];
+    let currentItemIndex = -1;
+    let baseTotal = 0;
+    let subtotal = 0;
+    let serviceCharge = 0;
+    let vat = 0;
     let currentTip = 0;
     let currentTipPercent = 0;
 
-    function updateQty(btn, change) {
-        const row = btn.closest('.order-item-row');
-        const qtySpan = row.querySelector('.item-qty');
-        let qty = parseInt(qtySpan.textContent);
-        qty = Math.max(1, qty + change);
-        qtySpan.textContent = qty;
-        calculateTotal();
+    // Toast notification system
+    function showToast(message, type = 'success', duration = 3000) {
+        const container = document.getElementById('toastContainer');
+        const toastId = 'toast_' + Date.now();
+        
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        toast.id = toastId;
+        
+        let icon = 'check_circle';
+        if (type === 'warning') icon = 'warning';
+        if (type === 'error') icon = 'error';
+        
+        toast.innerHTML = `
+            <span class="material-symbols-outlined toast-icon">${icon}</span>
+            <span class="toast-message">${message}</span>
+            <button class="toast-close" onclick="closeToast('${toastId}')">×</button>
+        `;
+        
+        container.appendChild(toast);
+        
+        // Trigger animation
+        setTimeout(() => toast.classList.add('show'), 10);
+        
+        // Auto remove after duration
+        setTimeout(() => {
+            closeToast(toastId);
+        }, duration);
     }
 
-    function cancelItem(element, itemName) {
-        const row = element.closest('.order-item-row');
-        if (confirm(`Remove ${itemName} from your order?`)) {
-            row.remove();
-            calculateTotal();
+    function closeToast(id) {
+        const toast = document.getElementById(id);
+        if (toast) {
+            toast.classList.remove('show');
+            setTimeout(() => {
+                if (toast.parentNode) {
+                    toast.parentNode.removeChild(toast);
+                }
+            }, 300);
         }
     }
 
+    // Load cart from localStorage
+    function loadCart() {
+        const savedCart = localStorage.getItem('cart');
+        cart = savedCart ? JSON.parse(savedCart) : [];
+        displayCartItems();
+    }
+
+    // Display cart items
+    function displayCartItems() {
+        const container = document.getElementById('cartItemsContainer');
+        const emptyMessage = document.getElementById('emptyCartMessage');
+        const placeOrderBtn = document.getElementById('placeOrderBtn');
+        
+        if (!cart || cart.length === 0) {
+            container.innerHTML = '';
+            emptyMessage.style.display = 'block';
+            placeOrderBtn.disabled = true;
+            updateBillSummary();
+            return;
+        }
+
+        emptyMessage.style.display = 'none';
+        placeOrderBtn.disabled = false;
+        
+        let html = '';
+        cart.forEach((item, index) => {
+            const optionsSummary = [];
+            if (item.options) {
+                if (item.options.size) optionsSummary.push(item.options.size);
+                if (item.options.temp && item.type !== 'food') {
+                    optionsSummary.push(item.options.temp);
+                    if (item.options.temp === 'cold' && item.options.ice) {
+                        optionsSummary.push(`${item.options.ice} ice`);
+                    }
+                }
+                if (item.options.sugar) optionsSummary.push(`${item.options.sugar} sugar`);
+                if (item.options.milk && item.type !== 'food') optionsSummary.push(`${item.options.milk} milk`);
+            }
+            
+            html += `
+                <div class="order-item-row" data-item-index="${index}">
+                    <div class="cancel-item-btn" onclick="cancelItem(${index})">
+                        <span class="material-symbols-outlined">close</span>
+                    </div>
+                    <div class="order-item-image" onclick="openEditModal(${index})">
+                        <img src="${item.image}" alt="${item.name}" onerror="this.src='{{ url_for('static', filename='imgg.jpeg') }}'">
+                    </div>
+                    <div class="order-item-details" onclick="openEditModal(${index})">
+                        <div class="order-item-name">${item.name}</div>
+                        <div class="order-item-meta">${optionsSummary.join(' · ')}</div>
+                    </div>
+                    <div class="order-item-right" onclick="event.stopPropagation()">
+                        <div class="order-item-price">BD ${(item.price * item.quantity).toFixed(3)}</div>
+                        <div class="order-item-actions">
+                            <button class="item-qty-btn" onclick="updateQty(${index}, -1)">−</button>
+                            <span class="item-qty">${item.quantity}</span>
+                            <button class="item-qty-btn" onclick="updateQty(${index}, 1)">+</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+        
+        container.innerHTML = html;
+        updateBillSummary();
+    }
+
+    // Update quantity
+    function updateQty(index, change) {
+        if (index >= 0 && index < cart.length) {
+            cart[index].quantity = Math.max(1, cart[index].quantity + change);
+            cart[index].totalPrice = cart[index].price * cart[index].quantity;
+            localStorage.setItem('cart', JSON.stringify(cart));
+            displayCartItems();
+            showToast('Quantity updated', 'success');
+        }
+    }
+
+    // Cancel/remove item
+    function cancelItem(index) {
+        const itemName = cart[index].name;
+        cart.splice(index, 1);
+        localStorage.setItem('cart', JSON.stringify(cart));
+        displayCartItems();
+        showToast(`${itemName} removed from cart`, 'warning');
+    }
+
+    // Update bill summary
+    function updateBillSummary() {
+        if (!cart || cart.length === 0) {
+            document.getElementById('itemCount').textContent = '0';
+            document.getElementById('subtotalAmount').textContent = 'BD 0.000';
+            document.getElementById('serviceCharge').textContent = 'BD 0.000';
+            document.getElementById('vat').textContent = 'BD 0.000';
+            document.getElementById('totalAmount').textContent = 'BD 0.000';
+            document.getElementById('payButtonAmount').textContent = 'BD 0.000';
+            
+            // Reset tip checkboxes
+            document.querySelectorAll('.tip-checkbox').forEach(cb => cb.checked = false);
+            document.getElementById('tipRow').style.display = 'none';
+            currentTip = 0;
+            currentTipPercent = 0;
+            
+            return;
+        }
+
+        subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        serviceCharge = subtotal * 0.10; // 10%
+        vat = subtotal * 0.05; // 5%
+        baseTotal = subtotal + serviceCharge + vat;
+        
+        document.getElementById('itemCount').textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+        document.getElementById('subtotalAmount').textContent = `BD ${subtotal.toFixed(3)}`;
+        document.getElementById('serviceCharge').textContent = `BD ${serviceCharge.toFixed(3)}`;
+        document.getElementById('vat').textContent = `BD ${vat.toFixed(3)}`;
+        
+        // Update tip amounts
+        updateTipAmounts();
+        updateTotal();
+    }
+
+    // Update tip display amounts
+    function updateTipAmounts() {
+        const tip5 = baseTotal * 0.05;
+        const tip10 = baseTotal * 0.10;
+        const tip15 = baseTotal * 0.15;
+        const tip20 = baseTotal * 0.20;
+        
+        const tip5Element = document.querySelector('label[for="tip5"] .tip-amount');
+        const tip10Element = document.querySelector('label[for="tip10"] .tip-amount');
+        const tip15Element = document.querySelector('label[for="tip15"] .tip-amount');
+        const tip20Element = document.querySelector('label[for="tip20"] .tip-amount');
+        
+        if (tip5Element) tip5Element.textContent = `BD ${tip5.toFixed(3)}`;
+        if (tip10Element) tip10Element.textContent = `BD ${tip10.toFixed(3)}`;
+        if (tip15Element) tip15Element.textContent = `BD ${tip15.toFixed(3)}`;
+        if (tip20Element) tip20Element.textContent = `BD ${tip20.toFixed(3)}`;
+    }
+
+    // Update tip from checkbox
     function updateTip(checkbox) {
-        // Uncheck other tip checkboxes
         document.querySelectorAll('.tip-checkbox').forEach(cb => {
             if (cb !== checkbox) cb.checked = false;
         });
@@ -1022,31 +1261,33 @@
         if (checkbox.checked) {
             const percent = parseInt(checkbox.value);
             currentTipPercent = percent;
-            currentTip = (baseTotal * percent / 100).toFixed(3);
+            currentTip = baseTotal * (percent / 100);
             document.getElementById('tipRow').style.display = 'flex';
             document.getElementById('tipPercentage').textContent = percent;
-            document.getElementById('tipAmount').textContent = `BD ${currentTip}`;
+            document.getElementById('tipAmount').textContent = `BD ${currentTip.toFixed(3)}`;
+            showToast(`${percent}% tip added`, 'success');
         } else {
             currentTip = 0;
             currentTipPercent = 0;
             document.getElementById('tipRow').style.display = 'none';
         }
-
+        
         updateTotal();
     }
 
+    // Apply custom tip
     function applyCustomTip() {
         const customTip = parseFloat(document.getElementById('customTip').value);
         
-        // Uncheck all checkboxes
         document.querySelectorAll('.tip-checkbox').forEach(cb => cb.checked = false);
 
         if (customTip > 0) {
-            currentTip = customTip.toFixed(3);
-            currentTipPercent = ((customTip / baseTotal) * 100).toFixed(1);
+            currentTip = customTip;
+            currentTipPercent = ((customTip / baseTotal) * 100);
             document.getElementById('tipRow').style.display = 'flex';
-            document.getElementById('tipPercentage').textContent = currentTipPercent;
-            document.getElementById('tipAmount').textContent = `BD ${currentTip}`;
+            document.getElementById('tipPercentage').textContent = currentTipPercent.toFixed(1);
+            document.getElementById('tipAmount').textContent = `BD ${currentTip.toFixed(3)}`;
+            showToast(`Custom tip of BD ${customTip.toFixed(3)} added`, 'success');
         } else {
             currentTip = 0;
             currentTipPercent = 0;
@@ -1056,119 +1297,334 @@
         updateTotal();
     }
 
-    function calculateTotal() {
-        // Recalculate base total based on items and quantities
-        // This is a simplified version - you'd need to loop through items
-        baseTotal = 12.995; // Placeholder
-        updateTotal();
-    }
-
+    // Update total amount
     function updateTotal() {
-        const total = (baseTotal + parseFloat(currentTip)).toFixed(3);
-        document.getElementById('totalAmount').textContent = `BD ${total}`;
-        document.getElementById('payButtonAmount').textContent = `BD ${total}`;
+        const total = baseTotal + currentTip;
+        document.getElementById('totalAmount').textContent = `BD ${total.toFixed(3)}`;
+        document.getElementById('payButtonAmount').textContent = `BD ${total.toFixed(3)}`;
     }
 
-    function processPayment() {
-        const total = document.getElementById('totalAmount').textContent;
-        const tipAmount = currentTip > 0 ? `BD ${currentTip}` : 'No tip';
-        const tipPercent = currentTipPercent > 0 ? ` (${currentTipPercent}%)` : '';
+    // Calculate price based on options
+    function calculatePrice(item, options) {
+        let price = item.basePrice || item.price;
         
-        // Save order data for receipt/confirmation
-        const orderData = {
-            items: getOrderItems(),
-            subtotal: baseTotal - serviceCharge - vat,
-            serviceCharge: serviceCharge,
-            vat: vat,
-            tip: currentTip,
-            tipPercent: currentTipPercent,
-            total: total.replace('BD ', ''),
-            timestamp: new Date().toISOString()
-        };
+        if (options.size === 'medium') price += 0.500;
+        if (options.size === 'large') price += 1.000;
+        if (options.sugar === 'extra') price += 0.200;
+        if (options.milk === 'oat' || options.milk === 'almond') price += 0.300;
         
-        localStorage.setItem('currentOrder', JSON.stringify(orderData));
-        
-        // Show payment processing simulation
-        alert(`✅ Let's Pay\n\nTotal: ${total}\nTip: ${tipAmount}${tipPercent}\n\n Getting your order!`);
-        
-
-         window.location.href = "{{ url_for('payment') }}";
+        return price;
     }
 
-    function getOrderItems() {
-        const items = [];
-        document.querySelectorAll('.order-item-row').forEach(row => {
-            const name = row.querySelector('.order-item-name').textContent;
-            const meta = row.querySelector('.order-item-meta').textContent;
-            const price = row.querySelector('.order-item-price').textContent.replace('BD ', '');
-            const qty = row.querySelector('.item-qty').textContent;
-            items.push({ name, meta, price, qty });
-        });
-        return items;
-    }
-
-    const itemImages = {
-        espresso:   "{{ url_for('static', filename='imgg.jpeg') }}",
-        cappuccino: "{{ url_for('static', filename='imgg3.jpeg') }}",
-        croissant:  "{{ url_for('static', filename='imgg9.jpeg') }}",
-        latte:      "{{ url_for('static', filename='imgg5.jpeg') }}",
-        cake:       "{{ url_for('static', filename='imgg10.jpeg') }}"
-    };
-
-    const itemNames = {
-        espresso:   'Espresso',
-        cappuccino: 'Cappuccino',
-        croissant:  'Butter Croissant',
-        latte:      'Iced Latte',
-        cake:       'Chocolate Cake'
-    };
-
-    function openEditModal(itemName) {
-        document.getElementById('modalProductName').textContent = itemNames[itemName] || itemName;
-        document.getElementById('modalProductImage').src = itemImages[itemName] || '';
+    // Open edit modal with current item options
+    function openEditModal(index) {
+        currentItemIndex = index;
+        const item = cart[index];
+        
+        document.getElementById('modalItemName').textContent = item.name;
+        document.getElementById('modalImageSrc').src = item.image;
+        document.getElementById('modalQtyDisplay').textContent = item.quantity;
+        
+        // Reset all option buttons
+        document.querySelectorAll('.option-btn').forEach(btn => btn.classList.remove('active'));
+        
+        // Set current options
+        if (item.options) {
+            // Set size
+            document.querySelectorAll('[data-size]').forEach(btn => {
+                if (btn.dataset.size === item.options.size) {
+                    btn.classList.add('active');
+                }
+            });
+            
+            // Set temperature
+            if (item.type !== 'food') {
+                document.getElementById('tempSection').style.display = 'block';
+                document.getElementById('milkSection').style.display = 'block';
+                
+                document.querySelectorAll('[data-temp]').forEach(btn => {
+                    if (btn.dataset.temp === item.options.temp) {
+                        btn.classList.add('active');
+                    }
+                });
+                
+                // Show/hide ice section based on temperature
+                const iceSection = document.getElementById('iceSection');
+                if (item.options.temp === 'cold') {
+                    iceSection.style.display = 'block';
+                    document.querySelectorAll('[data-ice]').forEach(btn => {
+                        if (btn.dataset.ice === item.options.ice) {
+                            btn.classList.add('active');
+                        }
+                    });
+                } else {
+                    iceSection.style.display = 'none';
+                }
+                
+                // Set milk
+                document.querySelectorAll('[data-milk]').forEach(btn => {
+                    if (btn.dataset.milk === item.options.milk) {
+                        btn.classList.add('active');
+                    }
+                });
+            } else {
+                document.getElementById('tempSection').style.display = 'none';
+                document.getElementById('iceSection').style.display = 'none';
+                document.getElementById('milkSection').style.display = 'none';
+            }
+            
+            // Set sugar
+            document.querySelectorAll('[data-sugar]').forEach(btn => {
+                if (btn.dataset.sugar === item.options.sugar) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+        
         document.getElementById('editModal').classList.add('active');
         document.body.style.overflow = 'hidden';
     }
 
+    // Close edit modal
     function closeEditModal() {
         document.getElementById('editModal').classList.remove('active');
         document.body.style.overflow = '';
+        currentItemIndex = -1;
     }
 
-    function selectSize(btn, size) {
-        document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-    }
-
-    function toggleExtra(element) { element.classList.toggle('active'); }
-
+    // Save edits
     function saveEdit() {
-        alert('Changes saved to item');
+        if (currentItemIndex >= 0) {
+            const item = cart[currentItemIndex];
+            
+            // Gather current options
+            const options = {
+                size: document.querySelector('[data-size].active')?.dataset.size || 'small',
+                sugar: document.querySelector('[data-sugar].active')?.dataset.sugar || 'regular'
+            };
+            
+            // Add drink-specific options
+            if (item.type !== 'food') {
+                options.temp = document.querySelector('[data-temp].active')?.dataset.temp || 'hot';
+                options.milk = document.querySelector('[data-milk].active')?.dataset.milk || 'whole';
+                
+                if (options.temp === 'cold') {
+                    options.ice = document.querySelector('[data-ice].active')?.dataset.ice || 'regular';
+                } else {
+                    options.ice = 'regular';
+                }
+            }
+            
+            // Update item options
+            item.options = options;
+            
+            // Get new quantity
+            const newQty = parseInt(document.getElementById('modalQtyDisplay').textContent);
+            item.quantity = newQty;
+            
+            // Recalculate price
+            item.price = calculatePrice(item, options);
+            item.totalPrice = item.price * item.quantity;
+            
+            localStorage.setItem('cart', JSON.stringify(cart));
+            displayCartItems();
+            showToast('Item updated successfully', 'success');
+        }
         closeEditModal();
     }
 
-    function deleteItem() {
-        if (confirm('Remove this item from your order?')) {
-            alert('Item removed');
+    // Delete current item from modal
+    function deleteCurrentItem() {
+        if (currentItemIndex >= 0) {
+            const itemName = cart[currentItemIndex].name;
+            cart.splice(currentItemIndex, 1);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            displayCartItems();
             closeEditModal();
+            showToast(`${itemName} removed from cart`, 'warning');
         }
     }
 
+    // Modal quantity controls
+    document.getElementById('modalIncrementQty')?.addEventListener('click', () => {
+        const qtyDisplay = document.getElementById('modalQtyDisplay');
+        let qty = parseInt(qtyDisplay.textContent);
+        qtyDisplay.textContent = qty + 1;
+    });
+
+    document.getElementById('modalDecrementQty')?.addEventListener('click', () => {
+        const qtyDisplay = document.getElementById('modalQtyDisplay');
+        let qty = parseInt(qtyDisplay.textContent);
+        if (qty > 1) {
+            qtyDisplay.textContent = qty - 1;
+        }
+    });
+
+    // Temperature selection in modal
+    document.querySelectorAll('[data-temp]').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('[data-temp]').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            
+            const iceSection = document.getElementById('iceSection');
+            if (this.dataset.temp === 'cold') {
+                iceSection.style.display = 'block';
+            } else {
+                iceSection.style.display = 'none';
+            }
+        });
+    });
+
+    // Option selection handlers
+    document.querySelectorAll('[data-size], [data-ice], [data-sugar], [data-milk]').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const group = this.dataset.size ? 'size' : 
+                         this.dataset.ice ? 'ice' :
+                         this.dataset.sugar ? 'sugar' : 'milk';
+            
+            document.querySelectorAll(`[data-${group}]`).forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+        });
+    });
+
+    // Process payment
+    function processPayment() {
+        if (!cart || cart.length === 0) return;
+        
+        const total = baseTotal + currentTip;
+        
+        // Create a deep copy of cart items to ensure all data is saved
+        const orderItems = cart.map(item => ({
+            name: item.name,
+            price: item.price,
+            quantity: item.quantity,
+            image: item.image,
+            type: item.type,
+            options: item.options ? {...item.options} : {},
+            totalPrice: item.price * item.quantity
+        }));
+        
+        const orderData = {
+            items: orderItems,
+            subtotal: subtotal,
+            serviceCharge: serviceCharge,
+            vat: vat,
+            tip: currentTip,
+            tipPercent: currentTipPercent,
+            total: total,
+            timestamp: new Date().toISOString(),
+            orderId: 'ORD' + Date.now() + Math.floor(Math.random() * 1000)
+        };
+        
+        // Save order to history
+        const orderHistory = JSON.parse(localStorage.getItem('orderHistory')) || [];
+        orderHistory.unshift(orderData);
+        if (orderHistory.length > 10) orderHistory.pop(); // Keep last 10 orders
+        localStorage.setItem('orderHistory', JSON.stringify(orderHistory));
+        
+        // Clear cart after successful order
+        localStorage.removeItem('cart');
+        
+        // Show success toast
+        showToast(`Order #${orderData.orderId} placed successfully!`, 'success', 5000);
+        
+        // Redirect to payment page after a short delay
+        setTimeout(() => {
+            window.location.href = "{{ url_for('payment') }}";
+        }, 1500);
+    }
+
+    // Open history modal
     function openHistoryModal() {
+        const historyContainer = document.getElementById('orderHistory');
+        const orderHistory = JSON.parse(localStorage.getItem('orderHistory')) || [];
+        
+        console.log('Order History:', orderHistory); // Debug log
+        
+        if (orderHistory.length === 0) {
+            historyContainer.innerHTML = '<div style="text-align:center; padding:20px; color:#8b6f54;">No order history yet</div>';
+        } else {
+            let html = '';
+            orderHistory.forEach((order, index) => {
+                // Make sure order has items
+                if (!order.items || order.items.length === 0) return;
+                
+                const date = order.timestamp ? new Date(order.timestamp) : new Date();
+                const formattedDate = date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                
+                // Calculate total if not present
+                const total = order.total || 
+                    ((order.subtotal || 0) + (order.serviceCharge || 0) + (order.vat || 0) + (order.tip || 0));
+                
+                // Get first item image or use default
+                const itemImage = order.items[0]?.image || "{{ url_for('static', filename='imgg.jpeg') }}";
+                
+                // Get item count
+                const itemCount = order.items.reduce((sum, item) => sum + (item.quantity || 1), 0);
+                
+                html += `
+                    <div class="history-item">
+                        <div class="history-item-image">
+                            <img src="${itemImage}" alt="Order" onerror="this.src='{{ url_for('static', filename='imgg.jpeg') }}'">
+                        </div>
+                        <div class="history-item-details">
+                            <div class="history-item-name">${itemCount} item(s)</div>
+                            <div class="history-item-meta">${formattedDate}</div>
+                        </div>
+                        <div class="history-item-price">BD ${total.toFixed(3)}</div>
+                        <button class="reorder-btn-small" onclick="reorderOrder(${index})">
+                            <span class="material-symbols-outlined">repeat</span>
+                        </button>
+                    </div>
+                `;
+            });
+            historyContainer.innerHTML = html || '<div style="text-align:center; padding:20px; color:#8b6f54;">No valid orders found</div>';
+        }
+        
         document.getElementById('historyModal').classList.add('active');
         document.body.style.overflow = 'hidden';
     }
 
+    // Close history modal
     function closeHistoryModal() {
         document.getElementById('historyModal').classList.remove('active');
         document.body.style.overflow = '';
     }
 
-    function reorderItem(item) {
-        alert(`🔄 ${item} added to your order`);
-        closeHistoryModal();
+    // Reorder order by index
+    function reorderOrder(index) {
+        const orderHistory = JSON.parse(localStorage.getItem('orderHistory')) || [];
+        
+        if (orderHistory[index] && orderHistory[index].items) {
+            const order = orderHistory[index];
+            
+            // Create a copy of the items with new IDs
+            cart = order.items.map(item => ({
+                ...item,
+                id: Date.now() + Math.random(), // Generate new unique ID
+                quantity: item.quantity || 1,
+                price: item.price || 0,
+                name: item.name || 'Item',
+                image: item.image || "{{ url_for('static', filename='imgg.jpeg') }}",
+                type: item.type || 'drink',
+                options: item.options || { size: 'small', sugar: 'regular' }
+            }));
+            
+            localStorage.setItem('cart', JSON.stringify(cart));
+            displayCartItems();
+            closeHistoryModal();
+            showToast('Items added to your cart', 'success');
+        } else {
+            showToast('No items in this order', 'error');
+        }
     }
 
+    // Initialize on page load
+    window.addEventListener('load', function() {
+        loadCart();
+    });
+
+    // Modal click handlers
     document.getElementById('editModal').addEventListener('click', function(e) {
         if (e.target === this) closeEditModal();
     });
@@ -1179,19 +1635,6 @@
 
     document.querySelectorAll('.modal-content, .history-modal-content').forEach(el => {
         el.addEventListener('click', e => e.stopPropagation());
-    });
-
-    // Pre-calculate tip amounts
-    window.addEventListener('load', function() {
-        const tip5 = baseTotal * 0.05;
-        const tip10 = baseTotal * 0.10;
-        const tip15 = baseTotal * 0.15;
-        const tip20 = baseTotal * 0.20;
-        
-        document.querySelector('label[for="tip5"] .tip-amount').textContent = `BD ${tip5.toFixed(3)}`;
-        document.querySelector('label[for="tip10"] .tip-amount').textContent = `BD ${tip10.toFixed(3)}`;
-        document.querySelector('label[for="tip15"] .tip-amount').textContent = `BD ${tip15.toFixed(3)}`;
-        document.querySelector('label[for="tip20"] .tip-amount').textContent = `BD ${tip20.toFixed(3)}`;
     });
 </script>
 {% endblock %}

@@ -67,6 +67,52 @@
     .action-btn:active { background: #fcf0e6; }
     .action-btn .material-symbols-outlined { font-size: 22px; color: #b48c5c; }
 
+    /* Zero Balance Message */
+    .zero-balance-message {
+        background: #fef3e2;
+        border: 2px solid #e67e22;
+        border-radius: 20px;
+        padding: 16px;
+        margin: 0 16px 20px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        animation: pulse-warning 2s infinite;
+    }
+
+    @keyframes pulse-warning {
+        0% { border-color: #e67e22; }
+        50% { border-color: #f39c12; }
+        100% { border-color: #e67e22; }
+    }
+
+    .warning-icon {
+        width: 48px;
+        height: 48px;
+        background: #e67e22;
+        border-radius: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        flex-shrink: 0;
+    }
+
+    .warning-text {
+        flex: 1;
+    }
+
+    .warning-title {
+        font-weight: 700;
+        color: #3a2417;
+        margin-bottom: 4px;
+    }
+
+    .warning-desc {
+        font-size: 12px;
+        color: #8b6f54;
+    }
+
     /* Top-up Presets */
     .topup-section { padding: 0 16px 20px; }
 
@@ -113,6 +159,11 @@
         transition: all 0.2s;
     }
 
+    .preset-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(92, 59, 44, 0.15);
+    }
+
     .preset-card.active {
         background: #5c3b2c;
         border-color: #5c3b2c;
@@ -154,11 +205,13 @@
         font-size: 16px;
         font-family: 'Montserrat', sans-serif;
         color: #3a2417;
+        transition: all 0.2s;
     }
 
     .custom-input:focus { 
         outline: none; 
         border-color: #5c3b2c;
+        box-shadow: 0 0 0 3px rgba(92, 59, 44, 0.1);
     }
 
     .custom-input::placeholder {
@@ -175,10 +228,18 @@
         cursor: pointer;
         font-family: 'Montserrat', sans-serif;
         white-space: nowrap;
-        transition: background 0.2s;
+        transition: all 0.2s;
     }
 
-    .apply-btn:active { background: #6f4a2e; }
+    .apply-btn:hover {
+        background: #6f4a2e;
+        transform: scale(1.02);
+    }
+
+    .apply-btn:active { 
+        background: #4a2f21;
+        transform: scale(0.98);
+    }
 
     /* Security Section */
     .security-section {
@@ -221,6 +282,78 @@
         font-weight: 600;
         color: #3a2417;
         letter-spacing: 0.5px;
+    }
+
+    /* Toast Notifications */
+    .toast-container {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 3000;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        width: 90%;
+        max-width: 400px;
+        pointer-events: none;
+    }
+
+    .toast {
+        background: #5c3b2c;
+        color: white;
+        padding: 16px 20px;
+        border-radius: 50px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        font-weight: 500;
+        transform: translateY(100px);
+        opacity: 0;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        pointer-events: auto;
+        border: 1px solid #e9d9c8;
+    }
+
+    .toast.show {
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+    .toast.success {
+        background: #27ae60;
+    }
+
+    .toast.warning {
+        background: #e67e22;
+    }
+
+    .toast.error {
+        background: #c0392b;
+    }
+
+    .toast-icon {
+        font-size: 24px;
+    }
+
+    .toast-message {
+        flex: 1;
+        font-size: 14px;
+    }
+
+    .toast-close {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 18px;
+        cursor: pointer;
+        opacity: 0.7;
+        padding: 0 5px;
+    }
+
+    .toast-close:hover {
+        opacity: 1;
     }
 
     /* History Modal Styles */
@@ -327,12 +460,34 @@
         color: white;
     }
 
+    .empty-history {
+        text-align: center;
+        padding: 40px 20px;
+        color: #8b6f54;
+    }
+
+    .empty-history .material-symbols-outlined {
+        font-size: 48px;
+        color: #d4b99c;
+        margin-bottom: 16px;
+    }
+
     .history-list {
         display: flex;
         flex-direction: column;
         gap: 12px;
         max-height: 60vh;
         overflow-y: auto;
+        padding-right: 4px;
+    }
+
+    .history-list::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    .history-list::-webkit-scrollbar-thumb {
+        background: #b48c5c;
+        border-radius: 4px;
     }
 
     .history-modal-item {
@@ -343,6 +498,12 @@
         background: #fcf9f7;
         border-radius: 20px;
         border: 1px solid #e9d9c8;
+        transition: all 0.2s;
+    }
+
+    .history-modal-item:hover {
+        transform: translateX(4px);
+        box-shadow: 0 4px 12px rgba(92, 59, 44, 0.1);
     }
 
     .history-modal-icon {
@@ -369,6 +530,11 @@
         background: #fcf0e6; 
         color: #b48c5c; 
     }
+    
+    .history-modal-icon.refund { 
+        background: #e8f0fe; 
+        color: #1976d2; 
+    }
 
     .history-modal-details {
         flex: 1;
@@ -382,6 +548,7 @@
         display: flex;
         align-items: center;
         gap: 8px;
+        flex-wrap: wrap;
     }
 
     .history-modal-type {
@@ -391,6 +558,7 @@
         background: #f0e4d6;
         color: #5c3b2c;
         font-weight: 600;
+        text-transform: uppercase;
     }
 
     .history-modal-type.topup { 
@@ -401,6 +569,16 @@
     .history-modal-type.bonus { 
         background: #fcf0e6; 
         color: #b48c5c; 
+    }
+    
+    .history-modal-type.payment { 
+        background: #fee; 
+        color: #c0392b; 
+    }
+    
+    .history-modal-type.refund { 
+        background: #e8f0fe; 
+        color: #1976d2; 
     }
 
     .history-modal-date {
@@ -444,6 +622,37 @@
         margin: 8px 0;
     }
 
+    /* Summary Cards in History */
+    .history-summary {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 20px;
+    }
+
+    .summary-card {
+        flex: 1;
+        background: linear-gradient(135deg, #fcf0e6, #ffffff);
+        border-radius: 20px;
+        padding: 12px;
+        text-align: center;
+        border: 1px solid #e9d9c8;
+    }
+
+    .summary-label {
+        font-size: 11px;
+        color: #8b6f54;
+        margin-bottom: 4px;
+    }
+
+    .summary-value {
+        font-size: 18px;
+        font-weight: 700;
+        color: #5c3b2c;
+    }
+
+    .summary-value.positive { color: #2e7d32; }
+    .summary-value.negative { color: #c0392b; }
+
     /* Responsive */
     @media (max-width: 480px) {
         .preset-grid   { grid-template-columns: repeat(2, 1fr); }
@@ -454,11 +663,15 @@
         .security-item { padding: 12px 4px; }
         .security-icon .material-symbols-outlined { font-size: 24px; }
         .security-text { font-size: 10px; }
+        .history-summary { flex-direction: column; }
     }
 </style>
 {% endblock %}
 
 {% block content %}
+<!-- Toast Container -->
+<div class="toast-container" id="toastContainer"></div>
+
 <!-- Balance Card -->
 <div class="balance-section">
     <div class="balance-card">
@@ -466,18 +679,29 @@
             <span class="material-symbols-outlined">account_balance_wallet</span>
             Available Balance
         </div>
-        <div class="balance-amount">BD 42.50</div>
+        <div class="balance-amount" id="walletBalance">BD 0.000</div>
     </div>
 </div>
 
 <!-- Quick Actions -->
 <div class="quick-actions">
-    <button class="action-btn" id="topupBtn" onclick="goToTopup()">
+    <button class="action-btn" onclick="goToTopup()">
         <span class="material-symbols-outlined">add_circle</span> Top Up
     </button>
-    <button class="action-btn" id="historyBtn" onclick="openHistoryModal()">
+    <button class="action-btn" onclick="openHistoryModal()">
         <span class="material-symbols-outlined">history</span> History
     </button>
+</div>
+
+<!-- Zero Balance Message (shown when balance is 0) -->
+<div class="zero-balance-message" id="zeroBalanceMessage" style="display: none;">
+    <div class="warning-icon">
+        <span class="material-symbols-outlined">info</span>
+    </div>
+    <div class="warning-text">
+        <div class="warning-title">Your wallet is empty!</div>
+        <div class="warning-desc">Add funds to start ordering and earn rewards</div>
+    </div>
 </div>
 
 <!-- Top-up Presets -->
@@ -487,27 +711,30 @@
         <span class="view-all" onclick="goToTopup()">Bonus included →</span>
     </div>
     <div class="preset-grid">
-        <div class="preset-card" data-amount="10" onclick="selectPreset(10)">
+        <div class="preset-card" data-amount="5" onclick="fillCustomAmount(5)">
+            <div class="preset-amount">BD 5</div>
+            <div class="preset-bonus">+0.500</div>
+        </div>
+        <div class="preset-card" data-amount="10" onclick="fillCustomAmount(10)">
             <div class="preset-amount">BD 10</div>
             <div class="preset-bonus">+1.500</div>
         </div>
-        <div class="preset-card" data-amount="15" onclick="selectPreset(15)">
-            <div class="preset-amount">BD 15</div>
-            <div class="preset-bonus">+2.500</div>
-        </div>
-        <div class="preset-card active" data-amount="25" onclick="selectPreset(25)">
+        <div class="preset-card active" data-amount="25" onclick="fillCustomAmount(25)">
             <div class="preset-amount">BD 25</div>
             <div class="preset-bonus">+5.000</div>
         </div>
-        <div class="preset-card" data-amount="50" onclick="selectPreset(50)">
+        <div class="preset-card" data-amount="50" onclick="fillCustomAmount(50)">
             <div class="preset-amount">BD 50</div>
             <div class="preset-bonus">+12.000</div>
         </div>
     </div>
 
     <div class="custom-topup">
-        <input type="number" class="custom-input" id="customInput" placeholder="Custom amount (BD)" value="20">
-        <button class="apply-btn" id="applyBtn" onclick="handleCustomTopup()">Top Up</button>
+        <input type="number" class="custom-input" id="customAmount" placeholder="Custom amount (BD)" min="1" step="0.100" value="25">
+        <button class="apply-btn" onclick="proceedToTopup()">
+            <span class="material-symbols-outlined">arrow_forward</span>
+            Proceed
+        </button>
     </div>
 </div>
 
@@ -529,6 +756,11 @@
     </div>
 </div>
 
+<!-- Debug Button - Remove after testing -->
+<!-- <button onclick="addTestTopup()" style="margin: 10px 16px; padding: 10px; background: #5c3b2c; color: white; border: none; border-radius: 40px; width: calc(100% - 32px);">
+    Add Test Top-up (Debug)
+</button> -->
+
 <!-- History Modal -->
 <div class="history-modal-overlay" id="historyModal">
     <div class="history-modal-content">
@@ -544,159 +776,12 @@
         <div class="filter-tabs">
             <span class="filter-tab active" onclick="filterHistory('all')">All</span>
             <span class="filter-tab" onclick="filterHistory('topup')">Top-ups</span>
+            <span class="filter-tab" onclick="filterHistory('payment')">Payments</span>
             <span class="filter-tab" onclick="filterHistory('bonus')">Bonuses</span>
         </div>
 
         <div class="history-list" id="historyList">
-            <!-- Month Divider -->
-            <div class="month-divider">March 2024</div>
-
-            <!-- Today's Top-up -->
-            <div class="history-modal-item" data-type="topup">
-                <div class="history-modal-icon topup">
-                    <span class="material-symbols-outlined">add_card</span>
-                </div>
-                <div class="history-modal-details">
-                    <div class="history-modal-title">
-                        Wallet Top-up
-                        <span class="history-modal-type topup">Top-up</span>
-                    </div>
-                    <div class="history-modal-date">
-                        <span class="material-symbols-outlined">schedule</span>
-                        Today · 10:30 AM
-                    </div>
-                </div>
-                <div class="history-modal-amount positive">
-                    +BD 25.00
-                    <span class="history-modal-balance">+5.000 bonus</span>
-                </div>
-            </div>
-
-            <!-- Payment -->
-            <div class="history-modal-item" data-type="payment">
-                <div class="history-modal-icon payment">
-                    <span class="material-symbols-outlined">shopping_bag</span>
-                </div>
-                <div class="history-modal-details">
-                    <div class="history-modal-title">
-                        Cappuccino
-                        <span class="history-modal-type" style="background:#fee; color:#c0392b;">Payment</span>
-                    </div>
-                    <div class="history-modal-date">
-                        <span class="material-symbols-outlined">schedule</span>
-                        Today · 9:15 AM
-                    </div>
-                </div>
-                <div class="history-modal-amount negative">
-                    -BD 3.50
-                </div>
-            </div>
-
-            <!-- Bonus -->
-            <div class="history-modal-item" data-type="bonus">
-                <div class="history-modal-icon bonus">
-                    <span class="material-symbols-outlined">celebration</span>
-                </div>
-                <div class="history-modal-details">
-                    <div class="history-modal-title">
-                        Welcome Bonus
-                        <span class="history-modal-type bonus">Bonus</span>
-                    </div>
-                    <div class="history-modal-date">
-                        <span class="material-symbols-outlined">schedule</span>
-                        Yesterday · 2:15 PM
-                    </div>
-                </div>
-                <div class="history-modal-amount positive">
-                    +BD 5.00
-                    <span class="history-modal-balance">First top-up</span>
-                </div>
-            </div>
-
-            <!-- Month Divider -->
-            <div class="month-divider">February 2024</div>
-
-            <!-- Previous Top-up -->
-            <div class="history-modal-item" data-type="topup">
-                <div class="history-modal-icon topup">
-                    <span class="material-symbols-outlined">add_card</span>
-                </div>
-                <div class="history-modal-details">
-                    <div class="history-modal-title">
-                        Wallet Top-up
-                        <span class="history-modal-type topup">Top-up</span>
-                    </div>
-                    <div class="history-modal-date">
-                        <span class="material-symbols-outlined">schedule</span>
-                        26 Feb 2024 · 3:45 PM
-                    </div>
-                </div>
-                <div class="history-modal-amount positive">
-                    +BD 15.00
-                    <span class="history-modal-balance">+2.500 bonus</span>
-                </div>
-            </div>
-
-            <!-- Another Payment -->
-            <div class="history-modal-item" data-type="payment">
-                <div class="history-modal-icon payment">
-                    <span class="material-symbols-outlined">restaurant</span>
-                </div>
-                <div class="history-modal-details">
-                    <div class="history-modal-title">
-                        Croissant + Latte
-                        <span class="history-modal-type" style="background:#fee; color:#c0392b;">Payment</span>
-                    </div>
-                    <div class="history-modal-date">
-                        <span class="material-symbols-outlined">schedule</span>
-                        25 Feb 2024 · 11:20 AM
-                    </div>
-                </div>
-                <div class="history-modal-amount negative">
-                    -BD 5.30
-                </div>
-            </div>
-
-            <!-- Large Top-up -->
-            <div class="history-modal-item" data-type="topup">
-                <div class="history-modal-icon topup">
-                    <span class="material-symbols-outlined">add_card</span>
-                </div>
-                <div class="history-modal-details">
-                    <div class="history-modal-title">
-                        Wallet Top-up
-                        <span class="history-modal-type topup">Top-up</span>
-                    </div>
-                    <div class="history-modal-date">
-                        <span class="material-symbols-outlined">schedule</span>
-                        20 Feb 2024 · 2:30 PM
-                    </div>
-                </div>
-                <div class="history-modal-amount positive">
-                    +BD 50.00
-                    <span class="history-modal-balance">+12.000 bonus</span>
-                </div>
-            </div>
-
-            <!-- Refund -->
-            <div class="history-modal-item" data-type="refund">
-                <div class="history-modal-icon" style="background:#e8f0fe; color:#1976d2;">
-                    <span class="material-symbols-outlined">autorenew</span>
-                </div>
-                <div class="history-modal-details">
-                    <div class="history-modal-title">
-                        Order Cancelled
-                        <span class="history-modal-type" style="background:#e8f0fe; color:#1976d2;">Refund</span>
-                    </div>
-                    <div class="history-modal-date">
-                        <span class="material-symbols-outlined">schedule</span>
-                        18 Feb 2024 · 4:45 PM
-                    </div>
-                </div>
-                <div class="history-modal-amount positive">
-                    +BD 8.50
-                </div>
-            </div>
+            <!-- History items will be loaded here dynamically -->
         </div>
     </div>
 </div>
@@ -706,34 +791,218 @@
 
 {% block extra_js %}
 <script>
-    let selectedAmount = 25; // Default selected amount
+    // Toast notification system
+    function showToast(message, type = 'success', duration = 3000) {
+        const container = document.getElementById('toastContainer');
+        const toastId = 'toast_' + Date.now();
+        
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        toast.id = toastId;
+        
+        let icon = 'check_circle';
+        if (type === 'warning') icon = 'warning';
+        if (type === 'error') icon = 'error';
+        
+        toast.innerHTML = `
+            <span class="material-symbols-outlined toast-icon">${icon}</span>
+            <span class="toast-message">${message}</span>
+            <button class="toast-close" onclick="closeToast('${toastId}')">×</button>
+        `;
+        
+        container.appendChild(toast);
+        
+        setTimeout(() => toast.classList.add('show'), 10);
+        
+        setTimeout(() => {
+            closeToast(toastId);
+        }, duration);
+    }
+
+    function closeToast(id) {
+        const toast = document.getElementById(id);
+        if (toast) {
+            toast.classList.remove('show');
+            setTimeout(() => {
+                if (toast.parentNode) {
+                    toast.parentNode.removeChild(toast);
+                }
+            }, 300);
+        }
+    }
+
+    // Wallet state
+    let walletBalance = 0;
+    let transactionHistory = [];
+
+    // Load wallet data from localStorage
+    function loadWalletData() {
+        // Load wallet balance from multiple sources
+        const savedWallet = localStorage.getItem('walletBalance');
+        const rewardsData = localStorage.getItem('rewardsData');
+        const orderHistory = JSON.parse(localStorage.getItem('orderHistory')) || [];
+        const topupHistory = JSON.parse(localStorage.getItem('topupHistory')) || [];
+        
+        console.log('Raw topupHistory from localStorage:', topupHistory); // Debug log
+        console.log('Raw orderHistory from localStorage:', orderHistory); // Debug log
+        
+        // Try to get balance from walletBalance first
+        if (savedWallet) {
+            walletBalance = parseFloat(savedWallet);
+        } 
+        // Then try rewardsData
+        else if (rewardsData) {
+            const data = JSON.parse(rewardsData);
+            if (data.walletBalance !== undefined) {
+                walletBalance = data.walletBalance;
+            }
+        } 
+        // Default to 0
+        else {
+            walletBalance = 0;
+        }
+        
+        // Load transaction history
+        loadTransactionHistory(orderHistory, topupHistory);
+        
+        // Update display
+        updateBalanceDisplay();
+    }
+
+    // Load transaction history from order history and topup history
+    function loadTransactionHistory(orderHistory, topupHistory) {
+        transactionHistory = [];
+        
+        // Add top-ups from localStorage
+        if (topupHistory && topupHistory.length > 0) {
+            topupHistory.forEach(topup => {
+                transactionHistory.push({
+                    type: 'topup',
+                    title: 'Wallet Top-up',
+                    amount: topup.amount || 0,
+                    bonus: topup.bonus || 0,
+                    total: topup.total || (topup.amount + (topup.bonus || 0)),
+                    date: topup.timestamp || new Date().toISOString(),
+                    paymentMethod: topup.paymentMethod || 'card',
+                    balance: 0
+                });
+            });
+        }
+        
+        // Add orders from order history as payments
+        if (orderHistory && orderHistory.length > 0) {
+            orderHistory.forEach(order => {
+                const total = order.total || 0;
+                if (total > 0) {
+                    // Get item names for the title
+                    let itemTitle = 'Order Payment';
+                    if (order.items && order.items.length > 0) {
+                        const firstItem = order.items[0].name || 'Item';
+                        itemTitle = order.items.length > 1 ? 
+                            `${firstItem} +${order.items.length-1}` : firstItem;
+                    }
+                    
+                    transactionHistory.push({
+                        type: 'payment',
+                        title: itemTitle,
+                        amount: -total, // Negative for payments
+                        bonus: 0,
+                        date: order.timestamp || new Date().toISOString(),
+                        orderId: order.orderId || '',
+                        items: order.items || [],
+                        balance: 0
+                    });
+                }
+                
+                // Add any bonuses from the order
+                if (order.bonus && order.bonus > 0) {
+                    transactionHistory.push({
+                        type: 'bonus',
+                        title: 'Reward Bonus',
+                        amount: order.bonus,
+                        bonus: 0,
+                        date: order.timestamp || new Date().toISOString(),
+                        balance: 0
+                    });
+                }
+            });
+        }
+        
+        // Sort by date (most recent first)
+        transactionHistory.sort((a, b) => new Date(b.date) - new Date(a.date));
+        
+        console.log('Final transactionHistory:', transactionHistory); // Debug log
+        
+        // Calculate running balance (from oldest to newest)
+        let runningBalance = walletBalance;
+        for (let i = transactionHistory.length - 1; i >= 0; i--) {
+            const transaction = transactionHistory[i];
+            if (transaction.type === 'topup') {
+                runningBalance -= (transaction.amount + (transaction.bonus || 0));
+            } else if (transaction.type === 'payment') {
+                runningBalance += Math.abs(transaction.amount);
+            } else if (transaction.type === 'bonus') {
+                runningBalance -= transaction.amount;
+            }
+            transaction.balance = runningBalance;
+        }
+    }
+
+    // Update balance display
+    function updateBalanceDisplay() {
+        document.getElementById('walletBalance').textContent = `BD ${walletBalance.toFixed(3)}`;
+        
+        // Show/hide zero balance message
+        const warningEl = document.getElementById('zeroBalanceMessage');
+        if (walletBalance === 0) {
+            warningEl.style.display = 'flex';
+        } else {
+            warningEl.style.display = 'none';
+        }
+    }
 
     // Navigate to topup page
     function goToTopup() {
         window.location.href = "{{ url_for('topup') }}";
     }
 
-    // Select preset amount
-    function selectPreset(amount) {
-        selectedAmount = amount;
-        document.querySelectorAll('.preset-card').forEach(c => c.classList.remove('active'));
+    // Fill custom amount field with preset value and update active state
+    function fillCustomAmount(amount) {
+        // Update the custom input field
+        const customInput = document.getElementById('customAmount');
+        customInput.value = amount;
+        
+        // Update active state on preset cards
+        document.querySelectorAll('.preset-card').forEach(card => {
+            card.classList.remove('active');
+        });
         event.target.closest('.preset-card').classList.add('active');
+        
+        // Add a small animation feedback
+        customInput.style.backgroundColor = '#fcf0e6';
+        setTimeout(() => {
+            customInput.style.backgroundColor = '';
+        }, 200);
+        
+        // Focus on the input field
+        customInput.focus();
+        
+        showToast(`Amount set to BD ${amount}.000`, 'success');
     }
 
-    // Handle custom topup
-    function handleCustomTopup() {
-        const amount = document.getElementById('customInput').value;
+    // Proceed to topup with custom amount
+    function proceedToTopup() {
+        const amount = document.getElementById('customAmount').value;
         if (amount && amount > 0) {
-            selectedAmount = amount;
-            // Navigate to topup page with amount
             window.location.href = "{{ url_for('topup') }}?amount=" + amount;
         } else {
-            alert('Please enter a valid amount');
+            showToast('Please enter a valid amount', 'error');
         }
     }
 
     // History Modal Functions
     function openHistoryModal() {
+        displayTransactionHistory();
         document.getElementById('historyModal').classList.add('active');
         document.body.style.overflow = 'hidden';
     }
@@ -741,6 +1010,108 @@
     function closeHistoryModal() {
         document.getElementById('historyModal').classList.remove('active');
         document.body.style.overflow = '';
+    }
+
+    // Display transaction history
+    function displayTransactionHistory() {
+        const historyList = document.getElementById('historyList');
+        
+        if (transactionHistory.length === 0) {
+            historyList.innerHTML = `
+                <div class="empty-history">
+                    <span class="material-symbols-outlined">receipt_long</span>
+                    <p>No transactions yet</p>
+                    <p style="font-size:12px; margin-top:8px;">Top up your wallet to get started</p>
+                </div>
+            `;
+            return;
+        }
+
+        let html = '';
+        let currentMonth = '';
+        let totalTopups = 0;
+        let totalPayments = 0;
+        let totalBonuses = 0;
+
+        transactionHistory.forEach(transaction => {
+            const date = new Date(transaction.date);
+            const monthYear = date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+            
+            // Calculate totals
+            if (transaction.type === 'topup') {
+                totalTopups += transaction.amount + (transaction.bonus || 0);
+            } else if (transaction.type === 'payment') {
+                totalPayments += Math.abs(transaction.amount);
+            } else if (transaction.type === 'bonus') {
+                totalBonuses += transaction.amount;
+            }
+            
+            // Add month divider if new month
+            if (monthYear !== currentMonth) {
+                currentMonth = monthYear;
+                html += `<div class="month-divider">${monthYear}</div>`;
+            }
+
+            const isPositive = transaction.amount > 0;
+            const icon = transaction.type === 'topup' ? 'add_card' : 
+                        transaction.type === 'payment' ? (transaction.title?.toLowerCase().includes('coffee') ? 'coffee' : 'shopping_bag') :
+                        transaction.type === 'bonus' ? 'celebration' : 'autorenew';
+            
+            const amountDisplay = `${isPositive ? '+' : ''}${Math.abs(transaction.amount).toFixed(3)}`;
+            const balanceAfter = transaction.balance || 0;
+
+            // Format payment method for display
+            let paymentMethodDisplay = '';
+            if (transaction.paymentMethod) {
+                paymentMethodDisplay = transaction.paymentMethod === 'apple' ? '🍎' :
+                                      transaction.paymentMethod === 'samsung' ? '📱' :
+                                      transaction.paymentMethod === 'card' ? '💳' : '';
+            }
+
+            html += `
+                <div class="history-modal-item" data-type="${transaction.type}">
+                    <div class="history-modal-icon ${transaction.type}">
+                        <span class="material-symbols-outlined">${icon}</span>
+                    </div>
+                    <div class="history-modal-details">
+                        <div class="history-modal-title">
+                            ${transaction.title || (transaction.type === 'topup' ? 'Wallet Top-up' : 'Transaction')}
+                            <span class="history-modal-type ${transaction.type}">${transaction.type}</span>
+                        </div>
+                        <div class="history-modal-date">
+                            <span class="material-symbols-outlined">schedule</span>
+                            ${date.toLocaleDateString()} · ${date.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}
+                            ${paymentMethodDisplay ? ` · ${paymentMethodDisplay}` : ''}
+                        </div>
+                    </div>
+                    <div class="history-modal-amount ${isPositive ? 'positive' : 'negative'}">
+                        ${isPositive ? '+' : '-'}BD ${Math.abs(transaction.amount).toFixed(3)}
+                        ${transaction.bonus ? `<span class="history-modal-balance">+${transaction.bonus.toFixed(3)} bonus</span>` : ''}
+                        <span class="history-modal-balance">Balance: BD ${balanceAfter.toFixed(3)}</span>
+                    </div>
+                </div>
+            `;
+        });
+
+        // Add summary at the top
+        const summaryHtml = `
+            <div class="history-summary">
+                <div class="summary-card">
+                    <div class="summary-label">Total Top-ups</div>
+                    <div class="summary-value positive">BD ${totalTopups.toFixed(3)}</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-label">Total Payments</div>
+                    <div class="summary-value negative">BD ${totalPayments.toFixed(3)}</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-label">Bonuses Earned</div>
+                    <div class="summary-value positive">BD ${totalBonuses.toFixed(3)}</div>
+                </div>
+            </div>
+        `;
+
+        historyList.innerHTML = summaryHtml + html;
     }
 
     // Filter history by type
@@ -762,34 +1133,51 @@
         });
     }
 
-    // Preset selection
-    document.querySelectorAll('.preset-card').forEach(card => {
-        card.addEventListener('click', function () {
-            document.querySelectorAll('.preset-card').forEach(c => c.classList.remove('active'));
-            this.classList.add('active');
-            selectedAmount = this.getAttribute('data-amount');
-        });
+    // Debug function to add a test top-up
+    function addTestTopup() {
+        const testTopup = {
+            id: 'TOPUP' + Date.now(),
+            type: 'topup',
+            amount: 25,
+            bonus: 5,
+            total: 30,
+            paymentMethod: 'apple',
+            timestamp: new Date().toISOString(),
+            date: new Date().toLocaleDateString(),
+            time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})
+        };
+        
+        let topupHistory = JSON.parse(localStorage.getItem('topupHistory')) || [];
+        topupHistory.unshift(testTopup);
+        localStorage.setItem('topupHistory', JSON.stringify(topupHistory));
+        
+        loadWalletData();
+        showToast('Test top-up added!', 'success');
+    }
+
+    // Listen for storage events (when top-up happens)
+    window.addEventListener('storage', function(e) {
+        if (e.key === 'walletBalance' || e.key === 'rewardsData' || e.key === 'topupHistory' || e.key === 'orderHistory') {
+            loadWalletData();
+            showToast('Wallet updated!', 'success');
+        }
     });
 
-    // Quick actions
-    document.getElementById('topupBtn').addEventListener('click', goToTopup);
-    document.getElementById('historyBtn').addEventListener('click', openHistoryModal);
-
-    // Custom top-up
-    document.getElementById('applyBtn').addEventListener('click', function () {
-        const amount = document.getElementById('customInput').value;
-        if (amount && amount > 0) {
-            // Navigate to topup page with amount
-            window.location.href = "{{ url_for('topup') }}?amount=" + amount;
-        } else {
-            alert('Please enter a valid amount');
+    // Initialize on page load
+    window.addEventListener('load', function() {
+        loadWalletData();
+        
+        // Check if we just completed a top-up
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('success') === 'true') {
+            showToast('Top-up successful!', 'success', 4000);
         }
     });
 
     // Enter key in custom input
-    document.getElementById('customInput').addEventListener('keypress', function(e) {
+    document.getElementById('customAmount').addEventListener('keypress', function(e) {
         if (e.key === 'Enter') {
-            handleCustomTopup();
+            proceedToTopup();
         }
     });
 

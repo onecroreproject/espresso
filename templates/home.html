@@ -2,260 +2,7 @@
 
 {% block title %}Espresso · Home{% endblock %}
 
-{% block content %}
-<!-- Banner Carousel -->
-<div class="banner-carousel-section">
-    <div class="banner-carousel-container">
-        <div class="banner-carousel" id="bannerCarousel">
-            <div class="banner-carousel-item active">
-                <img src="https://lh3.googleusercontent.com/gps-cs-s/AHVAweoZVh_5HjTgNzKwrgrU8Qodmda0OFZP0ozz-C64yNzJGNJpMGpU3fh9Dph_RXHj0Fmoz1FuP8JbYSq_L1NDmv3pn3Am7VJLF2tUXqbI_fEYdeImkgaXj8kE1PONHnf7G0JcF8iu=s1360-w1360-h1020-rw" alt="Cafe Interior" class="banner-carousel-image" onerror="this.src='data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22400%22%20height%3D%22200%22%20viewBox%3D%220%200%20400%20200%22%3E%3Crect%20width%3D%22400%22%20height%3D%22200%22%20fill%3D%22%235c3b2c%22%2F%3E%3Ctext%20x%3D%22120%22%20y%3D%22120%22%20font-family%3D%22Montserrat%22%20font-size%3D%2220%22%20fill%3D%22%23ffffff%22%3ECafe Interior%3C%2Ftext%3E%3C%2Fsvg%3E';">
-                <div class="banner-carousel-caption">
-                    <h3>Cozy Interior</h3>
-                    <p>Comfortable seating area</p>
-                </div>
-            </div>
-            <div class="banner-carousel-item">
-                <img src="https://lh3.googleusercontent.com/gps-cs-s/AHVAwepZYfEuPLc42rQLouJSfQEKy4LIbJQds6wqLdQ3HsElOXbptf0_kFxBpOELY-6dcrbTbKx3EaYJqqIpK9d1mc-UjCUJqRwwdsf8FPJ4ELu0W09SjUt_5DFYHjixuy-ncywj6iByBQ=s1360-w1360-h1020-rw" alt="Coffee Bar" class="banner-carousel-image" onerror="this.src='data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22400%22%20height%3D%22200%22%20viewBox%3D%220%200%20400%20200%22%3E%3Crect%20width%3D%22400%22%20height%3D%22200%22%20fill%3D%22%233a2417%22%2F%3E%3Ctext%20x%3D%22130%22%20y%3D%22120%22%20font-family%3D%22Montserrat%22%20font-size%3D%2220%22%20fill%3D%22%23ffffff%22%3ECoffee Bar%3C%2Ftext%3E%3C%2Fsvg%3E';">
-                <div class="banner-carousel-caption">
-                    <h3>Coffee Bar</h3>
-                    <p>Professional La Marzocco</p>
-                </div>
-            </div>
-            <div class="banner-carousel-item">
-                <img src="https://lh3.googleusercontent.com/gps-cs-s/AHVAweqAPFSWqT8k5WRDZguaeRaCFOdHV7uGVYciO3EVqmtjP6qKJtMM3yn9fGF28XPINI04gU6PeItxpZ1IMXVSgoZPVxnJjG1lYY2i6R3opAI-4pyrp3EzMWcR-odssEFzVN9FgSvtv3xgU4A=s1360-w1360-h1020-rw" alt="Outdoor Seating" class="banner-carousel-image" onerror="this.src='data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22400%22%20height%3D%22200%22%20viewBox%3D%220%200%20400%20200%22%3E%3Crect%20width%3D%22400%22%20height%3D%22200%22%20fill%3D%22%238b5a2b%22%2F%3E%3Ctext%20x%3D%22110%22%20y%3D%22120%22%20font-family%3D%22Montserrat%22%20font-size%3D%2220%22%20fill%3D%22%23ffffff%22%3EOutdoor Seating%3C%2Ftext%3E%3C%2Fsvg%3E';">
-                <div class="banner-carousel-caption">
-                    <h3>Outdoor Area</h3>
-                    <p>Patio seating available</p>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Carousel Indicators -->
-        <div class="carousel-indicators">
-            <span class="indicator active" onclick="slideTo(0)"></span>
-            <span class="indicator" onclick="slideTo(1)"></span>
-            <span class="indicator" onclick="slideTo(2)"></span>
-        </div>
-        
-        <!-- Navigation Arrows -->
-        <button class="carousel-arrow prev" onclick="slidePrev()">
-            <span class="material-symbols-outlined">chevron_left</span>
-        </button>
-        <button class="carousel-arrow next" onclick="slideNext()">
-            <span class="material-symbols-outlined">chevron_right</span>
-        </button>
-    </div>
-</div>
-
-<!-- Second Carousel - Menu Items (Horizontal Scroll) -->
-<div class="carousel-section">
-    <div class="section-title">
-        <span class="material-symbols-outlined">restaurant_menu</span>
-        Popular Menu Items
-    </div>
-    <div class="carousel">
-        <div class="menu-carousel-item" onclick="filterByCategory('coffee'); addToOrder('Cappuccino')">
-            <img src="{{ url_for('static', filename='imgg3.jpeg') }}" alt="Cappuccino" class="menu-carousel-image">
-            <div class="menu-carousel-caption">
-                <h3>Cappuccino</h3>
-                <p>Rich & creamy</p>
-                <span class="menu-carousel-price">BD 3.000</span>
-            </div>
-        </div>
-        <div class="menu-carousel-item" onclick="filterByCategory('cold'); addToOrder('Cold Brew')">
-            <img src="{{ url_for('static', filename='imgg5.jpeg') }}" alt="Cold Brew" class="menu-carousel-image">
-            <div class="menu-carousel-caption">
-                <h3>Cold Brew</h3>
-                <p>Smooth & strong</p>
-                <span class="menu-carousel-price">BD 2.800</span>
-            </div>
-        </div>
-        <div class="menu-carousel-item" onclick="filterByCategory('pastry'); addToOrder('Croissant')">
-            <img src="{{ url_for('static', filename='imgg9.jpeg') }}" alt="Croissant" class="menu-carousel-image">
-            <div class="menu-carousel-caption">
-                <h3>Butter Croissant</h3>
-                <p>Fresh baked</p>
-                <span class="menu-carousel-price">BD 1.800</span>
-            </div>
-        </div>
-        <div class="menu-carousel-item" onclick="filterByCategory('coffee'); addToOrder('Double Espresso')">
-            <img src="{{ url_for('static', filename='imgg2.jpeg') }}" alt="Espresso" class="menu-carousel-image">
-            <div class="menu-carousel-caption">
-                <h3>Double Espresso</h3>
-                <p>Strong shot</p>
-                <span class="menu-carousel-price">BD 2.500</span>
-            </div>
-        </div>
-        <div class="menu-carousel-item" onclick="filterByCategory('cold'); addToOrder('Iced Latte')">
-            <img src="{{ url_for('static', filename='imgg6.jpeg') }}" alt="Iced Latte" class="menu-carousel-image">
-            <div class="menu-carousel-caption">
-                <h3>Iced Latte</h3>
-                <p>With vanilla</p>
-                <span class="menu-carousel-price">BD 3.200</span>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Category Pills - Click to filter -->
-<div class="category-pills">
-    <span class="category-pill active" onclick="filterMenu('all')">All</span>
-    <span class="category-pill" onclick="filterMenu('coffee')">Coffee</span>
-    <span class="category-pill" onclick="filterMenu('cold')">Cold Drinks</span>
-    <span class="category-pill" onclick="filterMenu('pastry')">Pastries</span>
-    <span class="category-pill" onclick="filterMenu('breakfast')">Breakfast</span>
-    <span class="category-pill" onclick="filterMenu('dessert')">Desserts</span>
-</div>
-
-<!-- Available Menu List (Filterable) -->
-<div class="menu-list-section">
-    <div class="menu-list-header">
-        <h2>Available Menu</h2>
-        <a href="{{ url_for('menu') }}" class="view-all-link">View Full Menu →</a>
-    </div>
-
-    <div class="menu-list" id="menuList">
-        <!-- Coffee Items -->
-        <div class="menu-list-item coffee-item" data-category="coffee" onclick="addToOrder('Cappuccino')">
-            <div class="menu-list-image">
-                <img src="{{ url_for('static', filename='imgg3.jpeg') }}" alt="Cappuccino">
-            </div>
-            <div class="menu-list-details">
-                <div class="menu-list-name">Cappuccino</div>
-                <div class="menu-list-desc">Rich espresso with steamed milk</div>
-                <div class="menu-list-meta">
-                    <span class="menu-list-badge">Coffee</span>
-                    <span>🔥 Popular</span>
-                </div>
-            </div>
-            <div class="menu-list-price">BD 3.000</div>
-        </div>
-
-        <div class="menu-list-item coffee-item" data-category="coffee" onclick="addToOrder('Double Espresso')">
-            <div class="menu-list-image">
-                <img src="{{ url_for('static', filename='imgg2.jpeg') }}" alt="Espresso">
-            </div>
-            <div class="menu-list-details">
-                <div class="menu-list-name">Double Espresso</div>
-                <div class="menu-list-desc">Two shots of pure espresso</div>
-                <div class="menu-list-meta">
-                    <span class="menu-list-badge">Coffee</span>
-                    <span>⚡ Strong</span>
-                </div>
-            </div>
-            <div class="menu-list-price">BD 2.500</div>
-        </div>
-
-        <div class="menu-list-item coffee-item" data-category="coffee" onclick="addToOrder('Espresso')">
-            <div class="menu-list-image">
-                <img src="{{ url_for('static', filename='imgg.jpeg') }}" alt="Espresso">
-            </div>
-            <div class="menu-list-details">
-                <div class="menu-list-name">Espresso</div>
-                <div class="menu-list-desc">Single shot of pure espresso</div>
-                <div class="menu-list-meta">
-                    <span class="menu-list-badge">Coffee</span>
-                    <span>⚡ Classic</span>
-                </div>
-            </div>
-            <div class="menu-list-price">BD 2.000</div>
-        </div>
-
-        <!-- Cold Drink Items -->
-        <div class="menu-list-item cold-item" data-category="cold" onclick="addToOrder('Cold Brew')">
-            <div class="menu-list-image">
-                <img src="{{ url_for('static', filename='imgg5.jpeg') }}" alt="Cold Brew">
-            </div>
-            <div class="menu-list-details">
-                <div class="menu-list-name">Cold Brew</div>
-                <div class="menu-list-desc">12-hour steeped, smooth taste</div>
-                <div class="menu-list-meta">
-                    <span class="menu-list-badge">Cold Drinks</span>
-                    <span>❄️ Iced</span>
-                </div>
-            </div>
-            <div class="menu-list-price">BD 2.800</div>
-        </div>
-
-        <div class="menu-list-item cold-item" data-category="cold" onclick="addToOrder('Iced Latte')">
-            <div class="menu-list-image">
-                <img src="{{ url_for('static', filename='imgg6.jpeg') }}" alt="Iced Latte">
-            </div>
-            <div class="menu-list-details">
-                <div class="menu-list-name">Iced Latte</div>
-                <div class="menu-list-desc">With vanilla syrup</div>
-                <div class="menu-list-meta">
-                    <span class="menu-list-badge">Cold Drinks</span>
-                    <span>🧊 Vanilla</span>
-                </div>
-            </div>
-            <div class="menu-list-price">BD 3.200</div>
-        </div>
-
-        <div class="menu-list-item cold-item" data-category="cold" onclick="addToOrder('Iced Americano')">
-            <div class="menu-list-image">
-                <img src="{{ url_for('static', filename='imgg7.jpeg') }}" alt="Iced Americano">
-            </div>
-            <div class="menu-list-details">
-                <div class="menu-list-name">Iced Americano</div>
-                <div class="menu-list-desc">Espresso with cold water</div>
-                <div class="menu-list-meta">
-                    <span class="menu-list-badge">Cold Drinks</span>
-                    <span>🧊 Refreshing</span>
-                </div>
-            </div>
-            <div class="menu-list-price">BD 2.600</div>
-        </div>
-
-        <!-- Pastry Items -->
-        <div class="menu-list-item pastry-item" data-category="pastry" onclick="addToOrder('Butter Croissant')">
-            <div class="menu-list-image">
-                <img src="{{ url_for('static', filename='imgg9.jpeg') }}" alt="Croissant">
-            </div>
-            <div class="menu-list-details">
-                <div class="menu-list-name">Butter Croissant</div>
-                <div class="menu-list-desc">Flaky, buttery, fresh baked</div>
-                <div class="menu-list-meta">
-                    <span class="menu-list-badge">Pastries</span>
-                    <span>🥐 Fresh</span>
-                </div>
-            </div>
-            <div class="menu-list-price">BD 1.800</div>
-        </div>
-
-        <div class="menu-list-item pastry-item" data-category="pastry" onclick="addToOrder('Chocolate Croissant')">
-            <div class="menu-list-image">
-                <img src="{{ url_for('static', filename='imgg9.jpeg') }}" alt="Chocolate Croissant">
-            </div>
-            <div class="menu-list-details">
-                <div class="menu-list-name">Chocolate Croissant</div>
-                <div class="menu-list-desc">With chocolate filling</div>
-                <div class="menu-list-meta">
-                    <span class="menu-list-badge">Pastries</span>
-                    <span>🍫 Chocolate</span>
-                </div>
-            </div>
-            <div class="menu-list-price">BD 2.200</div>
-        </div>
-
-        <!-- Dessert Items -->
-        <div class="menu-list-item dessert-item" data-category="dessert" onclick="addToOrder('Chocolate Cake')">
-            <div class="menu-list-image">
-                <img src="{{ url_for('static', filename='imgg10.jpeg') }}" alt="Chocolate Cake">
-            </div>
-            <div class="menu-list-details">
-                <div class="menu-list-name">Chocolate Cake</div>
-                <div class="menu-list-desc">Rich chocolate layer cake</div>
-                <div class="menu-list-meta">
-                    <span class="menu-list-badge">Desserts</span>
-                    <span>🍫 Popular</span>
-                </div>
-            </div>
-            <div class="menu-list-price">BD 3.500</div>
-        </div>
-    </div>
-</div>
-
+{% block extra_css %}
 <style>
 /* Banner Carousel Styles */
 .banner-carousel-section {
@@ -422,14 +169,15 @@
 
 .menu-carousel-item {
     scroll-snap-align: start;
-    flex: 0 0 240px;
+    flex: 0 0 200px;
     border-radius: 25px;
     overflow: hidden;
     background: #ffffff;
     box-shadow: 0 8px 20px rgba(92, 59, 44, 0.15);
     border: 1px solid #e9d9c8;
     cursor: pointer;
-    transition: transform 0.2s ease;
+    transition: all 0.2s ease;
+    position: relative;
 }
 
 .menu-carousel-item:active {
@@ -438,31 +186,69 @@
 
 .menu-carousel-image {
     width: 100%;
-    height: 160px;
+    height: 140px;
     object-fit: cover;
     display: block;
 }
 
 .menu-carousel-caption {
-    padding: 14px 12px;
+    padding: 12px 10px;
 }
 
 .menu-carousel-caption h3 {
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 700;
     color: #3a2417;
-    margin-bottom: 4px;
+    margin-bottom: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .menu-carousel-caption p {
-    font-size: 12px;
+    font-size: 11px;
     color: #8b6f54;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .menu-carousel-price {
     font-weight: 700;
     color: #5c3b2c;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.menu-carousel-price::before {
+    content: 'BD ';
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.quick-add-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: 14px;
+    background: #5c3b2c;
+    color: white;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.quick-add-btn:active {
+    transform: scale(0.9);
+    background: #6f4a2e;
+}
+
+.quick-add-btn .material-symbols-outlined {
     font-size: 16px;
 }
 
@@ -527,9 +313,12 @@
     text-decoration: none;
     font-weight: 500;
     transition: color 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 4px;
 }
 
-.view-all-link:hover {
+.view-all-link:active {
     color: #5c3b2c;
 }
 
@@ -549,6 +338,7 @@
     border-bottom: 1px solid #f0e4d6;
     cursor: pointer;
     transition: background 0.2s;
+    position: relative;
 }
 
 .menu-list-item:last-child {
@@ -606,15 +396,6 @@
     color: #5c3b2c;
 }
 
-.menu-list-price {
-    font-weight: 700;
-    color: #5c3b2c;
-    font-size: 18px;
-    min-width: 70px;
-    text-align: right;
-    white-space: nowrap;
-}
-
 .menu-list-badge {
     background: #fcf0e6;
     padding: 4px 10px;
@@ -624,109 +405,403 @@
     color: #5c3b2c;
 }
 
+.menu-list-price {
+    font-weight: 700;
+    color: #5c3b2c;
+    font-size: 18px;
+    min-width: 70px;
+    text-align: right;
+    white-space: nowrap;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+}
+
+.menu-list-price::before {
+    content: 'BD ';
+    font-size: 11px;
+    font-weight: 500;
+    display: inline;
+}
+
+.list-add-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 16px;
+    background: #fcf0e6;
+    border: none;
+    color: #5c3b2c;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.list-add-btn:active {
+    background: #5c3b2c;
+    color: white;
+    transform: scale(0.9);
+}
+
+.list-add-btn .material-symbols-outlined {
+    font-size: 18px;
+}
+
+/* Toast Notifications */
+.toast-container {
+    position: fixed;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 3000;
+    width: 90%;
+    max-width: 300px;
+    pointer-events: none;
+}
+
+.toast {
+    background: #5c3b2c;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 50px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    font-weight: 500;
+    transform: translateY(100px);
+    opacity: 0;
+    transition: all 0.3s ease;
+    text-align: center;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.toast.show {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.toast.success {
+    background: #27ae60;
+}
+
+.toast .material-symbols-outlined {
+    font-size: 18px;
+}
+
 @media (max-width: 480px) {
     .banner-carousel-image {
         height: 180px;
     }
     .menu-carousel-item {
-        flex: 0 0 200px;
+        flex: 0 0 180px;
+    }
+    .menu-carousel-image {
+        height: 120px;
     }
 }
 </style>
+{% endblock %}
+
+{% block content %}
+<!-- Toast Container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- Banner Carousel -->
+<div class="banner-carousel-section">
+    <div class="banner-carousel-container">
+        <div class="banner-carousel" id="bannerCarousel">
+            <div class="banner-carousel-item active">
+                <img src="https://lh3.googleusercontent.com/gps-cs-s/AHVAweoZVh_5HjTgNzKwrgrU8Qodmda0OFZP0ozz-C64yNzJGNJpMGpU3fh9Dph_RXHj0Fmoz1FuP8JbYSq_L1NDmv3pn3Am7VJLF2tUXqbI_fEYdeImkgaXj8kE1PONHnf7G0JcF8iu=s1360-w1360-h1020-rw" alt="Cafe Interior" class="banner-carousel-image" onerror="this.src='{{ url_for('static', filename='imgg.jpeg') }}'">
+                <div class="banner-carousel-caption">
+                    <h3>Cozy Interior</h3>
+                    <p>Comfortable seating area</p>
+                </div>
+            </div>
+            <div class="banner-carousel-item">
+                <img src="https://lh3.googleusercontent.com/gps-cs-s/AHVAwepZYfEuPLc42rQLouJSfQEKy4LIbJQds6wqLdQ3HsElOXbptf0_kFxBpOELY-6dcrbTbKx3EaYJqqIpK9d1mc-UjCUJqRwwdsf8FPJ4ELu0W09SjUt_5DFYHjixuy-ncywj6iByBQ=s1360-w1360-h1020-rw" alt="Coffee Bar" class="banner-carousel-image" onerror="this.src='{{ url_for('static', filename='imgg2.jpeg') }}'">
+                <div class="banner-carousel-caption">
+                    <h3>Coffee Bar</h3>
+                    <p>Professional La Marzocco</p>
+                </div>
+            </div>
+            <div class="banner-carousel-item">
+                <img src="https://lh3.googleusercontent.com/gps-cs-s/AHVAweqAPFSWqT8k5WRDZguaeRaCFOdHV7uGVYciO3EVqmtjP6qKJtMM3yn9fGF28XPINI04gU6PeItxpZ1IMXVSgoZPVxnJjG1lYY2i6R3opAI-4pyrp3EzMWcR-odssEFzVN9FgSvtv3xgU4A=s1360-w1360-h1020-rw" alt="Outdoor Seating" class="banner-carousel-image" onerror="this.src='{{ url_for('static', filename='imgg3.jpeg') }}'">
+                <div class="banner-carousel-caption">
+                    <h3>Outdoor Area</h3>
+                    <p>Patio seating available</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Carousel Indicators -->
+        <div class="carousel-indicators">
+            <span class="indicator active" onclick="slideTo(0)"></span>
+            <span class="indicator" onclick="slideTo(1)"></span>
+            <span class="indicator" onclick="slideTo(2)"></span>
+        </div>
+        
+        <!-- Navigation Arrows -->
+        <button class="carousel-arrow prev" onclick="slidePrev()">
+            <span class="material-symbols-outlined">chevron_left</span>
+        </button>
+        <button class="carousel-arrow next" onclick="slideNext()">
+            <span class="material-symbols-outlined">chevron_right</span>
+        </button>
+    </div>
+</div>
+
+<!-- Second Carousel - Menu Items (Horizontal Scroll) -->
+<div class="carousel-section">
+    <div class="section-title">
+        <span class="material-symbols-outlined">restaurant_menu</span>
+        Popular Now
+    </div>
+    <div class="carousel" id="popularCarousel">
+        <!-- Will be populated dynamically -->
+    </div>
+</div>
+
+<!-- Category Pills - Click to filter -->
+<div class="category-pills">
+    <span class="category-pill active" onclick="filterMenu('all')">All</span>
+    <span class="category-pill" onclick="filterMenu('espresso')">Coffee</span>
+    <span class="category-pill" onclick="filterMenu('cold')">Cold Drinks</span>
+    <span class="category-pill" onclick="filterMenu('pastry')">Pastries</span>
+    <span class="category-pill" onclick="filterMenu('brewed')">Brewed</span>
+</div>
+
+<!-- Available Menu List (Filterable) -->
+<div class="menu-list-section">
+    <div class="menu-list-header">
+        <h2>Today's Menu</h2>
+        <a href="{{ url_for('menu') }}" class="view-all-link">
+            View Full Menu
+            <span class="material-symbols-outlined">arrow_forward</span>
+        </a>
+    </div>
+
+    <div class="menu-list" id="menuList">
+        <!-- Will be populated dynamically -->
+    </div>
+</div>
 
 <script>
-let currentSlide = 0;
-const totalSlides = 3;
+    // Toast notification system
+    function showToast(message, type = 'success', duration = 2000) {
+        const container = document.getElementById('toastContainer');
+        const toastId = 'toast_' + Date.now();
+        
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        toast.id = toastId;
+        
+        let icon = type === 'success' ? 'check_circle' : 'info';
+        
+        toast.innerHTML = `
+            <span class="material-symbols-outlined">${icon}</span>
+            <span>${message}</span>
+        `;
+        
+        container.appendChild(toast);
+        
+        setTimeout(() => toast.classList.add('show'), 10);
+        
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => toast.remove(), 300);
+        }, duration);
+    }
 
-function showSlide(index) {
-    const slides = document.querySelectorAll('.banner-carousel-item');
-    const indicators = document.querySelectorAll('.indicator');
+    // Cart management
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
     
-    if (index >= totalSlides) index = 0;
-    if (index < 0) index = totalSlides - 1;
-    
-    slides.forEach(slide => slide.classList.remove('active'));
-    indicators.forEach(ind => ind.classList.remove('active'));
-    
-    slides[index].classList.add('active');
-    indicators[index].classList.add('active');
-    
-    currentSlide = index;
-}
+    function updateCartCount() {
+        // This will be handled by base.html
+        window.dispatchEvent(new Event('storage'));
+    }
 
-function slideNext() {
-    showSlide(currentSlide + 1);
-}
+    // Menu items data (same as menu page)
+    const menuItems = [
+        // NEW ITEMS - Top 5
+        { name: 'Honey Almond Latte', price: 4.200, category: 'espresso', image: "{{ url_for('static', filename='imgg3.jpeg') }}", isNew: true, type: 'drink', desc: 'Sweet honey & almond' },
+        { name: 'Salted Caramel Mocha', price: 4.500, category: 'espresso', image: "{{ url_for('static', filename='imgg4.jpeg') }}", isNew: true, type: 'drink', desc: 'Rich caramel with sea salt' },
+        { name: 'Lavender Oat Latte', price: 4.300, category: 'espresso', image: "{{ url_for('static', filename='imgg2.jpeg') }}", isNew: true, type: 'drink', desc: 'Floral & creamy' },
+        { name: 'Brown Sugar Shaken', price: 3.900, category: 'cold', image: "{{ url_for('static', filename='imgg5.jpeg') }}", isNew: true, type: 'drink', desc: 'Brown sugar & cinnamon' },
+        { name: 'Tiramisu Cup', price: 3.800, category: 'pastry', image: "{{ url_for('static', filename='imgg9.jpeg') }}", isNew: true, type: 'food', desc: 'Coffee flavored dessert' },
+        
+        // Regular Items
+        { name: 'Espresso', price: 2.500, category: 'espresso', image: "{{ url_for('static', filename='imgg.jpeg') }}", type: 'drink', desc: 'Single shot of pure espresso' },
+        { name: 'Double Espresso', price: 3.500, category: 'espresso', image: "{{ url_for('static', filename='imgg2.jpeg') }}", type: 'drink', desc: 'Two shots of pure espresso' },
+        { name: 'Cappuccino', price: 3.000, category: 'espresso', image: "{{ url_for('static', filename='imgg3.jpeg') }}", type: 'drink', desc: 'Rich espresso with steamed milk' },
+        { name: 'Latte', price: 3.200, category: 'espresso', image: "{{ url_for('static', filename='imgg4.jpeg') }}", type: 'drink', desc: 'Smooth & creamy' },
+        { name: 'Caramel Macchiato', price: 3.500, category: 'espresso', image: "{{ url_for('static', filename='imgg4.jpeg') }}", type: 'drink', desc: 'Vanilla & caramel' },
+        { name: 'Cold Brew', price: 2.800, category: 'cold', image: "{{ url_for('static', filename='imgg5.jpeg') }}", type: 'drink', desc: '12-hour steeped, smooth taste' },
+        { name: 'Iced Latte', price: 3.200, category: 'cold', image: "{{ url_for('static', filename='imgg6.jpeg') }}", type: 'drink', desc: 'With vanilla syrup' },
+        { name: 'Iced Americano', price: 2.600, category: 'cold', image: "{{ url_for('static', filename='imgg7.jpeg') }}", type: 'drink', desc: 'Espresso with cold water' },
+        { name: 'Cold Drink', price: 2.200, category: 'cold', image: "{{ url_for('static', filename='imgg8.jpeg') }}", type: 'drink', desc: 'Refreshing beverage' },
+        { name: 'Pour Over', price: 2.800, category: 'brewed', image: "{{ url_for('static', filename='imgg7.jpeg') }}", type: 'drink', desc: 'Single origin pour over' },
+        { name: 'French Press', price: 2.500, category: 'brewed', image: "{{ url_for('static', filename='imgg8.jpeg') }}", type: 'drink', desc: 'Full-bodied brewed coffee' },
+        { name: 'Croissant', price: 1.800, category: 'pastry', image: "{{ url_for('static', filename='imgg9.jpeg') }}", type: 'food', desc: 'Flaky, buttery, fresh baked' },
+        { name: 'Chocolate Cake', price: 3.000, category: 'pastry', image: "{{ url_for('static', filename='imgg10.jpeg') }}", type: 'food', desc: 'Rich chocolate layer cake' }
+    ];
 
-function slidePrev() {
-    showSlide(currentSlide - 1);
-}
+    // Render popular items carousel
+    function renderPopularCarousel() {
+        const carousel = document.getElementById('popularCarousel');
+        const popularItems = menuItems.filter(item => item.isNew).slice(0, 8);
+        
+        carousel.innerHTML = popularItems.map(item => `
+            <div class="menu-carousel-item" onclick="quickAddToCart('${item.name}')">
+                <img src="${item.image}" alt="${item.name}" class="menu-carousel-image" onerror="this.src='{{ url_for('static', filename='imgg.jpeg') }}'">
+                <div class="menu-carousel-caption">
+                    <h3>${item.name}</h3>
+                    <p>${item.desc || ''}</p>
+                    <div class="menu-carousel-price">
+                        ${item.price.toFixed(3)}
+                        <button class="quick-add-btn" onclick="event.stopPropagation(); quickAddToCart('${item.name}')">
+                            <span class="material-symbols-outlined">add</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
 
-function slideTo(index) {
-    showSlide(index);
-}
+    // Render menu list
+    function renderMenuList() {
+        const menuList = document.getElementById('menuList');
+        
+        menuList.innerHTML = menuItems.map(item => `
+            <div class="menu-list-item" data-category="${item.category}" onclick="quickAddToCart('${item.name}')">
+                <div class="menu-list-image">
+                    <img src="${item.image}" alt="${item.name}" onerror="this.src='{{ url_for('static', filename='imgg.jpeg') }}'">
+                </div>
+                <div class="menu-list-details">
+                    <div class="menu-list-name">${item.name}</div>
+                    <div class="menu-list-desc">${item.desc || ''}</div>
+                    <div class="menu-list-meta">
+                        <span class="menu-list-badge">${item.category}</span>
+                        ${item.isNew ? '<span>🔥 Popular</span>' : ''}
+                    </div>
+                </div>
+                <div class="menu-list-price">
+                    ${item.price.toFixed(3)}
+                    <button class="list-add-btn" onclick="event.stopPropagation(); quickAddToCart('${item.name}')">
+                        <span class="material-symbols-outlined">add_shopping_cart</span>
+                    </button>
+                </div>
+            </div>
+        `).join('');
+    }
 
-// Auto slide every 5 seconds
-setInterval(() => {
-    slideNext();
-}, 5000);
+    // Quick add to cart
+    function quickAddToCart(itemName) {
+        const item = menuItems.find(i => i.name === itemName);
+        if (!item) return;
+        
+        const cartItem = {
+            id: Date.now() + Math.random(),
+            name: item.name,
+            basePrice: item.price,
+            price: item.price,
+            quantity: 1,
+            totalPrice: item.price,
+            options: {
+                size: 'small',
+                temp: item.type === 'food' ? undefined : 'hot',
+                ice: 'regular',
+                sugar: 'regular',
+                milk: item.type === 'food' ? undefined : 'whole'
+            },
+            image: item.image,
+            type: item.type
+        };
+        
+        cart.push(cartItem);
+        localStorage.setItem('cart', JSON.stringify(cart));
+        updateCartCount();
+        showToast(`Added ${item.name} to cart`);
+    }
 
-function addToOrder(itemName) {
-    alert(`🛒 ${itemName} added to your order`);
-}
-
-// Filter menu by category
-function filterMenu(category) {
-    // Update active pill
-    document.querySelectorAll('.category-pill').forEach(pill => {
-        pill.classList.remove('active');
-    });
-    event.target.classList.add('active');
-    
-    // Get all menu items
-    const menuItems = document.querySelectorAll('.menu-list-item');
-    
-    // Show/hide based on category
-    menuItems.forEach(item => {
-        if (category === 'all') {
-            item.style.display = 'flex';
-        } else {
-            if (item.dataset.category === category) {
+    // Filter menu by category
+    function filterMenu(category) {
+        // Update active pill
+        document.querySelectorAll('.category-pill').forEach(pill => {
+            pill.classList.remove('active');
+        });
+        event.target.classList.add('active');
+        
+        // Get all menu items
+        const menuItems = document.querySelectorAll('.menu-list-item');
+        
+        // Show/hide based on category
+        menuItems.forEach(item => {
+            if (category === 'all') {
                 item.style.display = 'flex';
             } else {
-                item.style.display = 'none';
+                if (item.dataset.category === category) {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = 'none';
+                }
             }
-        }
-    });
-}
+        });
+    }
 
-// Filter by category from carousel clicks
-function filterByCategory(category) {
-    // Update active pill
-    document.querySelectorAll('.category-pill').forEach(pill => {
-        pill.classList.remove('active');
-        if (pill.textContent.toLowerCase().includes(category)) {
-            pill.classList.add('active');
-        }
-    });
-    
-    // Filter menu items
-    const menuItems = document.querySelectorAll('.menu-list-item');
-    menuItems.forEach(item => {
-        if (item.dataset.category === category) {
-            item.style.display = 'flex';
-        } else {
-            item.style.display = 'none';
-        }
-    });
-}
+    // Carousel functions
+    let currentSlide = 0;
+    const totalSlides = 3;
 
-// Category pill selection
-document.querySelectorAll('.category-pill').forEach(pill => {
-    pill.addEventListener('click', function() {
-        const category = this.textContent.toLowerCase().replace(' ', '');
-        filterMenu(category);
+    function showSlide(index) {
+        const slides = document.querySelectorAll('.banner-carousel-item');
+        const indicators = document.querySelectorAll('.indicator');
+        
+        if (index >= totalSlides) index = 0;
+        if (index < 0) index = totalSlides - 1;
+        
+        slides.forEach(slide => slide.classList.remove('active'));
+        indicators.forEach(ind => ind.classList.remove('active'));
+        
+        slides[index].classList.add('active');
+        indicators[index].classList.add('active');
+        
+        currentSlide = index;
+    }
+
+    function slideNext() {
+        showSlide(currentSlide + 1);
+    }
+
+    function slidePrev() {
+        showSlide(currentSlide - 1);
+    }
+
+    function slideTo(index) {
+        showSlide(index);
+    }
+
+    // Auto slide every 5 seconds
+    setInterval(() => {
+        slideNext();
+    }, 5000);
+
+    // Initialize on load
+    window.addEventListener('load', function() {
+        renderPopularCarousel();
+        renderMenuList();
+        
+        // Check for highlight from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const category = urlParams.get('category');
+        if (category) {
+            filterMenu(category);
+        }
     });
-});
 </script>
 {% endblock %}
+
+{% block qr_card %}{% endblock %}
