@@ -597,28 +597,28 @@
         </div>
         <div class="category-item" data-category="espresso">
             <div class="category-image">
-                <img src="{{ url_for('static', filename='imgg2.jpeg') }}" alt="Espresso"
+                <img src="{{ url_for('static', filename='imgg8.jpeg') }}" alt="Espresso"
                     onerror="this.src='data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2280%22%20height%3D%2280%22%20viewBox%3D%220%200%2080%2080%22%3E%3Crect%20width%3D%2280%22%20height%3D%2280%22%20fill%3D%22%23a77b51%22%2F%3E%3Ctext%20x%3D%2210%22%20y%3D%2248%22%20font-family%3D%22Montserrat%22%20font-size%3D%2216%22%20fill%3D%22%23ffffff%22%3EEspresso%3C%2Ftext%3E%3C%2Fsvg%3E';">
             </div>
             <span class="category-name">Espresso</span>
         </div>
         <div class="category-item" data-category="brewed">
             <div class="category-image">
-                <img src="{{ url_for('static', filename='imgg3.jpeg') }}" alt="Brewed"
+                <img src="https://i.pinimg.com/736x/47/8d/79/478d7944e4707f9ea3f45abb4cf127f9.jpg" alt="Brewed"
                     onerror="this.src='data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2280%22%20height%3D%2280%22%20viewBox%3D%220%200%2080%2080%22%3E%3Crect%20width%3D%2280%22%20height%3D%2280%22%20fill%3D%22%23987b5f%22%2F%3E%3Ctext%20x%3D%2215%22%20y%3D%2248%22%20font-family%3D%22Montserrat%22%20font-size%3D%2216%22%20fill%3D%22%23ffffff%22%3EBrewed%3C%2Ftext%3E%3C%2Fsvg%3E';">
             </div>
             <span class="category-name">Brewed</span>
         </div>
         <div class="category-item" data-category="cold">
             <div class="category-image">
-                <img src="{{ url_for('static', filename='imgg5.jpeg') }}" alt="Cold"
+                <img src="https://i.pinimg.com/1200x/26/0c/6e/260c6e149042881a946ec57deea705bf.jpg" alt="Cold"
                     onerror="this.src='data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2280%22%20height%3D%2280%22%20viewBox%3D%220%200%2080%2080%22%3E%3Crect%20width%3D%2280%22%20height%3D%2280%22%20fill%3D%22%236fa8c7%22%2F%3E%3Ctext%20x%3D%2222%22%20y%3D%2248%22%20font-family%3D%22Montserrat%22%20font-size%3D%2216%22%20fill%3D%22%23ffffff%22%3ECold%3C%2Ftext%3E%3C%2Fsvg%3E';">
             </div>
             <span class="category-name">Cold</span>
         </div>
         <div class="category-item" data-category="pastry">
             <div class="category-image">
-                <img src="{{ url_for('static', filename='imgg9.jpeg') }}" alt="Pastry"
+                <img src="{{ url_for('static', filename='img7.jpeg') }}" alt="Pastry"
                     onerror="this.src='data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2280%22%20height%3D%2280%22%20viewBox%3D%220%200%2080%2080%22%3E%3Crect%20width%3D%2280%22%20height%3D%2280%22%20fill%3D%22%23c2a27f%22%2F%3E%3Ctext%20x%3D%2218%22%20y%3D%2248%22%20font-family%3D%22Montserrat%22%20font-size%3D%2216%22%20fill%3D%22%23ffffff%22%3EPastry%3C%2Ftext%3E%3C%2Fsvg%3E';">
             </div>
             <span class="category-name">Pastry</span>
@@ -829,26 +829,34 @@
     // Menu items data
     const menuItems = [
         // NEW ITEMS - Top 5
-        { name: 'Honey Almond Latte', price: 4.200, category: 'espresso', image: "{{ url_for('static', filename='imgg3.jpeg') }}", isNew: true, type: 'drink' },
-        { name: 'Salted Caramel Mocha', price: 4.500, category: 'espresso', image: "{{ url_for('static', filename='imgg4.jpeg') }}", isNew: true, type: 'drink' },
-        { name: 'Lavender Oat Latte', price: 4.300, category: 'espresso', image: "{{ url_for('static', filename='imgg2.jpeg') }}", isNew: true, type: 'drink' },
-        { name: 'Brown Sugar Shaken', price: 3.900, category: 'cold', image: "{{ url_for('static', filename='imgg5.jpeg') }}", isNew: true, type: 'drink' },
-        { name: 'Tiramisu Cup', price: 3.800, category: 'pastry', image: "{{ url_for('static', filename='imgg9.jpeg') }}", isNew: true, type: 'food' },
+{ 
+    name: 'Honey Almond Latte', 
+    price: 4.200, 
+    category: 'espresso', 
+    image: "https://i.pinimg.com/1200x/a8/fa/c9/a8fac951f60a016d433ebd23ea493de9.jpg", 
+    isNew: true, 
+    type: 'drink', 
+    desc: 'Sweet honey & almond' 
+},
+        { name: 'Salted Caramel Mocha', price: 4.500, category: 'espresso', image: "https://i.pinimg.com/1200x/91/08/79/910879b27550ed31c754dca3dcd00e6f.jpg", isNew: true, type: 'drink', desc: 'Rich caramel with sea salt' },
+        { name: 'Lavender Oat Latte', price: 4.300, category: 'espresso', image: "https://i.pinimg.com/1200x/03/40/bc/0340bc3bca1288373896cf62fabd67aa.jpg", isNew: true, type: 'drink', desc: 'Floral & creamy' },
+        { name: 'Brown Sugar Shaken', price: 3.900, category: 'cold', image: "https://i.pinimg.com/736x/85/85/11/85851111fca1556b7a272dd4d7df2943.jpg", isNew: true, type: 'drink', desc: 'Brown sugar & cinnamon' },
+        { name: 'Tiramisu Cup', price: 3.800, category: 'pastry', image: "{{ url_for('static', filename='imgg4.jpeg') }}", isNew: true, type: 'food', desc: 'Coffee flavored dessert' },
         
         // Regular Items
-        { name: 'Espresso',        price: 2.500, category: 'espresso', image: "{{ url_for('static', filename='imgg.jpeg') }}", type: 'drink' },
-        { name: 'Double Espresso', price: 3.500, category: 'espresso', image: "{{ url_for('static', filename='imgg2.jpeg') }}", type: 'drink' },
-        { name: 'Cappuccino',      price: 3.000, category: 'espresso', image: "{{ url_for('static', filename='imgg3.jpeg') }}", type: 'drink' },
-        { name: 'Latte',           price: 3.200, category: 'espresso', image: "{{ url_for('static', filename='imgg4.jpeg') }}", type: 'drink' },
-        { name: 'Caramel Macchiato', price: 3.500, category: 'espresso', image: "{{ url_for('static', filename='imgg4.jpeg') }}", type: 'drink' },
-        { name: 'Cold Brew',       price: 2.800, category: 'cold',     image: "{{ url_for('static', filename='imgg5.jpeg') }}", type: 'drink' },
-        { name: 'Iced Latte',      price: 3.200, category: 'cold',     image: "{{ url_for('static', filename='imgg6.jpeg') }}", type: 'drink' },
-        { name: 'Iced Americano',  price: 2.600, category: 'cold',     image: "{{ url_for('static', filename='imgg7.jpeg') }}", type: 'drink' },
-        { name: 'Cold Drink',      price: 2.200, category: 'cold',     image: "{{ url_for('static', filename='imgg8.jpeg') }}", type: 'drink' },
-        { name: 'Pour Over',       price: 2.800, category: 'brewed',   image: "{{ url_for('static', filename='imgg7.jpeg') }}", type: 'drink' },
-        { name: 'French Press',    price: 2.500, category: 'brewed',   image: "{{ url_for('static', filename='imgg8.jpeg') }}", type: 'drink' },
-        { name: 'Croissant',       price: 1.800, category: 'pastry',   image: "{{ url_for('static', filename='imgg9.jpeg') }}", type: 'food' },
-        { name: 'Chocolate Cake',  price: 3.000, category: 'pastry',   image: "{{ url_for('static', filename='imgg10.jpeg') }}", type: 'food' }
+        { name: 'Espresso', price: 2.500, category: 'espresso', image: "{{ url_for('static', filename='imgg8.jpeg') }}", type: 'drink', desc: 'Single shot of pure espresso' },
+        { name: 'Double Espresso', price: 3.500, category: 'espresso', image: "https://i.pinimg.com/1200x/e0/17/eb/e017eb28a91f18b41ad47d37ef9ed808.jpg", type: 'drink', desc: 'Two shots of pure espresso' },
+        { name: 'Cappuccino', price: 3.000, category: 'espresso', image: "https://i.pinimg.com/1200x/4a/7f/38/4a7f38787d21ef65e8d2489a0e9fbc68.jpg", type: 'drink', desc: 'Rich espresso with steamed milk' },
+        { name: 'Latte', price: 3.200, category: 'espresso', image: "https://i.pinimg.com/1200x/aa/24/4d/aa244d511815dd1bb73d20781786b37e.jpg", type: 'drink', desc: 'Smooth & creamy' },
+        { name: 'Caramel Macchiato', price: 3.500, category: 'espresso', image: "https://i.pinimg.com/1200x/87/19/95/87199510667068c8e1a32543ae00e467.jpg", type: 'drink', desc: 'Vanilla & caramel' },
+        { name: 'Cold Brew', price: 2.800, category: 'cold', image: "https://i.pinimg.com/1200x/26/0c/6e/260c6e149042881a946ec57deea705bf.jpg", type: 'drink', desc: '12-hour steeped, smooth taste' },
+        { name: 'Iced Latte', price: 3.200, category: 'cold', image: "https://i.pinimg.com/736x/1c/05/cb/1c05cbf1af9536aa85b86ffbe62af919.jpg", type: 'drink', desc: 'With vanilla syrup' },
+        { name: 'Iced Americano', price: 2.600, category: 'cold', image: "https://i.pinimg.com/1200x/bc/0c/ff/bc0cffc8b21c24b4b571e98b9ab5da12.jpg", type: 'drink', desc: 'Espresso with cold water' },
+        { name: 'Cold Drink', price: 2.200, category: 'cold', image: "https://i.pinimg.com/736x/6d/92/6e/6d926e1c4e4389dfd60ad95b510fb0f8.jpg", type: 'drink', desc: 'Refreshing beverage' },
+        { name: 'Pour Over', price: 2.800, category: 'brewed', image: "{{ url_for('static', filename='imgg10.jpeg') }}", type: 'drink', desc: 'Single origin pour over' },
+        { name: 'French Press', price: 2.500, category: 'brewed', image: "https://i.pinimg.com/1200x/06/d4/5b/06d45b224061587af2ee22591f0ead5d.jpg", type: 'drink', desc: 'Full-bodied brewed coffee' },
+        { name: 'Croissant', price: 1.800, category: 'pastry', image: "{{ url_for('static', filename='y-jKMyLA.jpeg') }}", type: 'food', desc: 'Flaky, buttery, fresh baked' },
+        { name: 'Chocolate Cake', price: 3.000, category: 'pastry', image: "https://i.pinimg.com/736x/4f/7d/d7/4f7dd739919a555b6ee20f15f03787d0.jpg", type: 'food', desc: 'Rich chocolate layer cake' }
     ];
 
     const menuGrid = document.getElementById('menuGrid');

@@ -586,11 +586,11 @@
         
         if (hasFreeDrink) {
             rewardBadge.classList.add('available');
-            document.getElementById('rewardTitle').textContent = '✨ FREE COFFEE!';
+            document.getElementById('rewardTitle').textContent = '✨ FREE DRINK!';
             document.getElementById('rewardMessage').textContent = 'Ready to redeem';
         } else {
             rewardBadge.classList.remove('available');
-            document.getElementById('rewardTitle').textContent = 'Free Cappuccino';
+            document.getElementById('rewardTitle').textContent = 'Free Drink';
             document.getElementById('rewardMessage').textContent = 
                 remaining === 0 ? 'Start ordering' : `${remaining} stamps needed`;
         }

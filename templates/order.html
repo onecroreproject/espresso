@@ -798,6 +798,128 @@
         .tip-options { grid-template-columns: repeat(2, 1fr); }
         .order-item-image { width: 60px; height: 60px; }
     }
+       /* Add these new styles for history modal details */
+    .order-detail-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px;
+        background: #fcf8f3;
+        border-radius: 20px;
+        margin-bottom: 10px;
+    }
+
+    .order-detail-image {
+        width: 50px;
+        height: 50px;
+        border-radius: 25px;
+        overflow: hidden;
+        border: 2px solid #ffffff;
+        box-shadow: 0 2px 8px rgba(92, 59, 44, 0.1);
+        flex-shrink: 0;
+    }
+
+    .order-detail-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .order-detail-info {
+        flex: 1;
+    }
+
+    .order-detail-name {
+        font-weight: 600;
+        color: #3a2417;
+        font-size: 14px;
+        margin-bottom: 2px;
+    }
+
+    .order-detail-meta {
+        font-size: 11px;
+        color: #8b6f54;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+    }
+
+    .order-detail-qty {
+        background: #e9d9c8;
+        padding: 2px 8px;
+        border-radius: 12px;
+        font-size: 10px;
+        font-weight: 600;
+        color: #5c3b2c;
+    }
+
+    .order-detail-price {
+        font-weight: 700;
+        color: #5c3b2c;
+        font-size: 14px;
+        white-space: nowrap;
+    }
+
+    .history-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px;
+        background: #fcf0e6;
+        border-radius: 20px;
+        margin-bottom: 16px;
+    }
+
+    .history-order-id {
+        font-weight: 700;
+        color: #5c3b2c;
+        font-size: 16px;
+    }
+
+    .history-order-date {
+        color: #8b6f54;
+        font-size: 13px;
+    }
+
+    .history-total {
+        font-size: 18px;
+        font-weight: 700;
+        color: #5c3b2c;
+        margin: 16px 0;
+        text-align: right;
+    }
+
+    .back-to-history {
+        background: none;
+        border: none;
+        color: #5c3b2c;
+        font-size: 14px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        cursor: pointer;
+        margin-bottom: 16px;
+        padding: 8px;
+    }
+
+    .back-to-history:hover {
+        color: #3a2417;
+    }
+
+    .history-summary-item {
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .history-summary-item:hover {
+        transform: scale(1.02);
+        background: #fcf0e6;
+    }
+
+    .history-summary-item:active {
+        transform: scale(0.98);
+    }
 </style>
 {% endblock %}
 
@@ -1050,8 +1172,20 @@
             <h3><span class="material-symbols-outlined">history</span> Recent Orders</h3>
             <button class="close-modal" onclick="closeHistoryModal()">&times;</button>
         </div>
-        <div id="orderHistory">
-            <!-- Order history will be loaded here -->
+        <div id="orderHistoryList">
+            <!-- Order history summary list will be loaded here -->
+        </div>
+    </div>
+</div>
+
+<!-- Order Detail Modal -->
+<div class="history-modal-overlay" id="orderDetailModal">
+    <div class="history-modal-content">
+        <button class="back-to-history" onclick="backToHistoryList()">
+            <span class="material-symbols-outlined">arrow_back</span> Back to Orders
+        </button>
+        <div id="orderDetailContent">
+            <!-- Order details will be loaded here -->
         </div>
     </div>
 </div>
@@ -1070,6 +1204,7 @@
     let vat = 0;
     let currentTip = 0;
     let currentTipPercent = 0;
+    let currentOrderIndex = -1;
 
     // Toast notification system
     function showToast(message, type = 'success', duration = 3000) {
@@ -1516,10 +1651,10 @@
             orderId: 'ORD' + Date.now() + Math.floor(Math.random() * 1000)
         };
         
-        // Save order to history
+        // Save order to history (add to beginning of array for recent orders first)
         const orderHistory = JSON.parse(localStorage.getItem('orderHistory')) || [];
-        orderHistory.unshift(orderData);
-        if (orderHistory.length > 10) orderHistory.pop(); // Keep last 10 orders
+        orderHistory.unshift(orderData); // Add new order at the beginning
+        if (orderHistory.length > 20) orderHistory.pop(); // Keep last 20 orders
         localStorage.setItem('orderHistory', JSON.stringify(orderHistory));
         
         // Clear cart after successful order
@@ -1536,7 +1671,7 @@
 
     // Open history modal
     function openHistoryModal() {
-        const historyContainer = document.getElementById('orderHistory');
+        const historyContainer = document.getElementById('orderHistoryList');
         const orderHistory = JSON.parse(localStorage.getItem('orderHistory')) || [];
         
         console.log('Order History:', orderHistory); // Debug log
@@ -1563,18 +1698,15 @@
                 const itemCount = order.items.reduce((sum, item) => sum + (item.quantity || 1), 0);
                 
                 html += `
-                    <div class="history-item">
+                    <div class="history-item history-summary-item" onclick="showOrderDetail(${index})">
                         <div class="history-item-image">
                             <img src="${itemImage}" alt="Order" onerror="this.src='{{ url_for('static', filename='imgg.jpeg') }}'">
                         </div>
                         <div class="history-item-details">
-                            <div class="history-item-name">${itemCount} item(s)</div>
-                            <div class="history-item-meta">${formattedDate}</div>
+                            <div class="history-item-name">${order.orderId || 'Order'}</div>
+                            <div class="history-item-meta">${formattedDate} · ${itemCount} items</div>
                         </div>
                         <div class="history-item-price">BD ${total.toFixed(3)}</div>
-                        <button class="reorder-btn-small" onclick="reorderOrder(${index})">
-                            <span class="material-symbols-outlined">repeat</span>
-                        </button>
                     </div>
                 `;
             });
@@ -1589,6 +1721,104 @@
     function closeHistoryModal() {
         document.getElementById('historyModal').classList.remove('active');
         document.body.style.overflow = '';
+    }
+
+    // Show order detail
+    function showOrderDetail(index) {
+        const orderHistory = JSON.parse(localStorage.getItem('orderHistory')) || [];
+        
+        if (index >= 0 && index < orderHistory.length) {
+            const order = orderHistory[index];
+            currentOrderIndex = index;
+            
+            const detailContainer = document.getElementById('orderDetailContent');
+            
+            const date = order.timestamp ? new Date(order.timestamp) : new Date();
+            const formattedDate = date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            
+            const total = order.total || 
+                ((order.subtotal || 0) + (order.serviceCharge || 0) + (order.vat || 0) + (order.tip || 0));
+            
+            // Generate items HTML
+            let itemsHtml = '';
+            order.items.forEach(item => {
+                const optionsSummary = [];
+                if (item.options) {
+                    if (item.options.size) optionsSummary.push(item.options.size);
+                    if (item.options.temp) optionsSummary.push(item.options.temp);
+                    if (item.options.ice && item.options.temp === 'cold') optionsSummary.push(`${item.options.ice} ice`);
+                    if (item.options.sugar) optionsSummary.push(`${item.options.sugar} sugar`);
+                    if (item.options.milk) optionsSummary.push(item.options.milk);
+                }
+                
+                itemsHtml += `
+                    <div class="order-detail-item">
+                        <div class="order-detail-image">
+                            <img src="${item.image}" alt="${item.name}" onerror="this.src='{{ url_for('static', filename='imgg.jpeg') }}'">
+                        </div>
+                        <div class="order-detail-info">
+                            <div class="order-detail-name">${item.name}</div>
+                            <div class="order-detail-meta">
+                                ${optionsSummary.join(' · ')}
+                                <span class="order-detail-qty">x${item.quantity}</span>
+                            </div>
+                        </div>
+                        <div class="order-detail-price">BD ${(item.price * item.quantity).toFixed(3)}</div>
+                    </div>
+                `;
+            });
+            
+            detailContainer.innerHTML = `
+                <div class="history-header">
+                    <div>
+                        <div class="history-order-id">${order.orderId || 'Order'}</div>
+                        <div class="history-order-date">${formattedDate}</div>
+                    </div>
+                    <button class="reorder-btn-small" onclick="reorderOrder(${index})">
+                        <span class="material-symbols-outlined">repeat</span>
+                    </button>
+                </div>
+                
+                <div style="max-height: 400px; overflow-y: auto; margin-bottom: 16px;">
+                    ${itemsHtml}
+                </div>
+                
+                <div style="background: #fcf8f3; border-radius: 20px; padding: 16px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px;">
+                        <span>Subtotal</span>
+                        <span>BD ${(order.subtotal || 0).toFixed(3)}</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px;">
+                        <span>Service charge (10%)</span>
+                        <span>BD ${(order.serviceCharge || 0).toFixed(3)}</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px;">
+                        <span>VAT (5%)</span>
+                        <span>BD ${(order.vat || 0).toFixed(3)}</span>
+                    </div>
+                    ${order.tip > 0 ? `
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px;">
+                        <span>Tip (${order.tipPercent ? order.tipPercent.toFixed(1) : 0}%)</span>
+                        <span>BD ${(order.tip || 0).toFixed(3)}</span>
+                    </div>
+                    ` : ''}
+                    <div style="border-top: 2px dashed #d0bcab; margin: 12px 0; padding-top: 12px; display: flex; justify-content: space-between; font-weight: 700; color: #5c3b2c;">
+                        <span>Total</span>
+                        <span>BD ${total.toFixed(3)}</span>
+                    </div>
+                </div>
+            `;
+            
+            // Switch to detail modal
+            document.getElementById('historyModal').classList.remove('active');
+            document.getElementById('orderDetailModal').classList.add('active');
+        }
+    }
+
+    // Back to history list
+    function backToHistoryList() {
+        document.getElementById('orderDetailModal').classList.remove('active');
+        document.getElementById('historyModal').classList.add('active');
     }
 
     // Reorder order by index
@@ -1612,7 +1842,12 @@
             
             localStorage.setItem('cart', JSON.stringify(cart));
             displayCartItems();
-            closeHistoryModal();
+            
+            // Close all modals
+            document.getElementById('historyModal').classList.remove('active');
+            document.getElementById('orderDetailModal').classList.remove('active');
+            document.body.style.overflow = '';
+            
             showToast('Items added to your cart', 'success');
         } else {
             showToast('No items in this order', 'error');
@@ -1631,6 +1866,13 @@
 
     document.getElementById('historyModal').addEventListener('click', function(e) {
         if (e.target === this) closeHistoryModal();
+    });
+
+    document.getElementById('orderDetailModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            document.getElementById('orderDetailModal').classList.remove('active');
+            document.getElementById('historyModal').classList.add('active');
+        }
     });
 
     document.querySelectorAll('.modal-content, .history-modal-content').forEach(el => {

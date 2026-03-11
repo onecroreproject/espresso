@@ -492,6 +492,213 @@
     font-size: 18px;
 }
 
+/* MODAL STYLES - Import from menu page */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    z-index: 2000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    background: #ffffff;
+    width: 100%;
+    max-width: 450px;
+    border-radius: 32px 32px 0 0;
+    padding: 24px 20px 30px;
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal-overlay.active .modal-content {
+    transform: translateY(0);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.modal-header h3 {
+    font-size: clamp(20px, 6vw, 24px);
+    font-weight: 700;
+    color: #3a2417;
+}
+
+.close-modal {
+    background: none;
+    border: none;
+    font-size: 32px;
+    cursor: pointer;
+    color: #8b6f54;
+    padding: 0 8px;
+}
+
+.modal-product-image {
+    width: 120px;
+    height: 120px;
+    border-radius: 24px;
+    overflow: hidden;
+    margin: 0 auto 16px;
+    border: 3px solid #f0e4d6;
+    box-shadow: 0 8px 16px rgba(92, 59, 44, 0.15);
+    position: relative;
+}
+
+.modal-product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.modal-item-name {
+    font-size: clamp(22px, 6.5vw, 26px);
+    font-weight: 600;
+    color: #5c3b2c;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Option sections */
+.option-section {
+    margin-bottom: 20px;
+}
+
+.option-label {
+    font-size: clamp(15px, 4vw, 16px);
+    font-weight: 600;
+    color: #3a2417;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.option-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.option-btn {
+    flex: 1 1 auto;
+    min-width: 70px;
+    padding: 12px 0;
+    border: 2px solid #e9d9c8;
+    border-radius: 40px;
+    background: #ffffff;
+    font-size: clamp(13px, 3.5vw, 14px);
+    font-weight: 500;
+    color: #5c3b2c;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+}
+
+.option-btn.active {
+    background: #5c3b2c;
+    color: #ffffff;
+    border-color: #5c3b2c;
+}
+
+.option-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.extra-cost {
+    font-size: 11px;
+    color: #8b6f54;
+    margin-left: 4px;
+}
+
+.option-btn.active .extra-cost {
+    color: #ffffff;
+    opacity: 0.9;
+}
+
+.quantity-selector { margin-bottom: 20px; }
+
+.quantity-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #fcf0e6;
+    border-radius: 60px;
+    padding: 6px;
+}
+
+.qty-btn {
+    width: clamp(44px, 12vw, 48px);
+    height: clamp(44px, 12vw, 48px);
+    border-radius: 50%;
+    border: none;
+    background: #ffffff;
+    font-size: clamp(22px, 6vw, 24px);
+    font-weight: 600;
+    color: #5c3b2c;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.qty-number {
+    font-size: clamp(22px, 6vw, 24px);
+    font-weight: 700;
+    color: #5c3b2c;
+    min-width: 50px;
+    text-align: center;
+}
+
+.add-to-cart-btn {
+    width: 100%;
+    background: #5c3b2c;
+    color: white;
+    border: none;
+    padding: 16px;
+    border-radius: 60px;
+    font-size: clamp(16px, 4.5vw, 18px);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    margin-top: 16px;
+}
+
+.add-to-cart-btn:active {
+    transform: scale(0.98);
+    background: #6f4a2e;
+}
+
+.add-to-cart-btn .price-display::before {
+    content: 'BD ';
+    margin-right: 2px;
+    font-weight: 500;
+}
+
 @media (max-width: 480px) {
     .banner-carousel-image {
         height: 180px;
@@ -567,11 +774,11 @@
 
 <!-- Category Pills - Click to filter -->
 <div class="category-pills">
-    <span class="category-pill active" onclick="filterMenu('all')">All</span>
-    <span class="category-pill" onclick="filterMenu('espresso')">Coffee</span>
-    <span class="category-pill" onclick="filterMenu('cold')">Cold Drinks</span>
-    <span class="category-pill" onclick="filterMenu('pastry')">Pastries</span>
-    <span class="category-pill" onclick="filterMenu('brewed')">Brewed</span>
+    <span class="category-pill active" onclick="filterMenu('all', this)">All</span>
+    <span class="category-pill" onclick="filterMenu('espresso', this)">Coffee</span>
+    <span class="category-pill" onclick="filterMenu('cold', this)">Cold Drinks</span>
+    <span class="category-pill" onclick="filterMenu('pastry', this)">Pastries</span>
+    <span class="category-pill" onclick="filterMenu('brewed', this)">Brewed</span>
 </div>
 
 <!-- Available Menu List (Filterable) -->
@@ -586,6 +793,109 @@
 
     <div class="menu-list" id="menuList">
         <!-- Will be populated dynamically -->
+    </div>
+</div>
+
+<!-- MODAL - Imported from menu page -->
+<div class="modal-overlay" id="modalOverlay">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>customize</h3>
+            <button class="close-modal" id="closeModal">&times;</button>
+        </div>
+        <div class="modal-product-image" id="modalProductImage">
+            <img src="" alt="" id="modalImageSrc">
+        </div>
+        <div class="modal-item-name" id="modalItemName">Espresso</div>
+
+        <!-- Size Selection -->
+        <div class="option-section">
+            <div class="option-label">
+                <span class="material-symbols-outlined">straighten</span> size
+            </div>
+            <div class="option-buttons" id="sizeOptions">
+                <button class="option-btn active" data-size="small">
+                    <span class="material-symbols-outlined">coffee</span> small
+                </button>
+                <button class="option-btn" data-size="medium">
+                    <span class="material-symbols-outlined">local_cafe</span> medium <span class="extra-cost">+0.500</span>
+                </button>
+                <button class="option-btn" data-size="large">
+                    <i class="fa-solid fa-mug-hot"></i> large <span class="extra-cost">+1.000</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Temperature Selection (for drinks) -->
+        <div class="option-section" id="tempSection">
+            <div class="option-label">
+                <span class="material-symbols-outlined">thermostat</span> temperature
+            </div>
+            <div class="option-buttons">
+                <button class="option-btn active" data-temp="hot">
+                    <span class="material-symbols-outlined">whatshot</span> hot
+                </button>
+                <button class="option-btn" data-temp="cold">
+                    <span class="material-symbols-outlined">ac_unit</span> cold
+                </button>
+            </div>
+        </div>
+
+        <!-- Ice Level (shows when cold is selected) -->
+        <div class="option-section" id="iceSection" style="display: none;">
+            <div class="option-label">
+                <span class="material-symbols-outlined">icecream</span> ice level
+            </div>
+            <div class="option-buttons">
+                <button class="option-btn active" data-ice="regular">regular</button>
+                <button class="option-btn" data-ice="less">less ice</button>
+                <button class="option-btn" data-ice="extra">extra ice</button>
+                <button class="option-btn" data-ice="no">no ice</button>
+            </div>
+        </div>
+
+        <!-- Sugar Selection -->
+        <div class="option-section">
+            <div class="option-label">
+                <span class="material-symbols-outlined">cookie</span> sugar
+            </div>
+            <div class="option-buttons">
+                <button class="option-btn active" data-sugar="regular">regular</button>
+                <button class="option-btn" data-sugar="less">less</button>
+                <button class="option-btn" data-sugar="half">half</button>
+                <button class="option-btn" data-sugar="no">no sugar</button>
+                <button class="option-btn" data-sugar="extra">extra <span class="extra-cost">+0.200</span></button>
+            </div>
+        </div>
+
+        <!-- Milk Selection (for coffee drinks) -->
+        <div class="option-section" id="milkSection">
+            <div class="option-label">
+                <span class="material-symbols-outlined">spa</span> milk
+            </div>
+            <div class="option-buttons">
+                <button class="option-btn active" data-milk="whole">whole</button>
+                <button class="option-btn" data-milk="oat">oat <span class="extra-cost">+0.300</span></button>
+                <button class="option-btn" data-milk="almond">almond <span class="extra-cost">+0.300</span></button>
+                <button class="option-btn" data-milk="skim">skim</button>
+            </div>
+        </div>
+
+        <!-- Quantity -->
+        <div class="option-section">
+            <div class="option-label">quantity</div>
+            <div class="quantity-controls">
+                <button class="qty-btn" id="decrementQty">−</button>
+                <span class="qty-number" id="qtyDisplay">1</span>
+                <button class="qty-btn" id="incrementQty">+</button>
+            </div>
+        </div>
+
+        <!-- Add to Cart Button -->
+        <button class="add-to-cart-btn" id="addToCartBtn">
+            <span class="material-symbols-outlined">shopping_bag</span>
+            add to cart · <span class="price-display" id="modalPrice">2.500</span>
+        </button>
     </div>
 </div>
 
@@ -627,27 +937,131 @@
     // Menu items data (same as menu page)
     const menuItems = [
         // NEW ITEMS - Top 5
-        { name: 'Honey Almond Latte', price: 4.200, category: 'espresso', image: "{{ url_for('static', filename='imgg3.jpeg') }}", isNew: true, type: 'drink', desc: 'Sweet honey & almond' },
-        { name: 'Salted Caramel Mocha', price: 4.500, category: 'espresso', image: "{{ url_for('static', filename='imgg4.jpeg') }}", isNew: true, type: 'drink', desc: 'Rich caramel with sea salt' },
-        { name: 'Lavender Oat Latte', price: 4.300, category: 'espresso', image: "{{ url_for('static', filename='imgg2.jpeg') }}", isNew: true, type: 'drink', desc: 'Floral & creamy' },
-        { name: 'Brown Sugar Shaken', price: 3.900, category: 'cold', image: "{{ url_for('static', filename='imgg5.jpeg') }}", isNew: true, type: 'drink', desc: 'Brown sugar & cinnamon' },
-        { name: 'Tiramisu Cup', price: 3.800, category: 'pastry', image: "{{ url_for('static', filename='imgg9.jpeg') }}", isNew: true, type: 'food', desc: 'Coffee flavored dessert' },
+{ 
+    name: 'Honey Almond Latte', 
+    price: 4.200, 
+    category: 'espresso', 
+    image: "https://i.pinimg.com/1200x/a8/fa/c9/a8fac951f60a016d433ebd23ea493de9.jpg", 
+    isNew: true, 
+    type: 'drink', 
+    desc: 'Sweet honey & almond' 
+},
+        { name: 'Salted Caramel Mocha', price: 4.500, category: 'espresso', image: "https://i.pinimg.com/1200x/91/08/79/910879b27550ed31c754dca3dcd00e6f.jpg", isNew: true, type: 'drink', desc: 'Rich caramel with sea salt' },
+        { name: 'Lavender Oat Latte', price: 4.300, category: 'espresso', image: "https://i.pinimg.com/1200x/03/40/bc/0340bc3bca1288373896cf62fabd67aa.jpg", isNew: true, type: 'drink', desc: 'Floral & creamy' },
+        { name: 'Brown Sugar Shaken', price: 3.900, category: 'cold', image: "https://i.pinimg.com/736x/85/85/11/85851111fca1556b7a272dd4d7df2943.jpg", isNew: true, type: 'drink', desc: 'Brown sugar & cinnamon' },
+        { name: 'Tiramisu Cup', price: 3.800, category: 'pastry', image: "{{ url_for('static', filename='imgg4.jpeg') }}", isNew: true, type: 'food', desc: 'Coffee flavored dessert' },
         
         // Regular Items
-        { name: 'Espresso', price: 2.500, category: 'espresso', image: "{{ url_for('static', filename='imgg.jpeg') }}", type: 'drink', desc: 'Single shot of pure espresso' },
-        { name: 'Double Espresso', price: 3.500, category: 'espresso', image: "{{ url_for('static', filename='imgg2.jpeg') }}", type: 'drink', desc: 'Two shots of pure espresso' },
-        { name: 'Cappuccino', price: 3.000, category: 'espresso', image: "{{ url_for('static', filename='imgg3.jpeg') }}", type: 'drink', desc: 'Rich espresso with steamed milk' },
-        { name: 'Latte', price: 3.200, category: 'espresso', image: "{{ url_for('static', filename='imgg4.jpeg') }}", type: 'drink', desc: 'Smooth & creamy' },
-        { name: 'Caramel Macchiato', price: 3.500, category: 'espresso', image: "{{ url_for('static', filename='imgg4.jpeg') }}", type: 'drink', desc: 'Vanilla & caramel' },
-        { name: 'Cold Brew', price: 2.800, category: 'cold', image: "{{ url_for('static', filename='imgg5.jpeg') }}", type: 'drink', desc: '12-hour steeped, smooth taste' },
-        { name: 'Iced Latte', price: 3.200, category: 'cold', image: "{{ url_for('static', filename='imgg6.jpeg') }}", type: 'drink', desc: 'With vanilla syrup' },
-        { name: 'Iced Americano', price: 2.600, category: 'cold', image: "{{ url_for('static', filename='imgg7.jpeg') }}", type: 'drink', desc: 'Espresso with cold water' },
-        { name: 'Cold Drink', price: 2.200, category: 'cold', image: "{{ url_for('static', filename='imgg8.jpeg') }}", type: 'drink', desc: 'Refreshing beverage' },
-        { name: 'Pour Over', price: 2.800, category: 'brewed', image: "{{ url_for('static', filename='imgg7.jpeg') }}", type: 'drink', desc: 'Single origin pour over' },
-        { name: 'French Press', price: 2.500, category: 'brewed', image: "{{ url_for('static', filename='imgg8.jpeg') }}", type: 'drink', desc: 'Full-bodied brewed coffee' },
-        { name: 'Croissant', price: 1.800, category: 'pastry', image: "{{ url_for('static', filename='imgg9.jpeg') }}", type: 'food', desc: 'Flaky, buttery, fresh baked' },
-        { name: 'Chocolate Cake', price: 3.000, category: 'pastry', image: "{{ url_for('static', filename='imgg10.jpeg') }}", type: 'food', desc: 'Rich chocolate layer cake' }
+        { name: 'Espresso', price: 2.500, category: 'espresso', image: "{{ url_for('static', filename='imgg8.jpeg') }}", type: 'drink', desc: 'Single shot of pure espresso' },
+        { name: 'Double Espresso', price: 3.500, category: 'espresso', image: "https://i.pinimg.com/1200x/e0/17/eb/e017eb28a91f18b41ad47d37ef9ed808.jpg", type: 'drink', desc: 'Two shots of pure espresso' },
+        { name: 'Cappuccino', price: 3.000, category: 'espresso', image: "https://i.pinimg.com/1200x/4a/7f/38/4a7f38787d21ef65e8d2489a0e9fbc68.jpg", type: 'drink', desc: 'Rich espresso with steamed milk' },
+        { name: 'Latte', price: 3.200, category: 'espresso', image: "https://i.pinimg.com/1200x/aa/24/4d/aa244d511815dd1bb73d20781786b37e.jpg", type: 'drink', desc: 'Smooth & creamy' },
+        { name: 'Caramel Macchiato', price: 3.500, category: 'espresso', image: "https://i.pinimg.com/1200x/87/19/95/87199510667068c8e1a32543ae00e467.jpg", type: 'drink', desc: 'Vanilla & caramel' },
+        { name: 'Cold Brew', price: 2.800, category: 'cold', image: "https://i.pinimg.com/1200x/26/0c/6e/260c6e149042881a946ec57deea705bf.jpg", type: 'drink', desc: '12-hour steeped, smooth taste' },
+        { name: 'Iced Latte', price: 3.200, category: 'cold', image: "https://i.pinimg.com/736x/1c/05/cb/1c05cbf1af9536aa85b86ffbe62af919.jpg", type: 'drink', desc: 'With vanilla syrup' },
+        { name: 'Iced Americano', price: 2.600, category: 'cold', image: "https://i.pinimg.com/1200x/bc/0c/ff/bc0cffc8b21c24b4b571e98b9ab5da12.jpg", type: 'drink', desc: 'Espresso with cold water' },
+        { name: 'Cold Drink', price: 2.200, category: 'cold', image: "https://i.pinimg.com/736x/6d/92/6e/6d926e1c4e4389dfd60ad95b510fb0f8.jpg", type: 'drink', desc: 'Refreshing beverage' },
+        { name: 'Pour Over', price: 2.800, category: 'brewed', image: "{{ url_for('static', filename='imgg10.jpeg') }}", type: 'drink', desc: 'Single origin pour over' },
+        { name: 'French Press', price: 2.500, category: 'brewed', image: "https://i.pinimg.com/1200x/06/d4/5b/06d45b224061587af2ee22591f0ead5d.jpg", type: 'drink', desc: 'Full-bodied brewed coffee' },
+        { name: 'Croissant', price: 1.800, category: 'pastry', image: "{{ url_for('static', filename='y-jKMyLA.jpeg') }}", type: 'food', desc: 'Flaky, buttery, fresh baked' },
+        { name: 'Chocolate Cake', price: 3.000, category: 'pastry', image: "https://i.pinimg.com/736x/4f/7d/d7/4f7dd739919a555b6ee20f15f03787d0.jpg", type: 'food', desc: 'Rich chocolate layer cake' }
     ];
+
+    // Modal variables
+    const modalOverlay = document.getElementById('modalOverlay');
+    const modalItemName = document.getElementById('modalItemName');
+    const modalPrice = document.getElementById('modalPrice');
+    const modalImageSrc = document.getElementById('modalImageSrc');
+    const qtyDisplay = document.getElementById('qtyDisplay');
+    
+    let currentItem = null;
+    let currentQty = 1;
+    let currentOptions = {
+        size: 'small',
+        temp: 'hot',
+        ice: 'regular',
+        sugar: 'regular',
+        milk: 'whole'
+    };
+
+    // Calculate price with options
+    function calculatePrice() {
+        if (!currentItem) return currentItem?.price || 0;
+        
+        let price = currentItem.price;
+        
+        // Size adjustments
+        if (currentOptions.size === 'medium') price += 0.500;
+        if (currentOptions.size === 'large') price += 1.000;
+        
+        // Sugar extra
+        if (currentOptions.sugar === 'extra') price += 0.200;
+        
+        // Milk extras
+        if (currentOptions.milk === 'oat' || currentOptions.milk === 'almond') price += 0.300;
+        
+        return price;
+    }
+
+    function updateModalPrice() {
+        const price = calculatePrice();
+        modalPrice.textContent = price.toFixed(3);
+    }
+
+    // Open modal with item details
+    function openModal(item) {
+        currentItem = item;
+        currentQty = 1;
+        currentOptions = {
+            size: 'small',
+            temp: 'hot',
+            ice: 'regular',
+            sugar: 'regular',
+            milk: 'whole'
+        };
+        
+        modalItemName.textContent = item.name;
+        modalImageSrc.src = item.image;
+        modalImageSrc.alt = item.name;
+        qtyDisplay.textContent = '1';
+        
+        // Reset all option buttons
+        document.querySelectorAll('.option-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        
+        // Set active states
+        document.querySelector('[data-size="small"]').classList.add('active');
+        document.querySelector('[data-temp="hot"]').classList.add('active');
+        document.querySelector('[data-ice="regular"]').classList.add('active');
+        document.querySelector('[data-sugar="regular"]').classList.add('active');
+        document.querySelector('[data-milk="whole"]').classList.add('active');
+        
+        // Show/hide sections based on item type
+        const tempSection = document.getElementById('tempSection');
+        const iceSection = document.getElementById('iceSection');
+        const milkSection = document.getElementById('milkSection');
+        
+        if (item.type === 'food') {
+            tempSection.style.display = 'none';
+            iceSection.style.display = 'none';
+            milkSection.style.display = 'none';
+        } else {
+            tempSection.style.display = 'block';
+            milkSection.style.display = 'block';
+            // Ice section visibility depends on temperature
+            iceSection.style.display = currentOptions.temp === 'cold' ? 'block' : 'none';
+        }
+        
+        updateModalPrice();
+        modalOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+        modalOverlay.classList.remove('active');
+        document.body.style.overflow = '';
+    }
 
     // Render popular items carousel
     function renderPopularCarousel() {
@@ -655,7 +1069,7 @@
         const popularItems = menuItems.filter(item => item.isNew).slice(0, 8);
         
         carousel.innerHTML = popularItems.map(item => `
-            <div class="menu-carousel-item" onclick="quickAddToCart('${item.name}')">
+            <div class="menu-carousel-item" onclick="openModal(${JSON.stringify(item).replace(/"/g, '&quot;')})">
                 <img src="${item.image}" alt="${item.name}" class="menu-carousel-image" onerror="this.src='{{ url_for('static', filename='imgg.jpeg') }}'">
                 <div class="menu-carousel-caption">
                     <h3>${item.name}</h3>
@@ -676,7 +1090,7 @@
         const menuList = document.getElementById('menuList');
         
         menuList.innerHTML = menuItems.map(item => `
-            <div class="menu-list-item" data-category="${item.category}" onclick="quickAddToCart('${item.name}')">
+            <div class="menu-list-item" data-category="${item.category}" onclick="openModal(${JSON.stringify(item).replace(/"/g, '&quot;')})">
                 <div class="menu-list-image">
                     <img src="${item.image}" alt="${item.name}" onerror="this.src='{{ url_for('static', filename='imgg.jpeg') }}'">
                 </div>
@@ -698,7 +1112,7 @@
         `).join('');
     }
 
-    // Quick add to cart
+    // Quick add to cart (bypasses modal)
     function quickAddToCart(itemName) {
         const item = menuItems.find(i => i.name === itemName);
         if (!item) return;
@@ -728,12 +1142,12 @@
     }
 
     // Filter menu by category
-    function filterMenu(category) {
+    function filterMenu(category, element) {
         // Update active pill
         document.querySelectorAll('.category-pill').forEach(pill => {
             pill.classList.remove('active');
         });
-        event.target.classList.add('active');
+        element.classList.add('active');
         
         // Get all menu items
         const menuItems = document.querySelectorAll('.menu-list-item');
@@ -789,6 +1203,128 @@
         slideNext();
     }, 5000);
 
+    // Modal Event Listeners
+    document.getElementById('closeModal').addEventListener('click', closeModal);
+    modalOverlay.addEventListener('click', e => { if (e.target === modalOverlay) closeModal(); });
+
+    // Size selection
+    document.querySelectorAll('[data-size]').forEach(btn => {
+        btn.addEventListener('click', function () {
+            document.querySelectorAll('[data-size]').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            currentOptions.size = this.dataset.size;
+            updateModalPrice();
+        });
+    });
+
+    // Temperature selection
+    document.querySelectorAll('[data-temp]').forEach(btn => {
+        btn.addEventListener('click', function () {
+            document.querySelectorAll('[data-temp]').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            currentOptions.temp = this.dataset.temp;
+            
+            // Show/hide ice section
+            const iceSection = document.getElementById('iceSection');
+            iceSection.style.display = currentOptions.temp === 'cold' ? 'block' : 'none';
+            
+            // Reset ice to regular when switching to hot
+            if (currentOptions.temp === 'hot') {
+                currentOptions.ice = 'regular';
+                document.querySelectorAll('[data-ice]').forEach(b => b.classList.remove('active'));
+                document.querySelector('[data-ice="regular"]').classList.add('active');
+            }
+        });
+    });
+
+    // Ice selection
+    document.querySelectorAll('[data-ice]').forEach(btn => {
+        btn.addEventListener('click', function () {
+            if (currentOptions.temp === 'cold') {
+                document.querySelectorAll('[data-ice]').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentOptions.ice = this.dataset.ice;
+            }
+        });
+    });
+
+    // Sugar selection
+    document.querySelectorAll('[data-sugar]').forEach(btn => {
+        btn.addEventListener('click', function () {
+            document.querySelectorAll('[data-sugar]').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            currentOptions.sugar = this.dataset.sugar;
+            updateModalPrice();
+        });
+    });
+
+    // Milk selection
+    document.querySelectorAll('[data-milk]').forEach(btn => {
+        btn.addEventListener('click', function () {
+            if (currentItem && currentItem.type !== 'food') {
+                document.querySelectorAll('[data-milk]').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentOptions.milk = this.dataset.milk;
+                updateModalPrice();
+            }
+        });
+    });
+
+    // Quantity controls
+    document.getElementById('incrementQty').addEventListener('click', () => { 
+        currentQty++; 
+        qtyDisplay.textContent = currentQty; 
+    });
+    
+    document.getElementById('decrementQty').addEventListener('click', () => { 
+        if (currentQty > 1) { 
+            currentQty--; 
+            qtyDisplay.textContent = currentQty; 
+        } 
+    });
+
+    // Add to cart from modal
+    document.getElementById('addToCartBtn').addEventListener('click', () => {
+        if (!currentItem) return;
+        
+        const price = calculatePrice();
+        const totalPrice = price * currentQty;
+        
+        const cartItem = {
+            id: Date.now() + Math.random(),
+            name: currentItem.name,
+            basePrice: currentItem.price,
+            price: price,
+            quantity: currentQty,
+            totalPrice: totalPrice,
+            options: { ...currentOptions },
+            image: currentItem.image,
+            type: currentItem.type
+        };
+        
+        cart.push(cartItem);
+        localStorage.setItem('cart', JSON.stringify(cart));
+        updateCartCount();
+        
+        const optionsSummary = [];
+        optionsSummary.push(currentOptions.size);
+        if (currentItem.type !== 'food') {
+            optionsSummary.push(currentOptions.temp);
+            if (currentOptions.temp === 'cold') optionsSummary.push(`${currentOptions.ice} ice`);
+            optionsSummary.push(`${currentOptions.sugar} sugar`);
+            optionsSummary.push(`${currentOptions.milk} milk`);
+        }
+        
+        showToast(`Added ${currentQty}x ${currentItem.name} to cart!`);
+        closeModal();
+    });
+
+    // Touch feedback
+    document.querySelectorAll('.option-btn, .qty-btn, .add-to-cart-btn, .menu-carousel-item, .menu-list-item').forEach(btn => {
+        btn.addEventListener('touchstart', () => btn.style.opacity = '0.8', { passive: true });
+        btn.addEventListener('touchend', () => btn.style.opacity = '1');
+    });
+
     // Initialize on load
     window.addEventListener('load', function() {
         renderPopularCarousel();
@@ -798,7 +1334,10 @@
         const urlParams = new URLSearchParams(window.location.search);
         const category = urlParams.get('category');
         if (category) {
-            filterMenu(category);
+            const pill = Array.from(document.querySelectorAll('.category-pill')).find(p => 
+                p.textContent.toLowerCase().includes(category)
+            );
+            if (pill) filterMenu(category, pill);
         }
     });
 </script>
