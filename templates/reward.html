@@ -7,7 +7,7 @@
     /* Simple Paper Style Rewards Page - Fixed Card at Top */
     .rewards-wrapper {
         min-height: 100vh;
-        background: #d9c8b8;
+        background: #ffffff;
         padding: 20px 16px 0;
         display: flex;
         flex-direction: column;
@@ -31,18 +31,18 @@
 
     /* Simple Paper Card - Fixed at Top */
     .paper-card {
-        background: #fcf8f3;
+        background: #ffffff;
         border-radius: 16px;
         padding: 30px 20px 25px;
         box-shadow: 
-            0 5px 0 0 #b48c5c,
-            0 12px 25px rgba(58, 36, 23, 0.25);
+            0 5px 0 0 #4a3a2b,
+            0 12px 25px rgba(0, 0, 0, 0.1);
         width: 100%;
         max-width: 320px;
         margin: 0 auto;
         position: relative;
         top: 20px;
-        border: 1px solid #e9d9c8;
+        border: 1px solid #f0f0f0;
         z-index: 10;
     }
 
@@ -54,7 +54,7 @@
         left: 10px;
         right: 10px;
         height: 2px;
-        background: linear-gradient(90deg, transparent, #d4b99c, transparent);
+        background: linear-gradient(90deg, transparent, #f0f0f0, transparent);
     }
 
     /* Simple Pin/Tack */
@@ -65,9 +65,9 @@
         transform: translateX(-50%);
         width: 30px;
         height: 30px;
-        background: #a38264;
+        background: #8B5A2B;
         border-radius: 50% 50% 40% 40%;
-        box-shadow: 0 3px 0 0 #5c3b2c;
+        box-shadow: 0 3px 0 0 #4a3a2b;
         z-index: 20;
     }
 
@@ -77,9 +77,9 @@
         top: 3px;
         left: 50%;
         transform: translateX(-50%);
-        width: 10px;
-        height: 10px;
-        background: #f0e4d6;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.4), transparent);
         border-radius: 50%;
     }
 
@@ -89,21 +89,21 @@
         margin-bottom: 25px;
         position: relative;
         padding-bottom: 15px;
-        border-bottom: 2px dotted #d4b99c;
+        border-bottom: 2px dotted #f0f0f0;
     }
 
     .store-name {
         font-family: 'Playfair Display', serif;
         font-size: 24px;
         font-weight: 700;
-        color: #3a2417;
+        color: #4a3a2b;
         letter-spacing: 0.5px;
         margin-bottom: 4px;
     }
 
     .paper-title {
         font-size: 12px;
-        color: #8b6f54;
+        color: #777777;
         text-transform: uppercase;
         letter-spacing: 2px;
         font-weight: 500;
@@ -111,26 +111,26 @@
 
     .paper-date {
         font-size: 9px;
-        color: #b48c5c;
+        color: #888888;
         margin-top: 8px;
         font-family: monospace;
     }
 
     /* Simple Counter */
     .counter-paper {
-        background: white;
+        background: #ffffff;
         border-radius: 12px;
         padding: 15px;
         margin-bottom: 20px;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        border: 1px solid #e9d9c8;
-        box-shadow: 0 2px 0 0 #d4b99c;
+        border: 1px solid #f0f0f0;
+        box-shadow: 0 2px 0 0 #f0f0f0;
     }
 
     .counter-icon-paper {
-        background: #f0e4d6;
+        background: #f0f0f0;
         width: 44px;
         height: 44px;
         border-radius: 12px;
@@ -141,20 +141,20 @@
 
     .counter-icon-paper .material-symbols-outlined {
         font-size: 24px;
-        color: #5c3b2c;
+        color: #8B5A2B;
     }
 
     .counter-number-paper {
         font-size: 34px;
         font-weight: 700;
-        color: #5c3b2c;
+        color: #8B5A2B;
         line-height: 1;
         font-family: 'Playfair Display', serif;
     }
 
     .counter-label-paper {
         font-size: 10px;
-        color: #8b6f54;
+        color: #777777;
         text-transform: uppercase;
         letter-spacing: 1px;
         text-align: right;
@@ -163,17 +163,17 @@
     /* Simple Divider */
     .simple-divider {
         height: 1px;
-        background: repeating-linear-gradient(90deg, #d4b99c, #d4b99c 4px, transparent 4px, transparent 8px);
+        background: repeating-linear-gradient(90deg, #f0f0f0, #f0f0f0 4px, transparent 4px, transparent 8px);
         margin: 20px 0;
     }
 
     /* Simple Progress */
     .progress-paper {
-        background: white;
+        background: #ffffff;
         border-radius: 16px;
         padding: 18px 15px;
         margin-bottom: 20px;
-        border: 1px solid #e9d9c8;
+        border: 1px solid #f0f0f0;
     }
 
     .progress-header-paper {
@@ -182,7 +182,7 @@
         align-items: center;
         margin-bottom: 12px;
         font-size: 12px;
-        color: #8b6f54;
+        color: #777777;
     }
 
     .progress-label {
@@ -193,21 +193,21 @@
 
     .progress-label .material-symbols-outlined {
         font-size: 16px;
-        color: #b48c5c;
+        color: #8B5A2B;
     }
 
     .progress-percent-paper {
-        background: #f0e4d6;
+        background: #f0f0f0;
         padding: 3px 8px;
         border-radius: 20px;
         font-size: 11px;
         font-weight: 600;
-        color: #5c3b2c;
+        color: #8B5A2B;
     }
 
     /* Simple Progress Bar */
     .track-paper {
-        background: #f0e4d6;
+        background: #f0f0f0;
         height: 12px;
         border-radius: 20px;
         padding: 2px;
@@ -217,7 +217,7 @@
     .fill-paper {
         height: 100%;
         border-radius: 20px;
-        background: #5c3b2c;
+        background: #8B5A2B;
         transition: width 0.5s ease;
         position: relative;
     }
@@ -229,7 +229,7 @@
         right: 0;
         width: 4px;
         height: 100%;
-        background: #8b5e3c;
+        background: rgba(255, 255, 255, 0.3);
         border-radius: 2px;
     }
 
@@ -238,7 +238,7 @@
         justify-content: space-between;
         font-size: 14px;
         font-weight: 600;
-        color: #3a2417;
+        color: #4a3a2b;
         font-family: monospace;
         padding: 0 2px;
     }
@@ -250,7 +250,7 @@
     }
 
     .stat-divider {
-        color: #d4b99c;
+        color: #cccccc;
     }
 
     /* Simple Reward Ticket */
@@ -261,23 +261,24 @@
         display: flex;
         align-items: center;
         gap: 14px;
-        border: 1px solid #e9d9c8;
+        border: 1px solid #f0f0f0;
         cursor: pointer;
         transition: all 0.2s ease;
         position: relative;
     }
 
     .reward-paper.available {
-        background: #5c3b2c;
-        border-color: #d4a373;
+        background: #8B5A2B;
+        border-color: #f0f0f0;
         transform: translateY(-2px);
-        box-shadow: 0 4px 0 0 #3a2417;
+        box-shadow: 0 4px 0 0 #4a3a2b;
     }
 
     .reward-icon-paper {
         width: 48px;
         height: 48px;
-        background: #f0e4d6;
+        background: #fcfcfc;
+        border: 1px solid #f0f0f0;
         border-radius: 14px;
         display: flex;
         align-items: center;
@@ -285,18 +286,18 @@
     }
 
     .reward-paper.available .reward-icon-paper {
-        background: #fcf0e6;
+        background: rgba(255, 255, 255, 0.2);
     }
 
     .reward-icon-paper .material-symbols-outlined {
         font-size: 24px;
-        color: #5c3b2c;
+        color: #8B5A2B;
     }
 
     .reward-text-paper h4 {
         font-size: 16px;
         font-weight: 600;
-        color: #3a2417;
+        color: #2d241c;
         margin-bottom: 2px;
     }
 
@@ -306,11 +307,11 @@
 
     .reward-text-paper p {
         font-size: 11px;
-        color: #8b6f54;
+        color: #777777;
     }
 
     .reward-paper.available .reward-text-paper p {
-        color: #f0e4d6;
+        color: #e0e0e0;
     }
 
     /* Simple Footer - Fixed at bottom */
@@ -318,7 +319,7 @@
         text-align: center;
         margin-top: 30px;
         font-size: 8px;
-        color: #d4b99c;
+        color: #8B5A2B;
         font-family: monospace;
         letter-spacing: 1px;
         position: fixed;
@@ -339,12 +340,12 @@
     }
 
     .toast {
-        background: #fcf8f3;
-        border: 1px solid #5c3b2c;
-        color: #3a2417;
+        background: #8B5A2B;
+        border: 1px solid #f0f0f0;
+        color: white;
         padding: 12px 16px;
         border-radius: 30px;
-        box-shadow: 0 3px 0 0 #5c3b2c;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         font-weight: 500;
         transform: translateY(100px);
         opacity: 0;
@@ -451,7 +452,7 @@
                 <span class="stat-divider">✦</span>
                 <span class="stat-item">
                     <span id="remainingCount">6</span>
-                    <span style="font-size: 10px; color: #8b6f54;">left</span>
+                    <span style="font-size: 10px; color: #777777;">left</span>
                 </span>
             </div>
         </div>

@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>Espresso · Login</title>
     <!-- Google Fonts & Material Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0,1" />
-    <!-- flag-icon-css for country flags -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/6.6.6/css/flag-icons.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Montserrat:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0,1" />
     <style>
         * {
             margin: 0;
@@ -49,34 +51,41 @@
             font-family: 'Playfair Display', serif;
             font-size: 13px;
             letter-spacing: 5px;
-            color: #8b5a2b;
+            color: #555555;
             text-transform: uppercase;
             margin-bottom: 32px;
             font-weight: 300;
         }
 
-        /* new inline country selector + phone - different style, no modal */
+        /* phone block */
         .phone-block {
-            background: #fcf9f7;
+            background: #ffffff;
             border-radius: 60px;
-            border: 1.5px solid #d4b99b;
+            border: 1px solid #f0f0f0;
             margin-bottom: 24px;
             padding: 6px 6px 6px 18px;
             display: flex;
             align-items: center;
             gap: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+            transition: all 0.2s ease;
         }
 
-        /* country dropdown styled as pill (inline, not modal) */
+        .phone-block:focus-within {
+            border-color: #8B5A2B;
+            background: #ffffff;
+        }
+
+        /* country dropdown */
         .country-dropdown {
             position: relative;
             min-width: 110px;
         }
+
         .country-selector {
             appearance: none;
-            background-color: #ede0d6;
-            border: none;
+            background-color: #ffffff;
+            border: 1px solid #f0f0f0;
             border-radius: 40px;
             padding: 10px 28px 10px 16px;
             font-family: 'Montserrat', sans-serif;
@@ -91,23 +100,22 @@
             background-position: right 12px center;
             background-size: 14px;
         }
+
         .country-selector:hover {
-            background-color: #e1d2c4;
+            background-color: #fcfcfc;
         }
-        /* flag inside dropdown option is tricky, but we show flag next to code */
-        .selected-flag-preview {
-            display: flex;
-            align-items: center;
-            gap: 6px;
+
+        .country-selector:focus {
+            outline: 2px solid #8B5A2B;
+            outline-offset: 2px;
         }
-        /* we'll not use separate wrapper; we embed flag via inline in dropdown? 
-           But dropdown shows text only. For simplicity, we show flag + code in selector via styling */
+
         .country-selector option {
             font-family: 'Montserrat', sans-serif;
             background: white;
         }
 
-        /* phone input next to dropdown */
+        /* phone input */
         .phone-input-simple {
             flex: 1;
             border: none;
@@ -117,15 +125,20 @@
             font-family: 'Montserrat', sans-serif;
             outline: none;
         }
+
         .phone-input-simple::placeholder {
-            color: #b9a187;
+            color: #aaaaaa;
             font-weight: 300;
         }
 
-        /* medium login button */
+        .phone-input-simple:focus {
+            caret-color: #8B5A2B;
+        }
+
+        /* BROWN LOGIN BUTTON */
         .login-btn {
             width: 100%;
-            background: #5c3b2c;
+            background: #8B5A2B;
             color: white;
             border: none;
             padding: 14px 20px;
@@ -141,13 +154,22 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
-            transition: background 0.2s;
-            border: 1px solid #4a3122;
+            transition: all 0.25s ease;
+            border: 1px solid rgba(255, 255, 255, 0.15);
             line-height: 1.2;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
         }
+
         .login-btn:hover {
-            background: #6f4a2e;
+            background: #6B3E1A;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 14px rgba(107, 62, 26, 0.2);
         }
+
+        .login-btn:active {
+            transform: translateY(1px);
+        }
+
         .login-btn .material-symbols-outlined {
             font-size: 22px;
         }
@@ -156,41 +178,105 @@
         .register-prompt {
             margin-top: 28px;
             font-size: 15px;
-            color: #6f4a2e;
+            color: #222222;
         }
+
         .register-link {
-            color: #8b5a2b;
+            color: #8B5A2B;
             font-weight: 600;
             text-decoration: none;
-            border-bottom: 2px solid #e9d9c8;
+            border-bottom: 2px solid #f0f0f0;
             padding-bottom: 2px;
             margin-left: 6px;
             cursor: pointer;
+            transition: all 0.2s;
         }
+
         .register-link:hover {
-            border-bottom: 2px solid #8b5a2b;
+            border-bottom: 2px solid #8B5A2B;
+            color: #6B3E1A;
+        }
+
+        /* validation feedback */
+        .field-feedback {
+            font-size: 12px;
+            font-weight: 500;
+            margin: -12px 0 16px 18px;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #777777;
+            background: rgba(255, 255, 255, 0.96);
+            padding: 5px 16px;
+            border-radius: 40px;
+            width: fit-content;
+            animation: fadeIn 0.2s ease;
+            border-left: 3px solid #cccccc;
+        }
+
+        .field-feedback .material-symbols-outlined {
+            font-size: 14px;
+            color: #999999;
+        }
+
+        .field-feedback.success {
+            color: #4CAF50;
+            background: rgba(240, 255, 240, 0.96);
+            border-left-color: #4CAF50;
+        }
+
+        .field-feedback.success .material-symbols-outlined {
+            color: #4CAF50;
+        }
+
+        .feedback-hidden {
+            display: none;
+        }
+
+        .error-field {
+            border-color: #c0392b !important;
+            background: #fff5f5 !important;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         @media (max-width: 480px) {
-            .login-container { padding: 10px 10px 20px; }
-            .country-dropdown { min-width: 95px; }
-            .country-selector { font-size: 13px; padding: 8px 24px 8px 12px; }
+            .login-container {
+                padding: 10px 10px 20px;
+            }
+
+            .country-dropdown {
+                min-width: 95px;
+            }
+
+            .country-selector {
+                font-size: 13px;
+                padding: 8px 24px 8px 12px;
+            }
         }
     </style>
 </head>
+
 <body>
-    <!-- login container with inline country dropdown (no modal, new style) -->
     <div class="login-container">
-        <!-- PNG logo -->
-        <img src="static/logo.png" alt="Espresso Logo" class="login-logo" onerror="this.src='data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22260%22%20height%3D%2280%22%20viewBox%3D%220%200%20260%2080%22%3E%3Crect%20width%3D%22260%22%20height%3D%2280%22%20fill%3D%22%23f9f1e7%22%2F%3E%3Ctext%20x%3D%2230%22%20y%3D%2252%22%20font-family%3D%22Montserrat%22%20font-size%3D%2232%22%20fill%3D%22%238b5a2b%22%3EESPRESSO%3C%2Ftext%3E%3C%2Fsvg%3E';">
+        <img src="static/logo.png" alt="Espresso Logo" class="login-logo"
+            onerror="this.src='data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22260%22%20height%3D%2280%22%20viewBox%3D%220%200%20260%2080%22%3E%3Crect%20width%3D%22260%22%20height%3D%2280%22%20fill%3D%22%23f9f1e7%22%2F%3E%3Ctext%20x%3D%2230%22%20y%3D%2252%22%20font-family%3D%22Montserrat%22%20font-size%3D%2232%22%20fill%3D%22%238b5a2b%22%3EESPRESSO%3C%2Ftext%3E%3C%2Fsvg%3E';">
 
         <div class="espresso-tagline"> ☕ WELCOME TO ESPRESSO</div>
 
-        <!-- FORM with new inline country dropdown (no modal, just select) and phone -->
         <form id="loginForm" onsubmit="event.preventDefault(); handleLogin();">
-            
-            <!-- Phone block with inline country dropdown (different style, no popup) -->
-            <div class="phone-block">
+            <div class="phone-block" id="phoneBlock">
                 <div class="country-dropdown">
                     <select id="countrySelect" class="country-selector">
                         <option value="bh" data-code="+973" selected>🇧🇭 +973</option>
@@ -209,18 +295,22 @@
                         <option value="sa" data-code="+966">🇸🇦 +966</option>
                         <option value="kw" data-code="+965">🇰🇼 +965</option>
                         <option value="qa" data-code="+974">🇶🇦 +974</option>
+                        <option value="eg" data-code="+20">🇪🇬 +20</option>
+                        <option value="tr" data-code="+90">🇹🇷 +90</option>
+                        <option value="my" data-code="+60">🇲🇾 +60</option>
+                        <option value="sg" data-code="+65">🇸🇬 +65</option>
                     </select>
                 </div>
-                <input type="tel" id="phoneNumber" class="phone-input-simple" placeholder="Phone number" value="3600 1234" required>
+                <input type="tel" id="phoneNumber" class="phone-input-simple" placeholder="Phone number"
+                    value="3600 1234" autocomplete="tel">
             </div>
+            <div id="phoneFeedback" class="field-feedback feedback-hidden"></div>
 
-            <!-- LOGIN button -->
             <button type="submit" class="login-btn">
                 <span class="material-symbols-outlined">local_cafe</span> LOGIN
             </button>
         </form>
 
-        <!-- register prompt -->
         <div class="register-prompt">
             No account?
             <a href="#" class="register-link" id="registerPromptBtn">Register here</a>
@@ -228,30 +318,115 @@
     </div>
 
     <script>
-        // Get elements
         const countrySelect = document.getElementById('countrySelect');
         const phoneInput = document.getElementById('phoneNumber');
+        const phoneBlock = document.getElementById('phoneBlock');
+        const phoneFeedback = document.getElementById('phoneFeedback');
 
-        // register link
-        document.getElementById('registerPromptBtn').addEventListener('click', function(e) {
+        function clearPhoneFeedback() {
+            phoneFeedback.classList.add('feedback-hidden');
+            phoneFeedback.innerHTML = '';
+            phoneFeedback.classList.remove('success');
+            phoneBlock.classList.remove('error-field');
+            phoneInput.classList.remove('error-field');
+        }
+
+        function showPhoneFeedback(message, isSuccess = false) {
+            phoneFeedback.innerHTML = '';
+            phoneFeedback.classList.remove('feedback-hidden', 'success');
+            const iconSpan = document.createElement('span');
+            iconSpan.className = 'material-symbols-outlined';
+            iconSpan.textContent = isSuccess ? 'check_circle' : 'info';
+            phoneFeedback.appendChild(iconSpan);
+            phoneFeedback.appendChild(document.createTextNode(message));
+            if (isSuccess) {
+                phoneFeedback.classList.add('success');
+            }
+            phoneFeedback.classList.remove('feedback-hidden');
+        }
+
+        function markPhoneError() {
+            phoneBlock.classList.add('error-field');
+            phoneInput.classList.add('error-field');
+        }
+
+        phoneInput.addEventListener('input', function (e) {
+            let raw = e.target.value;
+            let cleaned = raw.replace(/[^\d\s+]/g, '');
+            e.target.value = cleaned;
+            if (phoneBlock.classList.contains('error-field')) {
+                phoneBlock.classList.remove('error-field');
+                phoneInput.classList.remove('error-field');
+            }
+            phoneFeedback.classList.add('feedback-hidden');
+        });
+
+        phoneInput.addEventListener('focus', () => {
+            phoneBlock.classList.remove('error-field');
+            phoneInput.classList.remove('error-field');
+            phoneFeedback.classList.add('feedback-hidden');
+        });
+
+        document.getElementById('registerPromptBtn').addEventListener('click', function (e) {
             e.preventDefault();
             window.location.href = 'register';
         });
 
-        // LOGIN function: redirect to OTP page (uses selected country code from select)
         function handleLogin() {
             const selectedOption = countrySelect.options[countrySelect.selectedIndex];
-            const countryCode = selectedOption.getAttribute('data-code'); // e.g., +973
-            const phone = phoneInput.value;
+            const countryCode = selectedOption.getAttribute('data-code');
+            const phone = phoneInput.value.trim();
+
+            clearPhoneFeedback();
+            let isValid = true;
+
+            if (!phone) {
+                showPhoneFeedback('Please enter your phone number');
+                markPhoneError();
+                isValid = false;
+            } else {
+                const phoneDigits = phone.replace(/\D/g, '');
+                if (phoneDigits.length < 7) {
+                    showPhoneFeedback('Phone number must contain at least 7 digits');
+                    markPhoneError();
+                    isValid = false;
+                } else if (phoneDigits.length > 15) {
+                    showPhoneFeedback('Phone number is too long (max 15 digits)');
+                    markPhoneError();
+                    isValid = false;
+                }
+            }
+
+            if (!isValid) return;
+
+            showPhoneFeedback('✓ Number verified — redirecting...', true);
+            phoneBlock.classList.remove('error-field');
+            phoneInput.classList.remove('error-field');
+
             const fullPhone = countryCode + ' ' + phone;
             console.log('Sending OTP to', fullPhone);
-            
-            // Redirect to OTP page
-            window.location.href = 'otp';
+
+            setTimeout(() => {
+                window.location.href = 'otp';
+            }, 800);
         }
 
-        // No need for complex flag update because dropdown shows flag+code directly.
-        // The data-code attribute is used for the actual number.
+        phoneInput.addEventListener('keypress', function (event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                handleLogin();
+            }
+        });
+
+        if (phoneInput.value === "3600 1234") {
+            phoneInput.addEventListener('focus', function onFirstFocus() {
+                if (phoneInput.value === "3600 1234") {
+                    phoneInput.value = "";
+                }
+                phoneInput.removeEventListener('focus', onFirstFocus);
+            });
+        }
     </script>
 </body>
+
 </html>

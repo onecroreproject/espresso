@@ -3,7 +3,11 @@ import os
 
 app = Flask(__name__)
 
+
 @app.route('/')
+def loading():
+    return render_template('loading.html')
+@app.route('/splash')
 def splash():
     return render_template('splash.html')
 

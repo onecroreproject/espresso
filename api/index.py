@@ -6,6 +6,9 @@ app = Flask(__name__,
             static_folder="../static")
 
 @app.route('/')
+def loading():
+    return render_template('loading.html')
+@app.route('/splash')
 def splash():
     return render_template('splash.html')
 

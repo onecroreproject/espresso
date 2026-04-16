@@ -8,12 +8,13 @@
     .balance-section { padding: 20px 16px 16px; }
 
     .balance-card {
-        background: linear-gradient(135deg, #5c3b2c, #3a2417);
+        background: #8B5A2B;
         color: white;
         border-radius: 30px;
-        padding: 24px 20px;
-        box-shadow: 0 10px 25px rgba(92, 59, 44, 0.3);
+        padding: 40px 20px;
+        box-shadow: 0 15px 35px rgba(139, 90, 43, 0.15);
         text-align: center;
+        border: 1px solid rgba(255,255,255,0.1);
     }
 
     .balance-label {
@@ -28,14 +29,14 @@
     }
 
     .balance-label .material-symbols-outlined {
-        color: #f5c48a;
+        color: rgba(255,255,255,0.7);
     }
 
     .balance-amount {
         font-size: 48px;
         font-weight: 700;
         font-family: 'Playfair Display', serif;
-        color: #f5c48a;
+        color: #ffffff;
         text-align: center;
     }
 
@@ -48,48 +49,51 @@
 
     .action-btn {
         flex: 1;
-        background: #ffffff;
-        border: 1px solid #e9d9c8;
-        border-radius: 40px;
-        padding: 14px 0;
+        background: #8B5A2B;
+        border: none;
+        border-radius: 60px;
+        padding: 16px 0;
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 8px;
-        font-weight: 600;
-        color: #5c3b2c;
+        gap: 10px;
+        font-weight: 700;
+        color: #ffffff;
+        text-transform: uppercase;
+        letter-spacing: 1px;
         cursor: pointer;
         transition: all 0.2s;
         font-family: 'Montserrat', sans-serif;
-        font-size: 14px;
+        font-size: 13px;
+        box-shadow: 0 4px 12px rgba(139, 90, 43, 0.1);
     }
 
-    .action-btn:active { background: #fcf0e6; }
-    .action-btn .material-symbols-outlined { font-size: 22px; color: #b48c5c; }
+    .action-btn:active { transform: scale(0.98); background: #6B3E1A; }
+    .action-btn .material-symbols-outlined { font-size: 20px; color: #ffffff; }
 
     /* Zero Balance Message */
     .zero-balance-message {
-        background: #fef3e2;
-        border: 2px solid #e67e22;
+        background: #ffffff;
+        border: 1px solid #f0f0f0;
         border-radius: 20px;
         padding: 16px;
         margin: 0 16px 20px;
         display: flex;
         align-items: center;
         gap: 12px;
-        animation: pulse-warning 2s infinite;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
     }
 
     @keyframes pulse-warning {
-        0% { border-color: #e67e22; }
-        50% { border-color: #f39c12; }
-        100% { border-color: #e67e22; }
+        0% { border-color: #8B5A2B; }
+        50% { border-color: #6B3E1A; }
+        100% { border-color: #8B5A2B; }
     }
 
     .warning-icon {
         width: 48px;
         height: 48px;
-        background: #e67e22;
+        background: #8B5A2B;
         border-radius: 24px;
         display: flex;
         align-items: center;
@@ -104,13 +108,13 @@
 
     .warning-title {
         font-weight: 700;
-        color: #3a2417;
+        color: #4a3a2b;
         margin-bottom: 4px;
     }
 
     .warning-desc {
         font-size: 12px;
-        color: #8b6f54;
+        color: #777777;
     }
 
     /* Top-up Presets */
@@ -126,12 +130,12 @@
     .section-header h2 {
         font-family: 'Playfair Display', serif;
         font-size: 20px;
-        color: #3a2417;
+        color: #4a3a2b;
         font-weight: 700;
     }
 
     .view-all { 
-        color: #b48c5c; 
+        color: #888888; 
         font-size: 13px; 
         font-weight: 500; 
         cursor: pointer;
@@ -139,7 +143,7 @@
     }
 
     .view-all:hover {
-        color: #5c3b2c;
+        color: #8B5A2B;
     }
 
     .preset-grid {
@@ -151,94 +155,106 @@
 
     .preset-card {
         background: #ffffff;
-        border: 2px solid #e9d9c8;
+        border: 1px solid #f0f0f0;
         border-radius: 25px;
         padding: 16px 8px;
         text-align: center;
         cursor: pointer;
         transition: all 0.2s;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.02);
     }
 
     .preset-card:hover {
         transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(92, 59, 44, 0.15);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     }
 
     .preset-card.active {
-        background: #5c3b2c;
-        border-color: #5c3b2c;
+        background: #8B5A2B;
+        border-color: #8B5A2B;
     }
 
     .preset-amount { 
         font-size: 18px; 
         font-weight: 700; 
-        color: #3a2417; 
+        color: #2d241c; 
     }
     
     .preset-bonus {  
         font-size: 12px; 
-        color: #b48c5c; 
+        color: #888888; 
         font-weight: 600; 
         margin-top: 4px; 
     }
 
     .preset-card.active .preset-amount,
     .preset-card.active .preset-bonus { color: white; }
-    .preset-card.active .preset-bonus { color: #f5c48a; }
+    .preset-card.active .preset-bonus { color: #cccccc; }
 
     /* Custom Top-up */
     .custom-topup {
         background: #ffffff;
         border-radius: 40px;
         padding: 16px;
-        border: 1px solid #e9d9c8;
+        border: 1px solid #f0f0f0;
         display: flex;
         align-items: center;
         gap: 12px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.02);
     }
 
     .custom-input {
         flex: 1;
         padding: 14px 18px;
-        border: 2px solid #e9d9c8;
+        border: 1px solid #f0f0f0;
         border-radius: 40px;
         font-size: 16px;
         font-family: 'Montserrat', sans-serif;
-        color: #3a2417;
+        color: #4a3a2b;
         transition: all 0.2s;
     }
 
     .custom-input:focus { 
         outline: none; 
-        border-color: #5c3b2c;
-        box-shadow: 0 0 0 3px rgba(92, 59, 44, 0.1);
+        border-color: #8B5A2B;
+        box-shadow: 0 0 0 3px rgba(139, 90, 43, 0.1);
     }
 
     .custom-input::placeholder {
-        color: #b9a187;
+        color: #aaaaaa;
     }
 
     .apply-btn {
-        background: #5c3b2c;
+        background: #8B5A2B;
         color: white;
         border: none;
-        padding: 14px 28px;
-        border-radius: 40px;
-        font-weight: 600;
+        padding: 14px 32px;
+        border-radius: 60px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-size: 13px;
         cursor: pointer;
         font-family: 'Montserrat', sans-serif;
         white-space: nowrap;
         transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        box-shadow: 0 4px 12px rgba(139, 90, 43, 0.1);
     }
 
     .apply-btn:hover {
-        background: #6f4a2e;
-        transform: scale(1.02);
+        background: #6B3E1A;
     }
 
     .apply-btn:active { 
-        background: #4a2f21;
-        transform: scale(0.98);
+        transform: scale(0.96);
+    }
+    
+    .apply-btn .material-symbols-outlined {
+        font-size: 20px;
     }
 
     /* Security Section */
@@ -258,18 +274,18 @@
         border-radius: 20px;
         padding: 16px 8px;
         text-align: center;
-        border: 1px solid #e9d9c8;
-        box-shadow: 0 2px 8px rgba(92, 59, 44, 0.05);
+        border: 1px solid #f0f0f0;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         transition: all 0.2s;
     }
 
     .security-item:active {
         transform: scale(0.98);
-        background: #fcf0e6;
+        background: #fcfcfc;
     }
 
     .security-icon {
-        color: #b48c5c;
+        color: #888888;
         margin-bottom: 8px;
     }
 
@@ -280,7 +296,7 @@
     .security-text {
         font-size: 11px;
         font-weight: 600;
-        color: #3a2417;
+        color: #4a3a2b;
         letter-spacing: 0.5px;
     }
 
@@ -300,7 +316,7 @@
     }
 
     .toast {
-        background: #5c3b2c;
+        background: #8B5A2B;
         color: white;
         padding: 16px 20px;
         border-radius: 50px;
@@ -313,7 +329,7 @@
         align-items: center;
         gap: 12px;
         pointer-events: auto;
-        border: 1px solid #e9d9c8;
+        border: 1px solid #f0f0f0;
     }
 
     .toast.show {
@@ -363,7 +379,7 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(58, 36, 23, 0.7);
+        background: rgba(74, 58, 43, 0.85);
         display: flex;
         align-items: flex-end;
         justify-content: center;
@@ -400,20 +416,20 @@
         align-items: center;
         margin-bottom: 20px;
         padding-bottom: 10px;
-        border-bottom: 1px solid #f0e4d6;
+        border-bottom: 1px solid #f0f0f0;
     }
 
     .modal-header h3 {
         font-size: 22px;
         font-weight: 700;
-        color: #3a2417;
+        color: #4a3a2b;
         display: flex;
         align-items: center;
         gap: 8px;
     }
 
     .modal-header h3 .material-symbols-outlined {
-        color: #b48c5c;
+        color: #888888;
     }
 
     .close-modal {
@@ -421,13 +437,13 @@
         border: none;
         font-size: 28px;
         cursor: pointer;
-        color: #b48c5c;
+        color: #888888;
         padding: 0 8px;
         transition: color 0.2s;
     }
 
     .close-modal:hover {
-        color: #5c3b2c;
+        color: #8B5A2B;
     }
 
     .filter-tabs {
@@ -448,27 +464,28 @@
         border-radius: 40px;
         font-size: 13px;
         font-weight: 500;
-        background: #fcf0e6;
-        color: #5c3b2c;
+        background: #ffffff;
+        border: 1px solid #f0f0f0;
+        color: #4a3a2b;
         white-space: nowrap;
         cursor: pointer;
         transition: all 0.2s;
     }
 
     .filter-tab.active {
-        background: #5c3b2c;
+        background: #8B5A2B;
         color: white;
     }
 
     .empty-history {
         text-align: center;
         padding: 40px 20px;
-        color: #8b6f54;
+        color: #777777;
     }
 
     .empty-history .material-symbols-outlined {
         font-size: 48px;
-        color: #d4b99c;
+        color: #cccccc;
         margin-bottom: 16px;
     }
 
@@ -486,7 +503,7 @@
     }
 
     .history-list::-webkit-scrollbar-thumb {
-        background: #b48c5c;
+        background: #888888;
         border-radius: 4px;
     }
 
@@ -495,15 +512,15 @@
         align-items: center;
         gap: 12px;
         padding: 16px;
-        background: #fcf9f7;
+        background: #ffffff;
         border-radius: 20px;
-        border: 1px solid #e9d9c8;
+        border: 1px solid #f0f0f0;
         transition: all 0.2s;
     }
 
     .history-modal-item:hover {
         transform: translateX(4px);
-        box-shadow: 0 4px 12px rgba(92, 59, 44, 0.1);
+        box-shadow: 0 4px 12px rgba(139, 90, 43, 0.1);
     }
 
     .history-modal-icon {
@@ -517,18 +534,18 @@
     }
 
     .history-modal-icon.topup { 
-        background: #e3f2e9; 
+        background: #eeeeee; 
         color: #2e7d32; 
     }
     
     .history-modal-icon.payment { 
-        background: #fee; 
+        background: #f5f5f5; 
         color: #c0392b; 
     }
     
     .history-modal-icon.bonus { 
-        background: #fcf0e6; 
-        color: #b48c5c; 
+        background: #f0f0f0; 
+        color: #888888; 
     }
     
     .history-modal-icon.refund { 
@@ -543,7 +560,7 @@
 
     .history-modal-title {
         font-weight: 600;
-        color: #3a2417;
+        color: #2d241c;
         margin-bottom: 4px;
         display: flex;
         align-items: center;
@@ -555,24 +572,25 @@
         font-size: 10px;
         padding: 3px 8px;
         border-radius: 30px;
-        background: #f0e4d6;
-        color: #5c3b2c;
+        background: #ffffff;
+        border: 1px solid #f0f0f0;
+        color: #8B5A2B;
         font-weight: 600;
         text-transform: uppercase;
     }
 
     .history-modal-type.topup { 
-        background: #e3f2e9; 
+        background: #eeeeee; 
         color: #2e7d32; 
     }
     
     .history-modal-type.bonus { 
-        background: #fcf0e6; 
-        color: #b48c5c; 
+        background: #f0f0f0; 
+        color: #888888; 
     }
     
     .history-modal-type.payment { 
-        background: #fee; 
+        background: #f5f5f5; 
         color: #c0392b; 
     }
     
@@ -583,7 +601,7 @@
 
     .history-modal-date {
         font-size: 11px;
-        color: #8b6f54;
+        color: #777777;
         display: flex;
         align-items: center;
         gap: 4px;
@@ -591,7 +609,7 @@
 
     .history-modal-date .material-symbols-outlined {
         font-size: 12px;
-        color: #b48c5c;
+        color: #888888;
     }
 
     .history-modal-amount {
@@ -608,15 +626,16 @@
 
     .history-modal-balance {
         font-size: 10px;
-        color: #8b6f54;
+        color: #777777;
         font-weight: 400;
     }
 
     .month-divider {
         font-size: 13px;
         font-weight: 600;
-        color: #5c3b2c;
-        background: #fcf0e6;
+        color: #4a3a2b;
+        background: #ffffff;
+        border: 1px solid #f0f0f0;
         padding: 8px 12px;
         border-radius: 30px;
         margin: 8px 0;
@@ -631,23 +650,23 @@
 
     .summary-card {
         flex: 1;
-        background: linear-gradient(135deg, #fcf0e6, #ffffff);
+        background: linear-gradient(135deg, #ffffff, #fcfcfc);
         border-radius: 20px;
         padding: 12px;
         text-align: center;
-        border: 1px solid #e9d9c8;
+        border: 1px solid #f0f0f0;
     }
 
     .summary-label {
         font-size: 11px;
-        color: #8b6f54;
+        color: #777777;
         margin-bottom: 4px;
     }
 
     .summary-value {
         font-size: 18px;
         font-weight: 700;
-        color: #5c3b2c;
+        color: #8B5A2B;
     }
 
     .summary-value.positive { color: #2e7d32; }
@@ -732,8 +751,8 @@
     <div class="custom-topup">
         <input type="number" class="custom-input" id="customAmount" placeholder="Custom amount (BD)" min="1" step="0.100" value="25">
         <button class="apply-btn" onclick="proceedToTopup()">
+            <span>Proceed</span>
             <span class="material-symbols-outlined">arrow_forward</span>
-            Proceed
         </button>
     </div>
 </div>
@@ -757,7 +776,7 @@
 </div>
 
 <!-- Debug Button - Remove after testing -->
-<!-- <button onclick="addTestTopup()" style="margin: 10px 16px; padding: 10px; background: #5c3b2c; color: white; border: none; border-radius: 40px; width: calc(100% - 32px);">
+<!-- <button onclick="addTestTopup()" style="margin: 10px 16px; padding: 10px; background: #111111; color: white; border: none; border-radius: 40px; width: calc(100% - 32px);">
     Add Test Top-up (Debug)
 </button> -->
 
@@ -979,7 +998,7 @@
         event.target.closest('.preset-card').classList.add('active');
         
         // Add a small animation feedback
-        customInput.style.backgroundColor = '#fcf0e6';
+        customInput.style.backgroundColor = '#f0f0f0';
         setTimeout(() => {
             customInput.style.backgroundColor = '';
         }, 200);

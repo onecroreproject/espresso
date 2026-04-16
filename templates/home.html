@@ -4,716 +4,851 @@
 
 {% block extra_css %}
 <style>
-/* Banner Carousel Styles */
-.banner-carousel-section {
-    padding: 16px 16px 8px;
-}
+    /* Banner Carousel Styles */
+    .banner-carousel-section {
+        padding: 16px 16px 8px;
+    }
+
+    .banner-carousel-container {
+        position: relative;
+        width: 100%;
+        border-radius: 30px;
+        overflow: hidden;
+        box-shadow: 0 8px 25px rgba(139, 90, 43, 0.25);
+    }
+
+    .banner-carousel {
+        display: flex;
+        transition: transform 0.3s ease;
+        width: 100%;
+    }
+
+    .banner-carousel-item {
+        flex: 0 0 100%;
+        width: 100%;
+        position: relative;
+        display: none;
+    }
+
+    .banner-carousel-item.active {
+        display: block;
+    }
 
-.banner-carousel-container {
-    position: relative;
-    width: 100%;
-    border-radius: 30px;
-    overflow: hidden;
-    box-shadow: 0 8px 25px rgba(92, 59, 44, 0.25);
-}
-
-.banner-carousel {
-    display: flex;
-    transition: transform 0.3s ease;
-    width: 100%;
-}
-
-.banner-carousel-item {
-    flex: 0 0 100%;
-    width: 100%;
-    position: relative;
-    display: none;
-}
-
-.banner-carousel-item.active {
-    display: block;
-}
-
-.banner-carousel-image {
-    width: 100%;
-    height: 220px;
-    object-fit: cover;
-    display: block;
-}
-
-.banner-carousel-caption {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: linear-gradient(transparent, rgba(0,0,0,0.7));
-    color: white;
-    padding: 30px 20px 20px;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-}
-
-.banner-carousel-caption h3 {
-    font-size: 22px;
-    font-weight: 700;
-    font-family: 'Playfair Display', serif;
-    margin-bottom: 4px;
-}
-
-.banner-carousel-caption p {
-    font-size: 14px;
-    opacity: 0.95;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-}
-
-/* Carousel Indicators */
-.carousel-indicators {
-    position: absolute;
-    bottom: 15px;
-    right: 15px;
-    display: flex;
-    gap: 8px;
-    z-index: 10;
-}
-
-.indicator {
-    width: 10px;
-    height: 10px;
-    border-radius: 10px;
-    background: rgba(255,255,255,0.5);
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.indicator.active {
-    width: 20px;
-    background: #f5c48a;
-}
-
-/* Navigation Arrows */
-.carousel-arrow {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 40px;
-    height: 40px;
-    border-radius: 20px;
-    background: rgba(255,255,255,0.3);
-    backdrop-filter: blur(4px);
-    border: 1px solid rgba(255,255,255,0.5);
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    z-index: 10;
-    transition: all 0.2s;
-}
-
-.carousel-arrow:hover {
-    background: rgba(255,255,255,0.5);
-}
-
-.carousel-arrow.prev {
-    left: 10px;
-}
-
-.carousel-arrow.next {
-    right: 10px;
-}
-
-.carousel-arrow .material-symbols-outlined {
-    font-size: 24px;
-}
-
-/* Section Title */
-.section-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 20px;
-    color: #3a2417;
-    margin-bottom: 16px;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.section-title .material-symbols-outlined {
-    color: #b48c5c;
-}
-
-/* Menu Carousel (Horizontal Scroll) */
-.carousel-section {
-    padding: 20px 16px 8px;
-}
-
-.carousel {
-    display: flex;
-    overflow-x: auto;
-    gap: 16px;
-    padding: 4px 4px 16px;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: thin;
-}
-
-.carousel::-webkit-scrollbar {
-    height: 4px;
-}
-
-.carousel::-webkit-scrollbar-thumb {
-    background-color: #b48c5c;
-    border-radius: 20px;
-}
-
-.menu-carousel-item {
-    scroll-snap-align: start;
-    flex: 0 0 200px;
-    border-radius: 25px;
-    overflow: hidden;
-    background: #ffffff;
-    box-shadow: 0 8px 20px rgba(92, 59, 44, 0.15);
-    border: 1px solid #e9d9c8;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    position: relative;
-}
-
-.menu-carousel-item:active {
-    transform: scale(0.98);
-}
-
-.menu-carousel-image {
-    width: 100%;
-    height: 140px;
-    object-fit: cover;
-    display: block;
-}
-
-.menu-carousel-caption {
-    padding: 12px 10px;
-}
-
-.menu-carousel-caption h3 {
-    font-size: 15px;
-    font-weight: 700;
-    color: #3a2417;
-    margin-bottom: 2px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.menu-carousel-caption p {
-    font-size: 11px;
-    color: #8b6f54;
-    margin-bottom: 6px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.menu-carousel-price {
-    font-weight: 700;
-    color: #5c3b2c;
-    font-size: 15px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.menu-carousel-price::before {
-    content: 'BD ';
-    font-size: 11px;
-    font-weight: 500;
-}
-
-.quick-add-btn {
-    width: 28px;
-    height: 28px;
-    border-radius: 14px;
-    background: #5c3b2c;
-    color: white;
-    border: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.quick-add-btn:active {
-    transform: scale(0.9);
-    background: #6f4a2e;
-}
-
-.quick-add-btn .material-symbols-outlined {
-    font-size: 16px;
-}
-
-/* Category Pills */
-.category-pills {
-    display: flex;
-    gap: 12px;
-    padding: 8px 16px 20px;
-    overflow-x: auto;
-    scrollbar-width: none;
-    -webkit-overflow-scrolling: touch;
-}
-
-.category-pills::-webkit-scrollbar {
-    display: none;
-}
-
-.category-pill {
-    padding: 10px 20px;
-    background: #ffffff;
-    border: 1px solid #e9d9c8;
-    border-radius: 40px;
-    font-size: 14px;
-    font-weight: 500;
-    color: #8b6f54;
-    white-space: nowrap;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.category-pill.active {
-    background: #5c3b2c;
-    color: white;
-    border-color: #5c3b2c;
-}
-
-.category-pill:active {
-    transform: scale(0.95);
-}
-
-/* Menu List */
-.menu-list-section {
-    padding: 8px 16px 20px;
-}
-
-.menu-list-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 16px;
-}
-
-.menu-list-header h2 {
-    font-family: 'Playfair Display', serif;
-    font-size: 22px;
-    color: #3a2417;
-}
-
-.view-all-link {
-    color: #8b6f54;
-    font-size: 14px;
-    text-decoration: none;
-    font-weight: 500;
-    transition: color 0.2s;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-}
-
-.view-all-link:active {
-    color: #5c3b2c;
-}
-
-.menu-list {
-    background: #ffffff;
-    border-radius: 30px;
-    border: 1px solid #e9d9c8;
-    overflow: hidden;
-    box-shadow: 0 4px 15px rgba(92, 59, 44, 0.05);
-}
-
-.menu-list-item {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    padding: 16px;
-    border-bottom: 1px solid #f0e4d6;
-    cursor: pointer;
-    transition: background 0.2s;
-    position: relative;
-}
-
-.menu-list-item:last-child {
-    border-bottom: none;
-}
-
-.menu-list-item:active {
-    background: #fcf0e6;
-}
-
-.menu-list-image {
-    width: 70px;
-    height: 70px;
-    border-radius: 35px;
-    overflow: hidden;
-    border: 2px solid #ffffff;
-    box-shadow: 0 4px 10px rgba(92, 59, 44, 0.1);
-    flex-shrink: 0;
-}
-
-.menu-list-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.menu-list-details {
-    flex: 1;
-    min-width: 0;
-}
-
-.menu-list-name {
-    font-size: 16px;
-    font-weight: 700;
-    color: #3a2417;
-    margin-bottom: 4px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.menu-list-desc {
-    font-size: 12px;
-    color: #8b6f54;
-    margin-bottom: 4px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.menu-list-meta {
-    display: flex;
-    gap: 12px;
-    font-size: 11px;
-    color: #5c3b2c;
-}
-
-.menu-list-badge {
-    background: #fcf0e6;
-    padding: 4px 10px;
-    border-radius: 30px;
-    font-size: 11px;
-    font-weight: 600;
-    color: #5c3b2c;
-}
-
-.menu-list-price {
-    font-weight: 700;
-    color: #5c3b2c;
-    font-size: 18px;
-    min-width: 70px;
-    text-align: right;
-    white-space: nowrap;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 4px;
-}
-
-.menu-list-price::before {
-    content: 'BD ';
-    font-size: 11px;
-    font-weight: 500;
-    display: inline;
-}
-
-.list-add-btn {
-    width: 32px;
-    height: 32px;
-    border-radius: 16px;
-    background: #fcf0e6;
-    border: none;
-    color: #5c3b2c;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.list-add-btn:active {
-    background: #5c3b2c;
-    color: white;
-    transform: scale(0.9);
-}
-
-.list-add-btn .material-symbols-outlined {
-    font-size: 18px;
-}
-
-/* Toast Notifications */
-.toast-container {
-    position: fixed;
-    bottom: 100px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 3000;
-    width: 90%;
-    max-width: 300px;
-    pointer-events: none;
-}
-
-.toast {
-    background: #5c3b2c;
-    color: white;
-    padding: 12px 20px;
-    border-radius: 50px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-    font-weight: 500;
-    transform: translateY(100px);
-    opacity: 0;
-    transition: all 0.3s ease;
-    text-align: center;
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-}
-
-.toast.show {
-    transform: translateY(0);
-    opacity: 1;
-}
-
-.toast.success {
-    background: #27ae60;
-}
-
-.toast .material-symbols-outlined {
-    font-size: 18px;
-}
-
-/* MODAL STYLES - Import from menu page */
-.modal-overlay {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0,0,0,0.5);
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
-    z-index: 2000;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.3s;
-}
-
-.modal-overlay.active {
-    opacity: 1;
-    visibility: visible;
-}
-
-.modal-content {
-    background: #ffffff;
-    width: 100%;
-    max-width: 450px;
-    border-radius: 32px 32px 0 0;
-    padding: 24px 20px 30px;
-    transform: translateY(100%);
-    transition: transform 0.3s ease;
-    max-height: 90vh;
-    overflow-y: auto;
-}
-
-.modal-overlay.active .modal-content {
-    transform: translateY(0);
-}
-
-.modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 16px;
-}
-
-.modal-header h3 {
-    font-size: clamp(20px, 6vw, 24px);
-    font-weight: 700;
-    color: #3a2417;
-}
-
-.close-modal {
-    background: none;
-    border: none;
-    font-size: 32px;
-    cursor: pointer;
-    color: #8b6f54;
-    padding: 0 8px;
-}
-
-.modal-product-image {
-    width: 120px;
-    height: 120px;
-    border-radius: 24px;
-    overflow: hidden;
-    margin: 0 auto 16px;
-    border: 3px solid #f0e4d6;
-    box-shadow: 0 8px 16px rgba(92, 59, 44, 0.15);
-    position: relative;
-}
-
-.modal-product-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.modal-item-name {
-    font-size: clamp(22px, 6.5vw, 26px);
-    font-weight: 600;
-    color: #5c3b2c;
-    margin-bottom: 20px;
-    text-align: center;
-}
-
-/* Option sections */
-.option-section {
-    margin-bottom: 20px;
-}
-
-.option-label {
-    font-size: clamp(15px, 4vw, 16px);
-    font-weight: 600;
-    color: #3a2417;
-    margin-bottom: 12px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.option-buttons {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-}
-
-.option-btn {
-    flex: 1 1 auto;
-    min-width: 70px;
-    padding: 12px 0;
-    border: 2px solid #e9d9c8;
-    border-radius: 40px;
-    background: #ffffff;
-    font-size: clamp(13px, 3.5vw, 14px);
-    font-weight: 500;
-    color: #5c3b2c;
-    cursor: pointer;
-    transition: all 0.2s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-}
-
-.option-btn.active {
-    background: #5c3b2c;
-    color: #ffffff;
-    border-color: #5c3b2c;
-}
-
-.option-btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
-.extra-cost {
-    font-size: 11px;
-    color: #8b6f54;
-    margin-left: 4px;
-}
-
-.option-btn.active .extra-cost {
-    color: #ffffff;
-    opacity: 0.9;
-}
-
-.quantity-selector { margin-bottom: 20px; }
-
-.quantity-controls {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: #fcf0e6;
-    border-radius: 60px;
-    padding: 6px;
-}
-
-.qty-btn {
-    width: clamp(44px, 12vw, 48px);
-    height: clamp(44px, 12vw, 48px);
-    border-radius: 50%;
-    border: none;
-    background: #ffffff;
-    font-size: clamp(22px, 6vw, 24px);
-    font-weight: 600;
-    color: #5c3b2c;
-    cursor: pointer;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.qty-number {
-    font-size: clamp(22px, 6vw, 24px);
-    font-weight: 700;
-    color: #5c3b2c;
-    min-width: 50px;
-    text-align: center;
-}
-
-.add-to-cart-btn {
-    width: 100%;
-    background: #5c3b2c;
-    color: white;
-    border: none;
-    padding: 16px;
-    border-radius: 60px;
-    font-size: clamp(16px, 4.5vw, 18px);
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    cursor: pointer;
-    margin-top: 16px;
-}
-
-.add-to-cart-btn:active {
-    transform: scale(0.98);
-    background: #6f4a2e;
-}
-
-.add-to-cart-btn .price-display::before {
-    content: 'BD ';
-    margin-right: 2px;
-    font-weight: 500;
-}
-
-@media (max-width: 480px) {
     .banner-carousel-image {
-        height: 180px;
+        width: 100%;
+        height: 220px;
+        object-fit: cover;
+        display: block;
     }
+
+    .banner-carousel-caption {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(transparent, rgba(74, 58, 43, 0.8));
+        color: white;
+        padding: 30px 20px 20px;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .banner-carousel-caption h3 {
+        font-size: 22px;
+        font-weight: 700;
+        font-family: 'Playfair Display', serif;
+        margin-bottom: 4px;
+    }
+
+    .banner-carousel-caption p {
+        font-size: 14px;
+        opacity: 0.95;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    /* Carousel Indicators */
+    .carousel-indicators {
+        position: absolute;
+        bottom: 15px;
+        right: 15px;
+        display: flex;
+        gap: 8px;
+        z-index: 10;
+    }
+
+    .indicator {
+        width: 10px;
+        height: 10px;
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.4);
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .indicator.active {
+        width: 20px;
+        background: #8B5A2B;
+    }
+
+    /* Navigation Arrows */
+    .carousel-arrow {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 40px;
+        height: 40px;
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.3);
+        backdrop-filter: blur(4px);
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 10;
+        transition: all 0.2s;
+    }
+
+    .carousel-arrow:hover {
+        background: rgba(255, 255, 255, 0.5);
+    }
+
+    .carousel-arrow.prev {
+        left: 10px;
+    }
+
+    .carousel-arrow.next {
+        right: 10px;
+    }
+
+    .carousel-arrow .material-symbols-outlined {
+        font-size: 24px;
+    }
+
+    /* Section Title */
+    .section-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 20px;
+        color: #4a3a2b;
+        margin-bottom: 16px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .section-title .material-symbols-outlined {
+        color: #8B5A2B;
+        opacity: 0.5;
+    }
+
+    /* Menu Carousel (Horizontal Scroll) */
+    .carousel-section {
+        padding: 20px 16px 8px;
+    }
+
+    .carousel {
+        display: flex;
+        overflow-x: auto;
+        gap: 16px;
+        padding: 4px 4px 16px;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+    }
+
+    .carousel::-webkit-scrollbar {
+        height: 4px;
+    }
+
+    .carousel::-webkit-scrollbar-thumb {
+        background-color: #8B5A2B;
+        border-radius: 20px;
+    }
+
     .menu-carousel-item {
-        flex: 0 0 180px;
+        scroll-snap-align: start;
+        flex: 0 0 200px;
+        border-radius: 25px;
+        overflow: hidden;
+        background: #ffffff;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+        border: 1px solid #f0f0f0;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        position: relative;
     }
+
+    .menu-carousel-item:active {
+        transform: scale(0.98);
+    }
+
     .menu-carousel-image {
-        height: 120px;
+        width: 100%;
+        height: 140px;
+        object-fit: cover;
+        display: block;
     }
-}
+
+    .menu-carousel-caption {
+        padding: 12px 10px;
+    }
+
+    .menu-carousel-caption h3 {
+        font-size: 15px;
+        font-weight: 700;
+        color: #2d241c;
+        margin-bottom: 2px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .menu-carousel-caption p {
+        font-size: 11px;
+        color: #777777;
+        margin-bottom: 6px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .menu-carousel-price {
+        font-weight: 700;
+        color: #8B5A2B;
+        font-size: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .menu-carousel-price::before {
+        content: 'BD ';
+        font-size: 11px;
+        font-weight: 500;
+    }
+
+    .quick-add-btn {
+        width: 28px;
+        height: 28px;
+        border-radius: 14px;
+        background: #8B5A2B;
+        color: white;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .quick-add-btn:active {
+        transform: scale(0.9);
+        background: #6B3E1A;
+    }
+
+    .quick-add-btn .material-symbols-outlined {
+        font-size: 16px;
+    }
+
+    /* Category Pills */
+    .category-pills {
+        display: flex;
+        gap: 12px;
+        padding: 8px 16px 20px;
+        overflow-x: auto;
+        scrollbar-width: none;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .category-pills::-webkit-scrollbar {
+        display: none;
+    }
+
+    .category-pill {
+        padding: 10px 20px;
+        background: #ffffff;
+        border: 1px solid #f0f0f0;
+        border-radius: 40px;
+        font-size: 14px;
+        font-weight: 500;
+        color: #4a3a2b;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .category-pill.active {
+        background: #8B5A2B;
+        color: white;
+        border-color: #8B5A2B;
+    }
+
+    .category-pill:active {
+        transform: scale(0.95);
+    }
+
+    /* Menu List */
+    .menu-list-section {
+        padding: 8px 16px 20px;
+    }
+
+    .menu-list-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+    }
+
+    .menu-list-header h2 {
+        font-family: 'Playfair Display', serif;
+        font-size: 22px;
+        color: #4a3a2b;
+    }
+
+    .view-all-link {
+        color: #777777;
+        font-size: 14px;
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .view-all-link:active {
+        color: #8B5A2B;
+    }
+
+    .menu-list {
+        background: #ffffff;
+        border-radius: 30px;
+        border: 1px solid #f0f0f0;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .menu-list-item {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 16px;
+        border-bottom: 1px solid #f0f0f0;
+        cursor: pointer;
+        transition: background 0.2s;
+        position: relative;
+    }
+
+    .menu-list-item:last-child {
+        border-bottom: none;
+    }
+
+    .menu-list-item:active {
+        background: #fcfcfc;
+    }
+
+    .menu-list-image {
+        width: 70px;
+        height: 70px;
+        border-radius: 35px;
+        overflow: hidden;
+        border: 2px solid #ffffff;
+        box-shadow: 0 4px 10px rgba(139, 90, 43, 0.1);
+        flex-shrink: 0;
+    }
+
+    .menu-list-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .menu-list-details {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .menu-list-name {
+        font-size: 16px;
+        font-weight: 700;
+        color: #2d241c;
+        margin-bottom: 4px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .menu-list-desc {
+        font-size: 12px;
+        color: #777777;
+        margin-bottom: 4px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .menu-list-meta {
+        display: flex;
+        gap: 12px;
+        font-size: 11px;
+        color: #4a3a2b;
+    }
+
+    .menu-list-badge {
+        background: #ffffff;
+        border: 1px solid #f0f0f0;
+        padding: 4px 10px;
+        border-radius: 30px;
+        font-size: 11px;
+        font-weight: 600;
+        color: #8B5A2B;
+    }
+
+    .menu-list-price {
+        font-weight: 700;
+        color: #8B5A2B;
+        font-size: 18px;
+        min-width: 70px;
+        text-align: right;
+        white-space: nowrap;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 4px;
+    }
+
+    .menu-list-price::before {
+        content: 'BD ';
+        font-size: 11px;
+        font-weight: 500;
+        display: inline;
+    }
+
+    .list-add-btn {
+        width: 32px;
+        height: 32px;
+        border-radius: 16px;
+        background: #ffffff;
+        border: 1px solid #f0f0f0;
+        color: #8B5A2B;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+    .list-add-btn:active {
+        background: #8B5A2B;
+        color: white;
+        transform: scale(0.9);
+    }
+
+    .list-add-btn .material-symbols-outlined {
+        font-size: 18px;
+    }
+
+    /* Toast Notifications */
+    .toast-container {
+        position: fixed;
+        bottom: 100px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 3000;
+        width: 90%;
+        max-width: 300px;
+        pointer-events: none;
+    }
+
+    .toast {
+        background: #8B5A2B;
+        color: white;
+        padding: 12px 20px;
+        border-radius: 50px;
+        box-shadow: 0 4px 15px rgba(139, 90, 43, 0.2);
+        font-weight: 500;
+        transform: translateY(100px);
+        opacity: 0;
+        transition: all 0.3s ease;
+        text-align: center;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    .toast.show {
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+    .toast.success {
+        background: #27ae60;
+    }
+
+    .toast .material-symbols-outlined {
+        font-size: 18px;
+    }
+
+    /* MODAL CAROUSEL */
+    .modal-image-container {
+        position: relative;
+        width: 100%;
+        border-radius: 20px;
+        overflow: hidden;
+        margin-bottom: 20px;
+        background: #f9f9f9;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    .modal-carousel-track {
+        display: flex;
+        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        width: 100%;
+    }
+
+    .modal-carousel-item {
+        flex: 0 0 100%;
+        width: 100%;
+        aspect-ratio: 1/1;
+    }
+
+    .modal-carousel-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .carousel-indicators {
+        position: absolute;
+        bottom: 15px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 8px;
+        z-index: 35;
+    }
+
+    .carousel-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease;
+    }
+
+    .carousel-dot.active {
+        background: #000000;
+        transform: scale(1.3);
+    }
+
+    .modal-action-btns {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        z-index: 30;
+    }
+
+    .modal-action-btn {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(8px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #f0f0f0;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        transition: all 0.2s ease;
+    }
+
+    .modal-action-btn:active {
+        transform: scale(0.9);
+    }
+
+    .modal-action-btn.active .material-symbols-outlined {
+        font-variation-settings: 'FILL' 1;
+        color: #ff6b6b;
+    }
+
+    .modal-action-btn .material-symbols-outlined {
+        font-size: 22px;
+        color: #333;
+    }
+
+    /* OPTIONS CHECKLIST */
+    .options-checklist {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        width: 100%;
+    }
+
+    .checklist-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 14px 16px;
+        background: #ffffff;
+        border: 1px solid #f0f0f0;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .checklist-row.active {
+        border-color: #000000;
+        background: #fafafa;
+    }
+
+    .checklist-info {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 14px;
+        font-weight: 500;
+        color: #1a1a1a;
+    }
+
+    .checklist-check {
+        width: 20px;
+        height: 20px;
+        border: 2px solid #ddd;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+    }
+
+    .checklist-row.active .checklist-check {
+        background: #000000;
+        border-color: #000000;
+    }
+
+    .checklist-check::after {
+        content: '';
+        width: 6px;
+        height: 10px;
+        border: solid white;
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg) translateY(-1px);
+        display: none;
+    }
+
+    .checklist-row.active .checklist-check::after {
+        display: block;
+    }
+
+    /* MODAL CORE STYLES */
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(4px);
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        z-index: 2000;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s;
+    }
+
+    .modal-overlay.active {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .modal-content {
+        background: #ffffff;
+        width: 100%;
+        max-width: 450px;
+        border-radius: 32px 32px 0 0;
+        padding: 30px 20px;
+        transform: translateY(100%);
+        transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+
+    .modal-overlay.active .modal-content {
+        transform: translateY(0);
+    }
+
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+    }
+
+    .modal-header h3 {
+        font-size: 24px;
+        font-weight: 700;
+        color: #000;
+    }
+
+    .close-modal {
+        background: none;
+        border: none;
+        font-size: 32px;
+        cursor: pointer;
+        color: #000;
+    }
+
+    .modal-item-name {
+        font-size: 26px;
+        font-weight: 700;
+        color: #000;
+        margin-bottom: 24px;
+        text-align: left;
+    }
+
+    .option-section {
+        margin-bottom: 24px;
+    }
+
+    .option-label {
+        font-size: 16px;
+        font-weight: 700;
+        color: #000;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .quantity-controls {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: #f8f8f8;
+        border-radius: 16px;
+        padding: 8px;
+        margin-bottom: 24px;
+    }
+
+    .qty-btn {
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        border: none;
+        background: #fff;
+        font-size: 24px;
+        font-weight: 600;
+        color: #000;
+        cursor: pointer;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .qty-number {
+        font-size: 24px;
+        font-weight: 700;
+        color: #000;
+    }
+
+    .add-to-cart-btn {
+        width: 100%;
+        background: #000;
+        color: #fff;
+        border: none;
+        padding: 20px;
+        border-radius: 16px;
+        font-size: 18px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        cursor: pointer;
+        transition: transform 0.2s;
+    }
+
+    /* FULL VIEW OVERLAY */
+    .full-view-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.95);
+        backdrop-filter: blur(10px);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 3000;
+        cursor: zoom-out;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .full-view-overlay.active {
+        display: flex;
+        opacity: 1;
+    }
+
+    .full-view-image {
+        max-width: 95%;
+        max-height: 90%;
+        object-fit: contain;
+        border-radius: 8px;
+        transform: scale(0.9);
+        transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .full-view-overlay.active .full-view-image {
+        transform: scale(1);
+    }
+
+    .close-full-view {
+        position: absolute;
+        top: 30px;
+        right: 30px;
+        color: white;
+        cursor: pointer;
+        font-size: 32px;
+        z-index: 3001;
+    }
+
+
+    @media (max-width: 480px) {
+        .banner-carousel-image {
+            height: 180px;
+        }
+
+        .menu-carousel-item {
+            flex: 0 0 180px;
+        }
+
+        .menu-carousel-image {
+            height: 120px;
+        }
+
+    }
 </style>
 {% endblock %}
 
 {% block content %}
+{% set banner_fallback_1 = url_for('static', filename='imgg.jpeg') %}
+{% set banner_fallback_2 = url_for('static', filename='imgg2.jpeg') %}
+{% set banner_fallback_3 = url_for('static', filename='imgg3.jpeg') %}
+
 <!-- Toast Container -->
 <div class="toast-container" id="toastContainer"></div>
 
@@ -722,35 +857,41 @@
     <div class="banner-carousel-container">
         <div class="banner-carousel" id="bannerCarousel">
             <div class="banner-carousel-item active">
-                <img src="https://lh3.googleusercontent.com/gps-cs-s/AHVAweoZVh_5HjTgNzKwrgrU8Qodmda0OFZP0ozz-C64yNzJGNJpMGpU3fh9Dph_RXHj0Fmoz1FuP8JbYSq_L1NDmv3pn3Am7VJLF2tUXqbI_fEYdeImkgaXj8kE1PONHnf7G0JcF8iu=s1360-w1360-h1020-rw" alt="Cafe Interior" class="banner-carousel-image" onerror="this.src='{{ url_for('static', filename='imgg.jpeg') }}'">
+                <img src="https://lh3.googleusercontent.com/gps-cs-s/AHVAweoZVh_5HjTgNzKwrgrU8Qodmda0OFZP0ozz-C64yNzJGNJpMGpU3fh9Dph_RXHj0Fmoz1FuP8JbYSq_L1NDmv3pn3Am7VJLF2tUXqbI_fEYdeImkgaXj8kE1PONHnf7G0JcF8iu=s1360-w1360-h1020-rw"
+                    alt="Cafe Interior" class="banner-carousel-image"
+                    onerror="this.onerror=null; this.src='{{ banner_fallback_1 }}';">
                 <div class="banner-carousel-caption">
                     <h3>Cozy Interior</h3>
                     <p>Comfortable seating area</p>
                 </div>
             </div>
             <div class="banner-carousel-item">
-                <img src="https://lh3.googleusercontent.com/gps-cs-s/AHVAwepZYfEuPLc42rQLouJSfQEKy4LIbJQds6wqLdQ3HsElOXbptf0_kFxBpOELY-6dcrbTbKx3EaYJqqIpK9d1mc-UjCUJqRwwdsf8FPJ4ELu0W09SjUt_5DFYHjixuy-ncywj6iByBQ=s1360-w1360-h1020-rw" alt="Coffee Bar" class="banner-carousel-image" onerror="this.src='{{ url_for('static', filename='imgg2.jpeg') }}'">
+                <img src="https://lh3.googleusercontent.com/gps-cs-s/AHVAwepZYfEuPLc42rQLouJSfQEKy4LIbJQds6wqLdQ3HsElOXbptf0_kFxBpOELY-6dcrbTbKx3EaYJqqIpK9d1mc-UjCUJqRwwdsf8FPJ4ELu0W09SjUt_5DFYHjixuy-ncywj6iByBQ=s1360-w1360-h1020-rw"
+                    alt="Coffee Bar" class="banner-carousel-image"
+                    onerror="this.onerror=null; this.src='{{ banner_fallback_2 }}';">
                 <div class="banner-carousel-caption">
                     <h3>Coffee Bar</h3>
                     <p>Professional La Marzocco</p>
                 </div>
             </div>
             <div class="banner-carousel-item">
-                <img src="https://lh3.googleusercontent.com/gps-cs-s/AHVAweqAPFSWqT8k5WRDZguaeRaCFOdHV7uGVYciO3EVqmtjP6qKJtMM3yn9fGF28XPINI04gU6PeItxpZ1IMXVSgoZPVxnJjG1lYY2i6R3opAI-4pyrp3EzMWcR-odssEFzVN9FgSvtv3xgU4A=s1360-w1360-h1020-rw" alt="Outdoor Seating" class="banner-carousel-image" onerror="this.src='{{ url_for('static', filename='imgg3.jpeg') }}'">
+                <img src="https://lh3.googleusercontent.com/gps-cs-s/AHVAweqAPFSWqT8k5WRDZguaeRaCFOdHV7uGVYciO3EVqmtjP6qKJtMM3yn9fGF28XPINI04gU6PeItxpZ1IMXVSgoZPVxnJjG1lYY2i6R3opAI-4pyrp3EzMWcR-odssEFzVN9FgSvtv3xgU4A=s1360-w1360-h1020-rw"
+                    alt="Outdoor Seating" class="banner-carousel-image"
+                    onerror="this.onerror=null; this.src='{{ banner_fallback_3 }}';">
                 <div class="banner-carousel-caption">
                     <h3>Outdoor Area</h3>
                     <p>Patio seating available</p>
                 </div>
             </div>
         </div>
-        
+
         <!-- Carousel Indicators -->
         <div class="carousel-indicators">
             <span class="indicator active" onclick="slideTo(0)"></span>
             <span class="indicator" onclick="slideTo(1)"></span>
             <span class="indicator" onclick="slideTo(2)"></span>
         </div>
-        
+
         <!-- Navigation Arrows -->
         <button class="carousel-arrow prev" onclick="slidePrev()">
             <span class="material-symbols-outlined">chevron_left</span>
@@ -803,82 +944,26 @@
             <h3>customize</h3>
             <button class="close-modal" id="closeModal">&times;</button>
         </div>
-        <div class="modal-product-image" id="modalProductImage">
-            <img src="" alt="" id="modalImageSrc">
+        <div class="modal-image-container">
+            <div class="modal-action-btns">
+                <div class="modal-action-btn" id="modalExpandBtn" title="Full View">
+                    <span class="material-symbols-outlined">zoom_in</span>
+                </div>
+                <div class="modal-action-btn" id="modalFavBtn" title="Favorite">
+                    <span class="material-symbols-outlined">favorite</span>
+                </div>
+            </div>
+            <div class="modal-carousel-track" id="modalCarouselTrack">
+                <!-- Images added by JS -->
+            </div>
+            <div class="carousel-indicators" id="carouselIndicators">
+                <!-- Dots added by JS -->
+            </div>
         </div>
         <div class="modal-item-name" id="modalItemName">Espresso</div>
-
-        <!-- Size Selection -->
-        <div class="option-section">
-            <div class="option-label">
-                <span class="material-symbols-outlined">straighten</span> size
-            </div>
-            <div class="option-buttons" id="sizeOptions">
-                <button class="option-btn active" data-size="small">
-                    <span class="material-symbols-outlined">coffee</span> small
-                </button>
-                <button class="option-btn" data-size="medium">
-                    <span class="material-symbols-outlined">local_cafe</span> medium <span class="extra-cost">+0.500</span>
-                </button>
-                <button class="option-btn" data-size="large">
-                    <i class="fa-solid fa-mug-hot"></i> large <span class="extra-cost">+1.000</span>
-                </button>
-            </div>
-        </div>
-
-        <!-- Temperature Selection (for drinks) -->
-        <div class="option-section" id="tempSection">
-            <div class="option-label">
-                <span class="material-symbols-outlined">thermostat</span> temperature
-            </div>
-            <div class="option-buttons">
-                <button class="option-btn active" data-temp="hot">
-                    <span class="material-symbols-outlined">whatshot</span> hot
-                </button>
-                <button class="option-btn" data-temp="cold">
-                    <span class="material-symbols-outlined">ac_unit</span> cold
-                </button>
-            </div>
-        </div>
-
-        <!-- Ice Level (shows when cold is selected) -->
-        <div class="option-section" id="iceSection" style="display: none;">
-            <div class="option-label">
-                <span class="material-symbols-outlined">icecream</span> ice level
-            </div>
-            <div class="option-buttons">
-                <button class="option-btn active" data-ice="regular">regular</button>
-                <button class="option-btn" data-ice="less">less ice</button>
-                <button class="option-btn" data-ice="extra">extra ice</button>
-                <button class="option-btn" data-ice="no">no ice</button>
-            </div>
-        </div>
-
-        <!-- Sugar Selection -->
-        <div class="option-section">
-            <div class="option-label">
-                <span class="material-symbols-outlined">cookie</span> sugar
-            </div>
-            <div class="option-buttons">
-                <button class="option-btn active" data-sugar="regular">regular</button>
-                <button class="option-btn" data-sugar="less">less</button>
-                <button class="option-btn" data-sugar="half">half</button>
-                <button class="option-btn" data-sugar="no">no sugar</button>
-                <button class="option-btn" data-sugar="extra">extra <span class="extra-cost">+0.200</span></button>
-            </div>
-        </div>
-
-        <!-- Milk Selection (for coffee drinks) -->
-        <div class="option-section" id="milkSection">
-            <div class="option-label">
-                <span class="material-symbols-outlined">spa</span> milk
-            </div>
-            <div class="option-buttons">
-                <button class="option-btn active" data-milk="whole">whole</button>
-                <button class="option-btn" data-milk="oat">oat <span class="extra-cost">+0.300</span></button>
-                <button class="option-btn" data-milk="almond">almond <span class="extra-cost">+0.300</span></button>
-                <button class="option-btn" data-milk="skim">skim</button>
-            </div>
+        
+        <div id="modalOptionsContainer">
+            <!-- Options dynamically rendered by JS -->
         </div>
 
         <!-- Quantity -->
@@ -899,27 +984,32 @@
     </div>
 </div>
 
+<div class="full-view-overlay" id="fullViewOverlay">
+    <span class="material-symbols-outlined close-full-view" id="closeFullView">close</span>
+    <img src="" alt="Full View" class="full-view-image" id="fullViewImage">
+</div>
+
 <script>
     // Toast notification system
     function showToast(message, type = 'success', duration = 2000) {
         const container = document.getElementById('toastContainer');
         const toastId = 'toast_' + Date.now();
-        
+
         const toast = document.createElement('div');
         toast.className = `toast ${type}`;
         toast.id = toastId;
-        
+
         let icon = type === 'success' ? 'check_circle' : 'info';
-        
+
         toast.innerHTML = `
             <span class="material-symbols-outlined">${icon}</span>
             <span>${message}</span>
         `;
-        
+
         container.appendChild(toast);
-        
+
         setTimeout(() => toast.classList.add('show'), 10);
-        
+
         setTimeout(() => {
             toast.classList.remove('show');
             setTimeout(() => toast.remove(), 300);
@@ -928,54 +1018,61 @@
 
     // Cart management
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
-    
+
     function updateCartCount() {
-        // This will be handled by base.html
         window.dispatchEvent(new Event('storage'));
+        window.dispatchEvent(new Event('cartUpdated'));
     }
 
-    // Menu items data (same as menu page)
-    const menuItems = [
-        // NEW ITEMS - Top 5
-{ 
-    name: 'Honey Almond Latte', 
-    price: 4.200, 
-    category: 'espresso', 
-    image: "https://i.pinimg.com/1200x/a8/fa/c9/a8fac951f60a016d433ebd23ea493de9.jpg", 
-    isNew: true, 
-    type: 'drink', 
-    desc: 'Sweet honey & almond' 
-},
-        { name: 'Salted Caramel Mocha', price: 4.500, category: 'espresso', image: "https://i.pinimg.com/1200x/91/08/79/910879b27550ed31c754dca3dcd00e6f.jpg", isNew: true, type: 'drink', desc: 'Rich caramel with sea salt' },
-        { name: 'Lavender Oat Latte', price: 4.300, category: 'espresso', image: "https://i.pinimg.com/1200x/03/40/bc/0340bc3bca1288373896cf62fabd67aa.jpg", isNew: true, type: 'drink', desc: 'Floral & creamy' },
-        { name: 'Brown Sugar Shaken', price: 3.900, category: 'cold', image: "https://i.pinimg.com/736x/85/85/11/85851111fca1556b7a272dd4d7df2943.jpg", isNew: true, type: 'drink', desc: 'Brown sugar & cinnamon' },
-        { name: 'Tiramisu Cup', price: 3.800, category: 'pastry', image: "{{ url_for('static', filename='imgg4.jpeg') }}", isNew: true, type: 'food', desc: 'Coffee flavored dessert' },
-        
-        // Regular Items
-        { name: 'Espresso', price: 2.500, category: 'espresso', image: "{{ url_for('static', filename='imgg8.jpeg') }}", type: 'drink', desc: 'Single shot of pure espresso' },
-        { name: 'Double Espresso', price: 3.500, category: 'espresso', image: "https://i.pinimg.com/1200x/e0/17/eb/e017eb28a91f18b41ad47d37ef9ed808.jpg", type: 'drink', desc: 'Two shots of pure espresso' },
-        { name: 'Cappuccino', price: 3.000, category: 'espresso', image: "https://i.pinimg.com/1200x/4a/7f/38/4a7f38787d21ef65e8d2489a0e9fbc68.jpg", type: 'drink', desc: 'Rich espresso with steamed milk' },
-        { name: 'Latte', price: 3.200, category: 'espresso', image: "https://i.pinimg.com/1200x/aa/24/4d/aa244d511815dd1bb73d20781786b37e.jpg", type: 'drink', desc: 'Smooth & creamy' },
-        { name: 'Caramel Macchiato', price: 3.500, category: 'espresso', image: "https://i.pinimg.com/1200x/87/19/95/87199510667068c8e1a32543ae00e467.jpg", type: 'drink', desc: 'Vanilla & caramel' },
-        { name: 'Cold Brew', price: 2.800, category: 'cold', image: "https://i.pinimg.com/1200x/26/0c/6e/260c6e149042881a946ec57deea705bf.jpg", type: 'drink', desc: '12-hour steeped, smooth taste' },
-        { name: 'Iced Latte', price: 3.200, category: 'cold', image: "https://i.pinimg.com/736x/1c/05/cb/1c05cbf1af9536aa85b86ffbe62af919.jpg", type: 'drink', desc: 'With vanilla syrup' },
-        { name: 'Iced Americano', price: 2.600, category: 'cold', image: "https://i.pinimg.com/1200x/bc/0c/ff/bc0cffc8b21c24b4b571e98b9ab5da12.jpg", type: 'drink', desc: 'Espresso with cold water' },
-        { name: 'Cold Drink', price: 2.200, category: 'cold', image: "https://i.pinimg.com/736x/6d/92/6e/6d926e1c4e4389dfd60ad95b510fb0f8.jpg", type: 'drink', desc: 'Refreshing beverage' },
-        { name: 'Pour Over', price: 2.800, category: 'brewed', image: "{{ url_for('static', filename='imgg10.jpeg') }}", type: 'drink', desc: 'Single origin pour over' },
-        { name: 'French Press', price: 2.500, category: 'brewed', image: "https://i.pinimg.com/1200x/06/d4/5b/06d45b224061587af2ee22591f0ead5d.jpg", type: 'drink', desc: 'Full-bodied brewed coffee' },
-        { name: 'Croissant', price: 1.800, category: 'pastry', image: "{{ url_for('static', filename='y-jKMyLA.jpeg') }}", type: 'food', desc: 'Flaky, buttery, fresh baked' },
-        { name: 'Chocolate Cake', price: 3.000, category: 'pastry', image: "https://i.pinimg.com/736x/4f/7d/d7/4f7dd739919a555b6ee20f15f03787d0.jpg", type: 'food', desc: 'Rich chocolate layer cake' }
-    ];
+    // Favorites management
+    let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+    function isFavorite(itemName) {
+        return favorites.includes(itemName);
+    }
 
-    // Modal variables
+    function toggleModalFavorite(itemName) {
+        const index = favorites.indexOf(itemName);
+        const modalFavBtn = document.getElementById('modalFavBtn');
+        if (index === -1) {
+            favorites.push(itemName);
+            modalFavBtn.classList.add('active');
+            showToast(`❤️ Added to favorites`);
+        } else {
+            favorites.splice(index, 1);
+            modalFavBtn.classList.remove('active');
+            showToast(`💔 Removed from favorites`);
+        }
+        localStorage.setItem('favorites', JSON.stringify(favorites));
+    }
+
+    // Modal elements
     const modalOverlay = document.getElementById('modalOverlay');
     const modalItemName = document.getElementById('modalItemName');
     const modalPrice = document.getElementById('modalPrice');
-    const modalImageSrc = document.getElementById('modalImageSrc');
     const qtyDisplay = document.getElementById('qtyDisplay');
-    
+
+    // Menu items data - Unified with menu.html
+    const menuItems = [
+        { name: 'Honey Almond Latte', price: 4.200, category: 'espresso', images: ["{{ url_for('static', filename='imgg.jpeg') }}", "{{ url_for('static', filename='imgg1.jpeg') }}", "{{ url_for('static', filename='imgg2.jpeg') }}"], isNew: true, type: 'drink', desc: 'Sweet honey & almond' },
+        { name: 'Salted Caramel Mocha', price: 4.500, category: 'espresso', images: ["{{ url_for('static', filename='imgg1.jpeg') }}", "{{ url_for('static', filename='imgg3.jpeg') }}", "{{ url_for('static', filename='imgg5.jpeg') }}"], isNew: true, type: 'drink', desc: 'Rich caramel with sea salt' },
+        { name: 'Lavender Oat Latte', price: 4.300, category: 'espresso', images: ["{{ url_for('static', filename='imgg2.jpeg') }}", "{{ url_for('static', filename='imgg11.jpeg') }}", "{{ url_for('static', filename='imgg12.jpeg') }}"], isNew: true, type: 'drink', desc: 'Floral & creamy' },
+        { name: 'Brown Sugar Shaken', price: 3.900, category: 'cold', images: ["{{ url_for('static', filename='imgg3.jpeg') }}", "{{ url_for('static', filename='img4.jpeg') }}", "{{ url_for('static', filename='img6.jpeg') }}"], isNew: true, type: 'drink', desc: 'Brown sugar & cinnamon' },
+        { name: 'Tiramisu Cup', price: 3.800, category: 'pastry', images: ["{{ url_for('static', filename='imgg4.jpeg') }}", "{{ url_for('static', filename='img7.jpeg') }}", "{{ url_for('static', filename='img8.jpeg') }}"], isNew: true, type: 'food', desc: 'Coffee flavored dessert' },
+        { name: 'Espresso', price: 2.500, category: 'espresso', images: ["{{ url_for('static', filename='imgg8.jpeg') }}", "{{ url_for('static', filename='imgg9.jpeg') }}"], type: 'drink', desc: 'Single shot of pure espresso' },
+        { name: 'Double Espresso', price: 3.500, category: 'espresso', images: ["{{ url_for('static', filename='imgg9.jpeg') }}", "{{ url_for('static', filename='imgg8.jpeg') }}"], type: 'drink', desc: 'Two shots of pure espresso' },
+        { name: 'Cappuccino', price: 3.000, category: 'espresso', images: ["{{ url_for('static', filename='imgg11.jpeg') }}", "{{ url_for('static', filename='imgg12.jpeg') }}"], type: 'drink', desc: 'Rich espresso with steamed milk' },
+        { name: 'Latte', price: 3.200, category: 'espresso', images: ["{{ url_for('static', filename='imgg12.jpeg') }}", "{{ url_for('static', filename='imgg11.jpeg') }}"], type: 'drink', desc: 'Smooth & creamy' },
+        { name: 'Caramel Macchiato', price: 3.500, category: 'espresso', images: ["{{ url_for('static', filename='imgg13.jpeg') }}", "{{ url_for('static', filename='imgg12.jpeg') }}"], type: 'drink', desc: 'Vanilla & caramel' },
+        { name: 'Cold Brew', price: 2.800, category: 'cold', images: ["{{ url_for('static', filename='imgg5.jpeg') }}", "{{ url_for('static', filename='imgg7.jpeg') }}"], type: 'drink', desc: '12-hour steeped, smooth taste' },
+        { name: 'Iced Latte', price: 3.200, category: 'cold', images: ["{{ url_for('static', filename='imgg6.jpeg') }}", "{{ url_for('static', filename='imgg5.jpeg') }}"], type: 'drink', desc: 'With vanilla syrup' },
+        { name: 'Iced Americano', price: 2.600, category: 'cold', images: ["{{ url_for('static', filename='imgg7.jpeg') }}", "{{ url_for('static', filename='imgg5.jpeg') }}"], type: 'drink', desc: 'Espresso with cold water' },
+        { name: 'Pour Over', price: 2.800, category: 'brewed', images: ["{{ url_for('static', filename='imgg10.jpeg') }}", "{{ url_for('static', filename='img1.jpeg') }}"], type: 'drink', desc: 'Single origin pour over' },
+        { name: 'Croissant', price: 1.800, category: 'pastry', images: ["{{ url_for('static', filename='y-jKMyLA.jpeg') }}", "{{ url_for('static', filename='img7.jpeg') }}"], type: 'food', desc: 'Flaky, buttery, fresh baked' }
+    ];
+
     let currentItem = null;
     let currentQty = 1;
+    let currentImageIndex = 0;
     let currentOptions = {
         size: 'small',
         temp: 'hot',
@@ -984,22 +1081,13 @@
         milk: 'whole'
     };
 
-    // Calculate price with options
     function calculatePrice() {
         if (!currentItem) return currentItem?.price || 0;
-        
         let price = currentItem.price;
-        
-        // Size adjustments
         if (currentOptions.size === 'medium') price += 0.500;
         if (currentOptions.size === 'large') price += 1.000;
-        
-        // Sugar extra
         if (currentOptions.sugar === 'extra') price += 0.200;
-        
-        // Milk extras
         if (currentOptions.milk === 'oat' || currentOptions.milk === 'almond') price += 0.300;
-        
         return price;
     }
 
@@ -1008,54 +1096,84 @@
         modalPrice.textContent = price.toFixed(3);
     }
 
-    // Open modal with item details
     function openModal(item) {
         currentItem = item;
         currentQty = 1;
-        currentOptions = {
-            size: 'small',
-            temp: 'hot',
-            ice: 'regular',
-            sugar: 'regular',
-            milk: 'whole'
-        };
+        currentImageIndex = 0;
+        currentOptions = { size: 'small', temp: 'hot', ice: 'regular', sugar: 'regular', milk: 'whole' };
         
         modalItemName.textContent = item.name;
-        modalImageSrc.src = item.image;
-        modalImageSrc.alt = item.name;
         qtyDisplay.textContent = '1';
-        
-        // Reset all option buttons
-        document.querySelectorAll('.option-btn').forEach(btn => {
-            btn.classList.remove('active');
+
+        // Setup Carousel
+        const carouselTrack = document.getElementById('modalCarouselTrack');
+        const indicators = document.getElementById('carouselIndicators');
+        carouselTrack.innerHTML = '';
+        indicators.innerHTML = '';
+
+        item.images.forEach((img, idx) => {
+            const itemDiv = document.createElement('div');
+            itemDiv.className = 'modal-carousel-item';
+            itemDiv.innerHTML = `<img src="${img}" alt="${item.name}">`;
+            carouselTrack.appendChild(itemDiv);
+
+            const dot = document.createElement('div');
+            dot.className = `carousel-dot ${idx === 0 ? 'active' : ''}`;
+            dot.onclick = () => goToImage(idx);
+            indicators.appendChild(dot);
         });
-        
-        // Set active states
-        document.querySelector('[data-size="small"]').classList.add('active');
-        document.querySelector('[data-temp="hot"]').classList.add('active');
-        document.querySelector('[data-ice="regular"]').classList.add('active');
-        document.querySelector('[data-sugar="regular"]').classList.add('active');
-        document.querySelector('[data-milk="whole"]').classList.add('active');
-        
-        // Show/hide sections based on item type
-        const tempSection = document.getElementById('tempSection');
-        const iceSection = document.getElementById('iceSection');
-        const milkSection = document.getElementById('milkSection');
-        
-        if (item.type === 'food') {
-            tempSection.style.display = 'none';
-            iceSection.style.display = 'none';
-            milkSection.style.display = 'none';
-        } else {
-            tempSection.style.display = 'block';
-            milkSection.style.display = 'block';
-            // Ice section visibility depends on temperature
-            iceSection.style.display = currentOptions.temp === 'cold' ? 'block' : 'none';
-        }
-        
+        carouselTrack.style.transform = 'translateX(0)';
+
+        renderOptionSections(item);
         updateModalPrice();
+        
+        // Favorite state
+        const modalFavBtn = document.getElementById('modalFavBtn');
+        modalFavBtn.classList.toggle('active', isFavorite(item.name));
+        
         modalOverlay.classList.add('active');
         document.body.style.overflow = 'hidden';
+    }
+
+    function goToImage(index) {
+        currentImageIndex = index;
+        document.getElementById('modalCarouselTrack').style.transform = `translateX(-${index * 100}%)`;
+        document.querySelectorAll('.carousel-dot').forEach((dot, i) => dot.classList.toggle('active', i === index));
+    }
+
+    function renderOptionSections(item) {
+        const optionsContainer = document.getElementById('modalOptionsContainer');
+        optionsContainer.innerHTML = '';
+        const sections = [
+            { id: 'size', label: 'size', icon: 'straighten', options: ['small', 'medium', 'large'] },
+            { id: 'temp', label: 'temperature', icon: 'thermostat', options: ['hot', 'cold'], hideForFood: true },
+            { id: 'ice', label: 'ice level', icon: 'icecream', options: ['regular', 'less', 'extra', 'no'], showOnlyIf: () => currentOptions.temp === 'cold' },
+            { id: 'sugar', label: 'sugar level', icon: 'cookie', options: ['regular', 'less', 'half', 'no', 'extra'] },
+            { id: 'milk', label: 'milk selection', icon: 'local_cafe', options: ['whole', 'skim', 'oat', 'almond'], hideForFood: true }
+        ];
+
+        sections.forEach(section => {
+            if (section.hideForFood && item.type === 'food') return;
+            if (section.showOnlyIf && !section.showOnlyIf()) return;
+            const sectionDiv = document.createElement('div');
+            sectionDiv.className = 'option-section';
+            sectionDiv.innerHTML = `
+                <div class="option-label"><span class="material-symbols-outlined">${section.icon}</span> ${section.label}</div>
+                <div class="options-checklist">
+                    ${section.options.map(opt => `
+                        <div class="checklist-row ${currentOptions[section.id] === opt ? 'active' : ''}" onclick="selectOption('${section.id}', '${opt}')">
+                            <div class="checklist-info">${opt}</div>
+                            <div class="checklist-check"></div>
+                        </div>`).join('')}
+                </div>`;
+            optionsContainer.appendChild(sectionDiv);
+        });
+    }
+
+    function selectOption(sectionId, option) {
+        currentOptions[sectionId] = option;
+        renderOptionSections(currentItem);
+        updateModalPrice();
     }
 
     function closeModal() {
@@ -1063,282 +1181,94 @@
         document.body.style.overflow = '';
     }
 
-    // Render popular items carousel
+    // Home specific rendering
     function renderPopularCarousel() {
         const carousel = document.getElementById('popularCarousel');
         const popularItems = menuItems.filter(item => item.isNew).slice(0, 8);
-        
         carousel.innerHTML = popularItems.map(item => `
             <div class="menu-carousel-item" onclick="openModal(${JSON.stringify(item).replace(/"/g, '&quot;')})">
-                <img src="${item.image}" alt="${item.name}" class="menu-carousel-image" onerror="this.src='{{ url_for('static', filename='imgg.jpeg') }}'">
+                <img src="${item.images[0]}" class="menu-carousel-image" onerror="this.src='{{ banner_fallback_1 }}';">
                 <div class="menu-carousel-caption">
                     <h3>${item.name}</h3>
                     <p>${item.desc || ''}</p>
-                    <div class="menu-carousel-price">
-                        ${item.price.toFixed(3)}
-                        <button class="quick-add-btn" onclick="event.stopPropagation(); quickAddToCart('${item.name}')">
+                    <div class="menu-carousel-price">${item.price.toFixed(3)}
+                        <button class="quick-add-btn" onclick="event.stopPropagation(); openModal(${JSON.stringify(item).replace(/"/g, '&quot;')})">
                             <span class="material-symbols-outlined">add</span>
                         </button>
                     </div>
                 </div>
-            </div>
-        `).join('');
+            </div>`).join('');
     }
 
-    // Render menu list
     function renderMenuList() {
         const menuList = document.getElementById('menuList');
-        
         menuList.innerHTML = menuItems.map(item => `
             <div class="menu-list-item" data-category="${item.category}" onclick="openModal(${JSON.stringify(item).replace(/"/g, '&quot;')})">
-                <div class="menu-list-image">
-                    <img src="${item.image}" alt="${item.name}" onerror="this.src='{{ url_for('static', filename='imgg.jpeg') }}'">
-                </div>
+                <div class="menu-list-image"><img src="${item.images[0]}" onerror="this.src='{{ banner_fallback_1 }}';"></div>
                 <div class="menu-list-details">
                     <div class="menu-list-name">${item.name}</div>
                     <div class="menu-list-desc">${item.desc || ''}</div>
-                    <div class="menu-list-meta">
-                        <span class="menu-list-badge">${item.category}</span>
-                        ${item.isNew ? '<span>🔥 Popular</span>' : ''}
-                    </div>
+                    <div class="menu-list-meta"><span class="menu-list-badge">${item.category}</span></div>
                 </div>
-                <div class="menu-list-price">
-                    ${item.price.toFixed(3)}
-                    <button class="list-add-btn" onclick="event.stopPropagation(); quickAddToCart('${item.name}')">
-                        <span class="material-symbols-outlined">add_shopping_cart</span>
+                <div class="menu-list-price">${item.price.toFixed(3)}
+                    <button class="list-add-btn" onclick="event.stopPropagation(); openModal(${JSON.stringify(item).replace(/"/g, '&quot;')})">
+                        <span class="material-symbols-outlined">add</span>
                     </button>
                 </div>
-            </div>
-        `).join('');
+            </div>`).join('');
     }
 
-    // Quick add to cart (bypasses modal)
-    function quickAddToCart(itemName) {
-        const item = menuItems.find(i => i.name === itemName);
-        if (!item) return;
-        
-        const cartItem = {
-            id: Date.now() + Math.random(),
-            name: item.name,
-            basePrice: item.price,
-            price: item.price,
-            quantity: 1,
-            totalPrice: item.price,
-            options: {
-                size: 'small',
-                temp: item.type === 'food' ? undefined : 'hot',
-                ice: 'regular',
-                sugar: 'regular',
-                milk: item.type === 'food' ? undefined : 'whole'
-            },
-            image: item.image,
-            type: item.type
-        };
-        
-        cart.push(cartItem);
-        localStorage.setItem('cart', JSON.stringify(cart));
-        updateCartCount();
-        showToast(`Added ${item.name} to cart`);
-    }
-
-    // Filter menu by category
     function filterMenu(category, element) {
-        // Update active pill
-        document.querySelectorAll('.category-pill').forEach(pill => {
-            pill.classList.remove('active');
-        });
+        document.querySelectorAll('.category-pill').forEach(p => p.classList.remove('active'));
         element.classList.add('active');
-        
-        // Get all menu items
-        const menuItems = document.querySelectorAll('.menu-list-item');
-        
-        // Show/hide based on category
-        menuItems.forEach(item => {
-            if (category === 'all') {
-                item.style.display = 'flex';
-            } else {
-                if (item.dataset.category === category) {
-                    item.style.display = 'flex';
-                } else {
-                    item.style.display = 'none';
-                }
-            }
+        document.querySelectorAll('.menu-list-item').forEach(item => {
+            item.style.display = (category === 'all' || item.dataset.category === category) ? 'flex' : 'none';
         });
     }
 
-    // Carousel functions
-    let currentSlide = 0;
-    const totalSlides = 3;
-
-    function showSlide(index) {
+    // Banner Carousel logic
+    let bannerSlide = 0;
+    function showBanner(index) {
         const slides = document.querySelectorAll('.banner-carousel-item');
-        const indicators = document.querySelectorAll('.indicator');
-        
-        if (index >= totalSlides) index = 0;
-        if (index < 0) index = totalSlides - 1;
-        
-        slides.forEach(slide => slide.classList.remove('active'));
-        indicators.forEach(ind => ind.classList.remove('active'));
-        
+        const dots = document.querySelectorAll('.indicator');
+        if (index >= slides.length) index = 0;
+        if (index < 0) index = slides.length - 1;
+        slides.forEach(s => s.classList.remove('active'));
+        dots.forEach(d => d.classList.remove('active'));
         slides[index].classList.add('active');
-        indicators[index].classList.add('active');
-        
-        currentSlide = index;
+        dots[index].classList.add('active');
+        bannerSlide = index;
     }
+    function slideNext() { showBanner(bannerSlide + 1); }
+    function slidePrev() { showBanner(bannerSlide - 1); }
+    function slideTo(index) { showBanner(index); }
+    setInterval(slideNext, 5000);
 
-    function slideNext() {
-        showSlide(currentSlide + 1);
-    }
-
-    function slidePrev() {
-        showSlide(currentSlide - 1);
-    }
-
-    function slideTo(index) {
-        showSlide(index);
-    }
-
-    // Auto slide every 5 seconds
-    setInterval(() => {
-        slideNext();
-    }, 5000);
-
-    // Modal Event Listeners
+    // Event Listeners
     document.getElementById('closeModal').addEventListener('click', closeModal);
     modalOverlay.addEventListener('click', e => { if (e.target === modalOverlay) closeModal(); });
-
-    // Size selection
-    document.querySelectorAll('[data-size]').forEach(btn => {
-        btn.addEventListener('click', function () {
-            document.querySelectorAll('[data-size]').forEach(b => b.classList.remove('active'));
-            this.classList.add('active');
-            currentOptions.size = this.dataset.size;
-            updateModalPrice();
-        });
+    document.getElementById('modalFavBtn').addEventListener('click', () => toggleModalFavorite(currentItem.name));
+    document.getElementById('modalExpandBtn').addEventListener('click', () => {
+        document.getElementById('fullViewImage').src = currentItem.images[currentImageIndex];
+        document.getElementById('fullViewOverlay').classList.add('active');
     });
-
-    // Temperature selection
-    document.querySelectorAll('[data-temp]').forEach(btn => {
-        btn.addEventListener('click', function () {
-            document.querySelectorAll('[data-temp]').forEach(b => b.classList.remove('active'));
-            this.classList.add('active');
-            currentOptions.temp = this.dataset.temp;
-            
-            // Show/hide ice section
-            const iceSection = document.getElementById('iceSection');
-            iceSection.style.display = currentOptions.temp === 'cold' ? 'block' : 'none';
-            
-            // Reset ice to regular when switching to hot
-            if (currentOptions.temp === 'hot') {
-                currentOptions.ice = 'regular';
-                document.querySelectorAll('[data-ice]').forEach(b => b.classList.remove('active'));
-                document.querySelector('[data-ice="regular"]').classList.add('active');
-            }
-        });
-    });
-
-    // Ice selection
-    document.querySelectorAll('[data-ice]').forEach(btn => {
-        btn.addEventListener('click', function () {
-            if (currentOptions.temp === 'cold') {
-                document.querySelectorAll('[data-ice]').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-                currentOptions.ice = this.dataset.ice;
-            }
-        });
-    });
-
-    // Sugar selection
-    document.querySelectorAll('[data-sugar]').forEach(btn => {
-        btn.addEventListener('click', function () {
-            document.querySelectorAll('[data-sugar]').forEach(b => b.classList.remove('active'));
-            this.classList.add('active');
-            currentOptions.sugar = this.dataset.sugar;
-            updateModalPrice();
-        });
-    });
-
-    // Milk selection
-    document.querySelectorAll('[data-milk]').forEach(btn => {
-        btn.addEventListener('click', function () {
-            if (currentItem && currentItem.type !== 'food') {
-                document.querySelectorAll('[data-milk]').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-                currentOptions.milk = this.dataset.milk;
-                updateModalPrice();
-            }
-        });
-    });
-
-    // Quantity controls
-    document.getElementById('incrementQty').addEventListener('click', () => { 
-        currentQty++; 
-        qtyDisplay.textContent = currentQty; 
-    });
+    document.getElementById('closeFullView').addEventListener('click', () => document.getElementById('fullViewOverlay').classList.remove('active'));
+    document.getElementById('incrementQty').addEventListener('click', () => { currentQty++; qtyDisplay.textContent = currentQty; updateModalPrice(); });
+    document.getElementById('decrementQty').addEventListener('click', () => { if (currentQty > 1) { currentQty--; qtyDisplay.textContent = currentQty; updateModalPrice(); } });
     
-    document.getElementById('decrementQty').addEventListener('click', () => { 
-        if (currentQty > 1) { 
-            currentQty--; 
-            qtyDisplay.textContent = currentQty; 
-        } 
-    });
-
-    // Add to cart from modal
     document.getElementById('addToCartBtn').addEventListener('click', () => {
-        if (!currentItem) return;
-        
-        const price = calculatePrice();
-        const totalPrice = price * currentQty;
-        
-        const cartItem = {
-            id: Date.now() + Math.random(),
-            name: currentItem.name,
-            basePrice: currentItem.price,
-            price: price,
-            quantity: currentQty,
-            totalPrice: totalPrice,
-            options: { ...currentOptions },
-            image: currentItem.image,
-            type: currentItem.type
-        };
-        
+        const cartItem = { id: Date.now(), name: currentItem.name, price: calculatePrice(), quantity: currentQty, options: { ...currentOptions }, image: currentItem.images[0], type: currentItem.type };
         cart.push(cartItem);
         localStorage.setItem('cart', JSON.stringify(cart));
         updateCartCount();
-        
-        const optionsSummary = [];
-        optionsSummary.push(currentOptions.size);
-        if (currentItem.type !== 'food') {
-            optionsSummary.push(currentOptions.temp);
-            if (currentOptions.temp === 'cold') optionsSummary.push(`${currentOptions.ice} ice`);
-            optionsSummary.push(`${currentOptions.sugar} sugar`);
-            optionsSummary.push(`${currentOptions.milk} milk`);
-        }
-        
-        showToast(`Added ${currentQty}x ${currentItem.name} to cart!`);
+        showToast(`Added ${currentItem.name} to cart`);
         closeModal();
     });
 
-    // Touch feedback
-    document.querySelectorAll('.option-btn, .qty-btn, .add-to-cart-btn, .menu-carousel-item, .menu-list-item').forEach(btn => {
-        btn.addEventListener('touchstart', () => btn.style.opacity = '0.8', { passive: true });
-        btn.addEventListener('touchend', () => btn.style.opacity = '1');
-    });
-
-    // Initialize on load
-    window.addEventListener('load', function() {
+    window.addEventListener('load', () => {
         renderPopularCarousel();
         renderMenuList();
-        
-        // Check for highlight from URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const category = urlParams.get('category');
-        if (category) {
-            const pill = Array.from(document.querySelectorAll('.category-pill')).find(p => 
-                p.textContent.toLowerCase().includes(category)
-            );
-            if (pill) filterMenu(category, pill);
-        }
+        updateCartCount();
     });
 </script>
 {% endblock %}

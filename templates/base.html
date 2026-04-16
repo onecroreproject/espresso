@@ -19,10 +19,161 @@
 
         body {
             font-family: 'Montserrat', sans-serif;
-            background: #fcf8f3;
+            background: #ffffff;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            color: #1a1a1a;
+        }
+
+        /* Sidebar styles - White/Black Theme */
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            visibility: hidden;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-overlay.active {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -280px;
+            width: 280px;
+            height: 100%;
+            background: #ffffff;
+            z-index: 1001;
+            transition: left 0.3s ease;
+            box-shadow: 2px 0 20px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .sidebar.active {
+            left: 0;
+        }
+
+        .sidebar-header {
+            background: #4a3a2b;
+            padding: 30px 20px;
+            text-align: center;
+            color: white;
+            border-bottom: 1px solid #5d4a3a;
+        }
+
+        .sidebar-user-avatar {
+            width: 70px;
+            height: 70px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+            font-size: 36px;
+            border: 2px solid #ffffff;
+        }
+
+        .sidebar-user-name {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: #ffffff;
+        }
+
+        .sidebar-user-email {
+            font-size: 12px;
+            opacity: 0.7;
+            color: #ccc;
+        }
+
+        .sidebar-menu {
+            flex: 1;
+            padding: 20px 0;
+        }
+
+        .sidebar-menu-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 24px;
+            color: #1a1a1a;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar-menu-item:hover,
+        .sidebar-menu-item.active {
+            background: #ffffff;
+            border: 1px solid #f0f0f0;
+            border-left: 3px solid #8B5A2B;
+            color: #4a3a2b;
+        }
+
+        .sidebar-menu-item .material-symbols-outlined {
+            font-size: 22px;
+        }
+
+        .sidebar-footer {
+            padding: 20px;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .sidebar-logout {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #dc3545;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .sidebar-logout:hover {
+            background: rgba(220,53,69,0.05);
+            color: #c82333;
+        }
+
+        /* Menu button */
+        .menu-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: #ffffff;
+            border: 1px solid #f0f0f0;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .menu-button:active {
+            background: #fcfcfc;
+        }
+
+        .menu-button .material-symbols-outlined {
+            font-size: 24px;
+            color: #8B5A2B;
         }
 
         .content-wrapper {
@@ -31,80 +182,171 @@
             width: 100%;
             max-width: 100%;
             overflow-x: hidden;
+            /* Extra top breathing room for minimalist layout */
+            padding-top: env(safe-area-inset-top, 32px);
         }
 
-        /* ── HEADER ── */
+        /* ── HEADER with Improved Logo Styling ── */
         .home-header {
             background: #ffffff;
             padding: 12px 20px;
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
-            border-bottom: 1px solid #f0e4d6;
+            border-bottom: 1px solid #e0e0e0;
             position: sticky;
             top: 0;
             z-index: 100;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: relative;
+            min-height: 70px;
         }
 
+        /* Improved Logo Styling */
         .header-logo {
-            max-width: min(140px, 35vw);
+            max-width: min(180px, 45vw);
             height: auto;
             object-fit: contain;
+            display: block;
+            transition: all 0.3s ease;
+            filter: brightness(0) invert(0);
         }
 
-        /* Home greeting — name + wave only */
-        .header-greeting {
-            font-size: 14px;
-            font-weight: 500;
-            color: #ab6c4f;
-            background: #fcf0e6;
-            padding: 8px 16px;
-            border-radius: 40px;
+        /* Logo container for better centering */
+        .logo-container {
             display: flex;
             align-items: center;
-            gap: 4px;
+            justify-content: center;
+            flex: 1;
         }
 
-        .header-greeting span {
-            font-weight: 700;
-            color: #3a2417;
+        /* Optional: Add logo hover effect */
+        .header-logo:hover {
+            transform: scale(1.02);
+            transition: transform 0.3s ease;
         }
 
-        /* Back button — shown on all non-home pages */
-        .header-back {
+        .header-left {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
             display: flex;
             align-items: center;
-            gap: 4px;
-            color: #5c3b2c;
+            gap: 12px;
+            z-index: 2;
+        }
+
+        /* Header right container */
+        .header-right {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 2;
+        }
+
+        .icon-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: #ffffff;
+            border: 1px solid #f0f0f0;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #8B5A2B;
             text-decoration: none;
-            font-size: 14px;
-            font-weight: 500;
-            padding: 8px 14px;
-            border-radius: 40px;
-            background: #fcf0e6;
-            white-space: nowrap;
-            transition: background 0.2s;
         }
 
-        .header-back:active { background: #e8d5c2; }
-        .header-back .material-symbols-outlined { font-size: 20px; }
+        .icon-btn:active {
+            background: #fcfcfc;
+        }
 
-        /* ── BOTTOM NAV ── */
+        .header-page-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: #1a1a1a;
+            text-transform: capitalize;
+        }
+
+        /* Cart Badge styling */
+        .cart-badge-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        /* Cart Badge styling */
+        .cart-badge-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: -2px;
+            right: 0px;
+            background: #ff3b30;
+            color: white;
+            font-size: 9px;
+            font-weight: 700;
+            min-width: 16px;
+            height: 16px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 3px;
+            border: 1.5px solid #ffffff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            visibility: hidden;
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 5;
+        }
+
+        .cart-badge.active {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* Hide greeting completely */
+        .header-greeting {
+            display: none;
+        }
+
+        /* ── CENTERED BOTTOM NAVIGATION ── */
         .bottom-nav {
             position: fixed;
             bottom: 0;
             left: 0;
+            right: 0;
             width: 100%;
             background: #ffffff;
-            border-top: 1px solid #f0e4d6;
-            padding: 8px 12px 20px;
+            border-top: 1px solid #e0e0e0;
+            padding: 8px 16px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            z-index: 1000;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.05);
+        }
+
+        /* Nav items container for better centering */
+        .nav-container {
             display: flex;
             justify-content: space-around;
             align-items: center;
-            z-index: 1000;
-            border-radius: 30px 30px 0 0;
-            box-shadow: 0 -5px 20px rgba(92, 59, 44, 0.08);
+            max-width: 600px;
+            width: 100%;
+            gap: 4px;
         }
 
         .nav-item {
@@ -112,13 +354,14 @@
             flex-direction: column;
             align-items: center;
             text-decoration: none;
-            color: #9b856e;
+            color: #999;
             font-size: 11px;
             font-weight: 500;
-            padding: 6px 0 4px;
-            min-width: 44px;
+            padding: 6px 8px 4px;
+            min-width: 50px;
             transition: all 0.2s ease;
             position: relative;
+            border-radius: 12px;
         }
 
         .nav-item .material-symbols-outlined {
@@ -127,48 +370,65 @@
             transition: all 0.2s ease;
         }
 
-        .nav-item span:last-child { font-size: 10px; letter-spacing: 0.3px; }
-
-        .nav-item.active { color: #5c3b2c; }
-        .nav-item.active .material-symbols-outlined { font-weight: 700; transform: translateY(-1px); }
-
-        .nav-item.active::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 4px;
-            height: 4px;
-            background: #5c3b2c;
-            border-radius: 50%;
+        .nav-item span:last-child { 
+            font-size: 10px; 
+            letter-spacing: 0.3px;
         }
 
-        .nav-item:hover { color: #5c3b2c; }
+        .nav-item.active { 
+            color: #8B5A2B; 
+            background: #ffffff;
+            border: 1px solid #f0f0f0;
+        }
+        
+        .nav-item.active .material-symbols-outlined { 
+            font-weight: 700; 
+        }
 
-        /* QR center button */
+        .nav-item:hover { 
+            color: #1a1a1a; 
+            background: #ffffff;
+            border: 1px solid #f0f0f0;
+            transform: translateY(-2px);
+        }
+
+        /* QR center button - Special styling */
         .nav-item.qr-center {
-            background: #5c3b2c;
+            background: #8B5A2B;
             color: white;
             border-radius: 40px;
-            padding: 8px 16px;
+            padding: 8px 20px;
             margin-top: -28px;
-            box-shadow: 0 4px 15px rgba(92, 59, 44, 0.4);
-            min-width: 64px;
-            border: 3px solid #fcf8f3;
+            box-shadow: 0 4px 15px rgba(139, 90, 43, 0.3);
+            min-width: 70px;
         }
 
-        .nav-item.qr-center .material-symbols-outlined { font-size: 28px; margin-bottom: 2px; }
-        .nav-item.qr-center span:last-child { font-size: 10px; font-weight: 600; }
-        .nav-item.qr-center.active { background: #4a3225; }
-        .nav-item.qr-center.active::after { display: none; }
-        .nav-item.qr-center:hover { background: #4a3225; transform: translateY(-2px); }
+        .nav-item.qr-center .material-symbols-outlined { 
+            font-size: 28px; 
+            margin-bottom: 2px; 
+        }
+        
+        .nav-item.qr-center span:last-child { 
+            font-size: 10px; 
+            font-weight: 600; 
+        }
+        
+        .nav-item.qr-center.active { 
+            background: #6B3E1A; 
+            color: white; 
+        }
+        
+        .nav-item.qr-center:hover { 
+            background: #6B3E1A; 
+            transform: translateY(-2px);
+            color: white;
+        }
 
-        /* ── UTILITY ── */
+        /* ── UTILITY - White/Black Theme ── */
         .section-title {
             font-family: 'Playfair Display', serif;
             font-size: 20px;
-            color: #3a2417;
+            color: #1a1a1a;
             margin-bottom: 16px;
             font-weight: 700;
             display: flex;
@@ -187,7 +447,8 @@
         }
 
         .carousel::-webkit-scrollbar { height: 4px; }
-        .carousel::-webkit-scrollbar-thumb { background-color: #b48c5c; border-radius: 20px; }
+        .carousel::-webkit-scrollbar-thumb { background-color: #8B5A2B; border-radius: 20px; }
+        .carousel::-webkit-scrollbar-track { background-color: #ffffff; }
 
         .category-pills {
             display: flex;
@@ -202,43 +463,44 @@
         .category-pill {
             padding: 8px 20px;
             background: #ffffff;
-            border: 1px solid #e9d9c8;
+            border: 1px solid #f0f0f0;
             border-radius: 40px;
             font-size: 14px;
             font-weight: 500;
-            color: #5c3b2c;
+            color: #4a3a2b;
             white-space: nowrap;
             cursor: pointer;
             transition: all 0.2s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
         }
 
-        .category-pill:hover  { background: #fcf0e6; }
-        .category-pill.active { background: #5c3b2c; color: white; border-color: #5c3b2c; }
+        .category-pill:hover  { background: #ffffff; border-color: #8B5A2B; }
+        .category-pill.active { background: #8B5A2B; color: white; border-color: #8B5A2B; }
 
-        /* QR card */
+        /* QR card - White/Black Theme */
         .qr-card {
-            background: linear-gradient(145deg, #ffffff, #fbf5ee);
+            background: #ffffff;
             border-radius: 30px;
             padding: 20px 16px;
             margin: 8px 16px 20px;
             display: flex;
             align-items: center;
             gap: 16px;
-            border: 1px solid #e9d9c8;
-            box-shadow: 0 6px 14px -6px rgba(92, 59, 44, 0.15);
+            border: 1px solid #f0f0f0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
             cursor: pointer;
             text-decoration: none;
             color: inherit;
             transition: all 0.2s ease;
         }
 
-        .qr-card:hover { transform: translateY(-2px); box-shadow: 0 8px 20px -6px rgba(92, 59, 44, 0.25); }
+        .qr-card:hover { transform: translateY(-2px); box-shadow: 0 8px 20px -6px rgba(139, 90, 43, 0.2); border-color: #8B5A2B; }
 
         .qr-code-icon {
             min-width: 70px;
             width: 70px;
             height: 70px;
-            background: #5c3b2c;
+            background: #8B5A2B;
             border-radius: 35px;
             display: flex;
             align-items: center;
@@ -247,8 +509,24 @@
         }
 
         .qr-code-icon .material-symbols-outlined { font-size: 36px; }
-        .qr-text h4 { font-size: 16px; font-weight: 700; color: #3a2417; margin-bottom: 4px; }
-        .qr-text p  { font-size: 13px; color: #7d5d43; }
+        .qr-text h4 { font-size: 16px; font-weight: 700; color: #1a1a1a; margin-bottom: 4px; }
+        .qr-text p  { font-size: 13px; color: #666; }
+
+        /* Product cards - White/Black Theme */
+        .product-card {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 12px;
+            margin: 8px;
+            border: 1px solid #e0e0e0;
+            transition: all 0.2s ease;
+        }
+
+        .product-card:hover {
+            border-color: #1a1a1a;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
 
         /* Safe area */
         @supports (padding-bottom: env(safe-area-inset-bottom)) {
@@ -256,40 +534,158 @@
         }
 
         /* Responsive */
-        @media (max-width: 480px) {
-            .nav-item span:last-child { font-size: 9px; }
-            .nav-item.qr-center { padding: 8px 12px; min-width: 56px; }
-            .nav-item.qr-center .material-symbols-outlined { font-size: 24px; }
+        @media (max-width: 600px) {
+            .nav-container {
+                gap: 2px;
+            }
+            .nav-item {
+                min-width: 44px;
+                padding: 6px 4px 4px;
+            }
+            .nav-item span:last-child { 
+                font-size: 9px; 
+            }
+            .nav-item.qr-center { 
+                padding: 8px 12px; 
+                min-width: 60px;
+            }
+            .nav-item.qr-center .material-symbols-outlined { 
+                font-size: 24px; 
+            }
         }
 
-        @media (max-width: 360px) {
-            .nav-item span:last-child { font-size: 8px; }
-            .nav-item .material-symbols-outlined { font-size: 20px; }
+        @media (max-width: 480px) {
+            .nav-item span:last-child { 
+                font-size: 8px; 
+            }
+            .nav-item .material-symbols-outlined { 
+                font-size: 20px; 
+            }
+            .header-logo {
+                max-width: min(120px, 35vw);
+            }
+            .nav-item.qr-center {
+                padding: 6px 10px;
+                min-width: 55px;
+            }
         }
+
+        /* Additional white/black theme elements */
+        input, textarea, select {
+            background: #ffffff;
+            border: 1px solid #e0e0e0;
+            color: #1a1a1a;
+            border-radius: 8px;
+            padding: 10px;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #8B5A2B;
+        }
+
+        button {
+            background: #8B5A2B;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        button:hover {
+            background: #6B3E1A;
+            transform: translateY(-1px);
+        }
+
     </style>
 </head>
 <body>
+
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-user-avatar">
+                <span class="material-symbols-outlined">person</span>
+            </div>
+            <div class="sidebar-user-name">{% block user_name %}Guest User{% endblock %}</div>
+            <div class="sidebar-user-email">guest@example.com</div>
+        </div>
+        <div class="sidebar-menu">
+            <a href="{{ url_for('home') }}" class="sidebar-menu-item {% if request.endpoint == 'home' %}active{% endif %}">
+                <span class="material-symbols-outlined">home</span>
+                <span>Home</span>
+            </a>
+            <a href="{{ url_for('menu') }}" class="sidebar-menu-item {% if request.endpoint == 'menu' %}active{% endif %}">
+                <span class="material-symbols-outlined">restaurant_menu</span>
+                <span>Menu</span>
+            </a>
+            <a href="{{ url_for('order') }}" class="sidebar-menu-item {% if request.endpoint == 'order' %}active{% endif %}">
+                <span class="material-symbols-outlined">shopping_bag</span>
+                <span>My Orders</span>
+            </a>
+            <a href="{{ url_for('qr') }}" class="sidebar-menu-item {% if request.endpoint == 'qr' %}active{% endif %}">
+                <span class="material-symbols-outlined">qr_code_scanner</span>
+                <span>QR Scanner</span>
+            </a>
+            <a href="{{ url_for('reward') }}" class="sidebar-menu-item {% if request.endpoint == 'reward' %}active{% endif %}">
+                <span class="material-symbols-outlined">card_giftcard</span>
+                <span>Rewards</span>
+            </a>
+            <a href="{{ url_for('wallet') }}" class="sidebar-menu-item {% if request.endpoint == 'wallet' %}active{% endif %}">
+                <span class="material-symbols-outlined">account_balance_wallet</span>
+                <span>Wallet</span>
+            </a>
+            <a href="{{ url_for('profile') }}" class="sidebar-menu-item {% if request.endpoint == 'profile' %}active{% endif %}">
+                <span class="material-symbols-outlined">person</span>
+                <span>Profile</span>
+            </a>
+            <!-- Settings, Help - using javascript functions instead of broken routes -->
+            <div class="sidebar-menu-item" onclick="showComingSoon('Settings')">
+                <span class="material-symbols-outlined">settings</span>
+                <span>Settings</span>
+            </div>
+            <div class="sidebar-menu-item" onclick="showComingSoon('Help & Support')">
+                <span class="material-symbols-outlined">help</span>
+                <span>Help & Support</span>
+            </div>
+        </div>
+        <div class="sidebar-footer">
+            <div class="sidebar-logout" onclick="handleLogout()">
+                <span class="material-symbols-outlined">logout</span>
+                <span>Logout</span>
+            </div>
+        </div>
+    </div>
+
     <div class="content-wrapper">
 
-        <!-- ── HEADER ──
-             Home  → logo left  + greeting right
-             Other → logo left  + back button right
-        -->
+        <!-- ── HEADER with Improved Logo Styling ── -->
         <div class="home-header">
-            <img src="{{ url_for('static', filename='logo.png') }}" alt="Espresso" class="header-logo"
-                 onerror="this.src='https://via.placeholder.com/140x40?text=Espresso'">
+            <!-- Header Left: Toggle Sidebar (Always visible) -->
+            <div class="header-left">
+                <button class="menu-button" id="menuButton">
+                    <span class="material-symbols-outlined">menu</span>
+                </button>
+            </div>
 
-            {% if request.endpoint == 'home' %}
-                <!-- Home: name + wave only -->
-                <div class="header-greeting">
-                    <span>{% block user_name %}Sarah{% endblock %}</span> 👋
-                </div>
-            {% else %}
-                <!-- All other pages: back button -->
-                <a href="{{ url_for('home') }}" class="header-back">
-                    <span class="material-symbols-outlined">arrow_back</span> back
+            <!-- Centered Logo (Global Branding) -->
+            <div class="logo-container">
+                <img src="{{ url_for('static', filename='logo.png') }}" alt="Espresso" class="header-logo"
+                     onerror="this.src='https://via.placeholder.com/180x50?text=Espresso'">
+            </div>
+
+            <!-- Header right with profile and search buttons -->
+            <div class="header-right">
+                <a href="{{ url_for('profile') }}" class="icon-btn">
+                    <span class="material-symbols-outlined">person</span>
                 </a>
-            {% endif %}
+            </div>
         </div>
 
         {% block content %}{% endblock %}
@@ -297,50 +693,115 @@
         {% block qr_card %}
       
         {% endblock %}
+
     </div>
 
-    <!-- BOTTOM NAVIGATION -->
+    <!-- CENTERED BOTTOM NAVIGATION -->
     <nav class="bottom-nav">
-        <a href="{{ url_for('home') }}"    class="nav-item {% if request.endpoint == 'home'    %}active{% endif %}">
-            <span class="material-symbols-outlined">home</span>
-            <span>Home</span>
-        </a>
-        <a href="{{ url_for('menu') }}"    class="nav-item {% if request.endpoint == 'menu'    %}active{% endif %}">
-            <span class="material-symbols-outlined">restaurant_menu</span>
-            <span>Menu</span>
-        </a>
-        <a href="{{ url_for('order') }}"   class="nav-item {% if request.endpoint == 'order'   %}active{% endif %}">
-            <span class="material-symbols-outlined">shopping_bag</span>
-            <span>Order</span>
-        </a>
-        <a href="{{ url_for('qr') }}"      class="nav-item qr-center {% if request.endpoint == 'qr' %}active{% endif %}">
-            <span class="material-symbols-outlined">qr_code_scanner</span>
-            <span>QR</span>
-        </a>
-        <a href="{{ url_for('reward') }}"  class="nav-item {% if request.endpoint == 'reward'  %}active{% endif %}">
-            <span class="material-symbols-outlined">card_giftcard</span>
-            <span>Reward</span>
-        </a>
-        <a href="{{ url_for('wallet') }}"  class="nav-item {% if request.endpoint == 'wallet'  %}active{% endif %}">
-            <span class="material-symbols-outlined">account_balance_wallet</span>
-            <span>Wallet</span>
-        </a>
-        <a href="{{ url_for('profile') }}" class="nav-item {% if request.endpoint == 'profile' %}active{% endif %}">
-            <span class="material-symbols-outlined">person</span>
-            <span>Profile</span>
-        </a>
+        <div class="nav-container">
+            <a href="{{ url_for('home') }}"    class="nav-item {% if request.endpoint == 'home'    %}active{% endif %}">
+                <span class="material-symbols-outlined">home</span>
+                <span>Home</span>
+            </a>
+            <a href="{{ url_for('menu') }}"    class="nav-item {% if request.endpoint == 'menu'    %}active{% endif %}">
+                <span class="material-symbols-outlined">restaurant_menu</span>
+                <span>Menu</span>
+            </a>
+            <a href="{{ url_for('order') }}"   class="nav-item cart-badge-container {% if request.endpoint == 'order'   %}active{% endif %}">
+                <span class="material-symbols-outlined">shopping_bag</span>
+                <span class="cart-badge" id="cartNavBadge">0</span>
+                <span>Order</span>
+            </a>
+            <a href="{{ url_for('qr') }}"      class="nav-item qr-center {% if request.endpoint == 'qr' %}active{% endif %}">
+                <span class="material-symbols-outlined">qr_code_scanner</span>
+                <span>QR</span>
+            </a>
+            <a href="{{ url_for('reward') }}"  class="nav-item {% if request.endpoint == 'reward'  %}active{% endif %}">
+                <span class="material-symbols-outlined">card_giftcard</span>
+                <span>Reward</span>
+            </a>
+            <a href="{{ url_for('wallet') }}" class="nav-item {% if request.endpoint == 'wallet' %}active{% endif %}">
+                <span class="material-symbols-outlined">account_balance_wallet</span>
+                <span>Wallet</span>
+            </a>
+            <a href="{{ url_for('profile') }}" class="nav-item {% if request.endpoint == 'profile' %}active{% endif %}">
+                <span class="material-symbols-outlined">person</span>
+                <span>Profile</span>
+            </a>
+        </div>
     </nav>
 
     <script>
+        // Sidebar functionality
+        const menuButton = document.getElementById('menuButton');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebarOverlay');
+
+        function openSidebar() {
+            sidebar.classList.add('active');
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeSidebar() {
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        menuButton.addEventListener('click', openSidebar);
+        overlay.addEventListener('click', closeSidebar);
+
+        // Close sidebar on escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && sidebar.classList.contains('active')) {
+                closeSidebar();
+            }
+        });
+
+        // Helper functions for non-existent routes
+        function showComingSoon(feature) {
+            closeSidebar();
+            alert(`✨ ${feature} feature coming soon!`);
+        }
+
+        function handleLogout() {
+            closeSidebar();
+            if (confirm('Are you sure you want to logout?')) {
+                // Redirect to logout route if exists, otherwise show message
+                window.location.href = "{{ url_for('logout') if 'logout' in request.application.view_functions else '#' }}";
+                if ("{{ url_for('logout') if 'logout' in request.application.view_functions else '' }}" === "#") {
+                    alert('Logged out successfully!');
+                }
+            }
+        }
+
         function addToOrder(item) {
             alert(`🛒 ${item} added to your order`);
         }
 
-        document.querySelectorAll('.category-pill').forEach(pill => {
-            pill.addEventListener('click', function () {
-                document.querySelectorAll('.category-pill').forEach(p => p.classList.remove('active'));
-                this.classList.add('active');
-            });
+        // Cart Badge Logic
+        function updateCartBadge() {
+            const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+            const badge = document.getElementById('cartNavBadge');
+            
+            if (badge) {
+                const totalItems = cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0);
+                badge.textContent = totalItems;
+                
+                if (totalItems > 0) {
+                    badge.classList.add('active');
+                } else {
+                    badge.classList.remove('active');
+                }
+            }
+        }
+
+        window.addEventListener('storage', updateCartBadge);
+        window.addEventListener('cartUpdated', updateCartBadge);
+        window.addEventListener('load', () => {
+            closeSidebar();
+            updateCartBadge();
         });
     </script>
 

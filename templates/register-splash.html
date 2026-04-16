@@ -26,8 +26,8 @@
       height: 56px;
       object-fit: cover;
       border-radius: 9999px;
-      background-color: #f5f1eb;
-      border: 1.5px dashed #d1d5db;
+      background-color: #ffffff;
+      border: 1px dashed #f0f0f0;
       padding: 0.25rem;
     }
     .perk-image-large {
@@ -35,39 +35,33 @@
       height: 120px;
       object-fit: cover;
       border-radius: 9999px;
-      border: 2px dashed #d1d5db;
+      border: 1px dashed #f0f0f0;
       padding: 0.5rem;
-      background-color: #f5f1eb;
+      background-color: #ffffff;
     }
     /* layout consistency */
     .slide-content {
       display: flex;
       flex-direction: column;
       align-items: center;
-      min-height: 380px; /* gives predictable space */
+      justify-content: center;
+      width: 100%;
     }
   </style>
 </head>
-<body class="bg-[#f5f1eb] p-0 m-0">
+<body class="bg-[#ffffff] p-0 m-0">
   
   <!-- Main Card Container -->
-  <div class="w-full min-h-screen md:min-h-0 md:max-w-sm md:mx-auto md:my-8 bg-[#f5f1eb] flex flex-col justify-between p-8 shadow-xl md:rounded-3xl relative overflow-hidden">
+  <div class="w-full h-[100dvh] overflow-hidden md:h-auto md:max-w-sm md:mx-auto md:my-8 bg-[#ffffff] flex flex-col p-8 shadow-xl md:rounded-3xl relative">
     
-    <!-- Back Button -->
-    <button class="absolute top-8 left-8 text-2xl font-light text-gray-600 z-10">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 19l-7-7 7-7" />
-      </svg>
-    </button>
-    
-    <!-- TOP LOGO - CENTERED -->
-    <div class="absolute top-28 left-0 right-0 flex justify-center z-10">
-      <img src="static/logo.png" alt="Espresso Logo" class="h-12 float-animation" 
+    <!-- TOP LOGO - NOW IN FLOW -->
+    <div class="flex justify-center mb-4 pt-4">
+      <img src="static/logo.png" alt="Espresso Logo" class="h-10 float-animation" 
            onerror="this.src='data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22260%22%20height%3D%2280%22%20viewBox%3D%220%200%20260%2080%22%3E%3Crect%20width%3D%22260%22%20height%3D%2280%22%20fill%3D%22%23f9f1e7%22%2F%3E%3Ctext%20x%3D%2230%22%20y%3D%2252%22%20font-family%3D%22Montserrat%22%20font-size%3D%2232%22%20fill%3D%22%238b5a2b%22%3EESPRESSO%3C%2Ftext%3E%3C%2Fsvg%3E';">
     </div>
     
-    <!-- CAROUSEL SECTION - adjusted top margin -->
-    <div class="relative w-full overflow-hidden mt-40 flex-1 flex items-center">
+    <!-- CAROUSEL SECTION -->
+    <div class="relative w-full overflow-hidden flex-1 flex items-center">
       <!-- Carousel Track -->
       <div class="flex transition-transform duration-300 ease-out w-full" id="carouselTrack">
         
@@ -75,15 +69,15 @@
         <div class="w-full flex-shrink-0 px-2">
           <div class="slide-content">
             <div class="text-center mt-4">
-              <h1 class="text-[26px] leading-tight font-normal text-gray-800">
-                6th cup <span class="font-semibold">free</span>
+              <h1 class="text-[26px] leading-tight font-normal text-[#4a3a2b]">
+                6th cup <span class="font-semibold text-[#8B5A2B]">free</span>
               </h1>
               <p class="text-gray-500 text-sm mt-2">Collect stamps & get 1 free Drink</p>
             </div>
             
             <!-- image row replaces icon row: exactly same spacing as before, but now all images -->
               <div class="flex justify-center items-center mt-16">
-              <div class="w-48 h-48 rounded-full bg-[#f5f1eb] flex items-center justify-center border-2 border-dashed border-gray-300 p-4">
+              <div class="w-48 h-48 rounded-full bg-[#ffffff] flex items-center justify-center border-2 border-dashed border-[#f0f0f0] p-4">
                 <img src="static/coffee-bottle-bottle-drink-svgrepo-com.svg" alt="Coffee Cup" class="w-32 h-32 object-contain rounded-full" onerror="this.src='data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22128%22%20height%3D%22128%22%20viewBox%3D%220%200%20128%20128%22%3E%3Ccircle%20cx%3D%2264%22%20cy%3D%2264%22%20r%3D%2260%22%20fill%3D%22%23f5f1eb%22%20stroke%3D%22%23d1d5db%22%20stroke-width%3D%222%22%20stroke-dasharray%3D%224%204%22%2F%3E%3Ctext%20x%3D%2232%22%20y%3D%2280%22%20font-size%3D%2220%22%20fill%3D%22%239ca3af%22%3Ecoffee%3C%2Ftext%3E%3C%2Fsvg%3E';">
               </div>
             </div>
@@ -96,15 +90,15 @@
         <div class="w-full flex-shrink-0 px-2">
           <div class="slide-content">
             <div class="text-center mt-4">
-              <h1 class="text-[26px] leading-tight font-normal text-gray-800">
-                Top-up & get <span class="font-semibold">bonus</span>
+              <h1 class="text-[26px] leading-tight font-normal text-[#4a3a2b]">
+                Top-up & get <span class="font-semibold text-[#8B5A2B]">bonus</span>
               </h1>
               <p class="text-gray-500 text-sm mt-2">Extra money on every reload</p>
             </div>
             
             <!-- all images row (replaces previous bolt/savings icons) -->
              <div class="flex justify-center items-center mt-16">
-              <div class="w-48 h-48 rounded-full bg-[#f5f1eb] flex items-center justify-center border-2 border-dashed border-gray-300 p-4">
+              <div class="w-48 h-48 rounded-full bg-[#ffffff] flex items-center justify-center border-2 border-dashed border-[#f0f0f0] p-4">
                 <img src="static/money-bag.svg" alt="Coffee Cup" class="w-32 h-32 object-contain rounded-full" onerror="this.src='data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22128%22%20height%3D%22128%22%20viewBox%3D%220%200%20128%20128%22%3E%3Ccircle%20cx%3D%2264%22%20cy%3D%2264%22%20r%3D%2260%22%20fill%3D%22%23f5f1eb%22%20stroke%3D%22%23d1d5db%22%20stroke-width%3D%222%22%20stroke-dasharray%3D%224%204%22%2F%3E%3Ctext%20x%3D%2232%22%20y%3D%2280%22%20font-size%3D%2220%22%20fill%3D%22%239ca3af%22%3Ecoffee%3C%2Ftext%3E%3C%2Fsvg%3E';">
               </div>
             </div>
@@ -119,16 +113,16 @@
         <div class="w-full flex-shrink-0 px-2">
           <div class="slide-content">
             <div class="text-center mt-4">
-              <h1 class="text-[26px] leading-tight font-normal text-gray-800">
-                Customize & <span class="font-semibold">pickup</span>
+              <h1 class="text-[26px] leading-tight font-normal text-[#4a3a2b]">
+                Customize & <span class="font-semibold text-[#8B5A2B]">pickup</span>
               </h1>
               <p class="text-gray-500 text-sm mt-2">Ready when you are</p>
             </div>
             
             <!-- Centered large coffee cup image (hero style) -->
             <div class="flex justify-center items-center mt-16">
-              <div class="w-48 h-48 rounded-full bg-[#f5f1eb] flex items-center justify-center border-2 border-dashed border-gray-300 p-4">
-                <img src="static/coffee_cup.jpg" alt="Coffee Cup" class="w-32 h-32 object-contain rounded-full" onerror="this.src='data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22128%22%20height%3D%22128%22%20viewBox%3D%220%200%20128%20128%22%3E%3Ccircle%20cx%3D%2264%22%20cy%3D%2264%22%20r%3D%2260%22%20fill%3D%22%23f5f1eb%22%20stroke%3D%22%23d1d5db%22%20stroke-width%3D%222%22%20stroke-dasharray%3D%224%204%22%2F%3E%3Ctext%20x%3D%2232%22%20y%3D%2280%22%20font-size%3D%2220%22%20fill%3D%22%239ca3af%22%3Ecoffee%3C%2Ftext%3E%3C%2Fsvg%3E';">
+              <div class="w-48 h-48 rounded-full bg-[#ffffff] flex items-center justify-center border-2 border-dashed border-[#f0f0f0] p-4">
+                <img src="static/coffee_cup.jpg" alt="Coffee Cup" class="w-32 h-32 object-contain rounded-full" onerror="this.src='data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22128%22%20height%3D%22128%22%20viewBox%3D%220%200%20128%20128%22%3E%3Ccircle%20cx%3D%2264%22%20cy%3D%2264%22%20r%3D%2260%22%20fill%3D%22%23ffffff%22%20stroke%3D%22%23f0f0f0%22%20stroke-width%3D%222%22%20stroke-dasharray%3D%224%204%22%2F%3E%3Ctext%20x%3D%2232%22%20y%3D%2280%22%20font-size%3D%2220%22%20fill%3D%22%23f0f0f0%22%3Ecoffee%3C%2Ftext%3E%3C%2Fsvg%3E';">
               </div>
             </div>
             
@@ -143,13 +137,13 @@
     <div class="w-full space-y-6 mt-auto pt-8 pb-4">
       <!-- Carousel Indicators (dots) -->
       <div class="flex justify-center gap-1.5" id="dotContainer">
-        <span class="w-6 h-1.5 bg-black rounded-full cursor-pointer" onclick="goToSlide(0)"></span>
-        <span class="w-1.5 h-1.5 bg-gray-300 rounded-full cursor-pointer" onclick="goToSlide(1)"></span>
-        <span class="w-1.5 h-1.5 bg-gray-300 rounded-full cursor-pointer" onclick="goToSlide(2)"></span>
+        <span class="w-6 h-1.5 bg-[#8B5A2B] rounded-full cursor-pointer" onclick="goToSlide(0)"></span>
+        <span class="w-1.5 h-1.5 bg-[#f0f0f0] rounded-full cursor-pointer" onclick="goToSlide(1)"></span>
+        <span class="w-1.5 h-1.5 bg-[#f0f0f0] rounded-full cursor-pointer" onclick="goToSlide(2)"></span>
       </div>
       
       <!-- Next Button - navigates to /register -->
-      <button class="w-full bg-black text-white text-lg py-4 rounded-xl hover:bg-gray-900 transition-all font-medium" id="nextBtn">
+      <button class="w-1/2 max-w-[200px] mx-auto bg-[#8B5A2B] text-white text-lg py-4 rounded-xl hover:bg-[#6B3E1A] transition-all font-medium block" id="nextBtn">
         Next
       </button>
     </div>
@@ -171,9 +165,9 @@
       
       dots.forEach((dot, i) => {
         if (i === currentSlide) {
-          dot.className = 'w-6 h-1.5 bg-black rounded-full cursor-pointer';
+          dot.className = 'w-6 h-1.5 bg-[#8B5A2B] rounded-full cursor-pointer';
         } else {
-          dot.className = 'w-1.5 h-1.5 bg-gray-300 rounded-full cursor-pointer';
+          dot.className = 'w-1.5 h-1.5 bg-[#f0f0f0] rounded-full cursor-pointer';
         }
       });
       
