@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Espresso Gallery</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Playfair Display', 'Cormorant Garamond', serif;
+            background: #faf9f6;
+            color: #111111;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Loading Screen */
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: #faf9f6;
+            z-index: 3000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 1s ease, visibility 1s ease;
+        }
+
+        #loading-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loading-content {
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        /* Loading Logo - PNG Image */
+        .loading-logo {
+            max-width: min(300px, 70vw);
+            height: auto;
+            margin-bottom: clamp(20px, 5vh, 40px);
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            object-fit: contain;
+        }
+
+        /* Coffee Cup Animation */
+        .coffee-cup {
+            width: clamp(80px, 20vw, 120px);
+            height: clamp(100px, 25vw, 160px);
+            margin: 0 auto clamp(15px, 3vh, 30px);
+            position: relative;
+        }
+
+        .cup {
+            width: clamp(60px, 15vw, 100px);
+            height: clamp(70px, 18vw, 120px);
+            background: #f0f0f0;
+            border: clamp(2px, 0.5vw, 4px) solid #333333;
+            border-radius: 0 0 clamp(20px, 5vw, 50px) clamp(20px, 5vw, 50px);
+            position: absolute;
+            bottom: 0;
+            left: clamp(5px, 1vw, 10px);
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .cup-handle {
+            width: clamp(15px, 4vw, 30px);
+            height: clamp(25px, 6vw, 50px);
+            border: clamp(2px, 0.5vw, 4px) solid #333333;
+            border-radius: 50% 0 0 50%;
+            position: absolute;
+            left: clamp(-15px, -3vw, -20px);
+            top: clamp(15px, 4vw, 30px);
+            border-right: none;
+        }
+
+        .cup-fill {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(180deg, #333333, #111111);
+            animation: fillCup 4s linear forwards;
+            height: 0%;
+        }
+
+        .steam {
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 5px;
+        }
+
+        .steam span {
+            width: 8px;
+            height: 8px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 50%;
+            animation: steam 2s ease-in-out infinite;
+        }
+
+        .steam span:nth-child(1) { animation-delay: 0s; }
+        .steam span:nth-child(2) { animation-delay: 0.5s; }
+        .steam span:nth-child(3) { animation-delay: 1s; }
+
+        @keyframes fillCup {
+            0% { height: 0%; }
+            20% { height: 20%; }
+            40% { height: 40%; }
+            60% { height: 60%; }
+            80% { height: 80%; }
+            100% { height: 100%; }
+        }
+
+        @keyframes steam {
+            0% { transform: translateY(0) scale(1); opacity: 0.5; }
+            50% { transform: translateY(-20px) scale(1.5); opacity: 0; }
+            100% { transform: translateY(0) scale(1); opacity: 0.5; }
+        }
+
+        .loading-text {
+            font-size: clamp(0.8rem, 4vw, 1.2rem);
+            color: #333333;
+            letter-spacing: clamp(1px, 1vw, 4px);
+            margin-top: clamp(10px, 2vh, 20px);
+            font-family: 'DM Sans', sans-serif;
+            animation: fadePulse 2s ease-in-out infinite;
+        }
+
+        @keyframes fadePulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        /* Main Container */
+        .container {
+            width: 100%;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            opacity: 0;
+            animation: fadeIn 1s ease-out 4.5s forwards;
+            background: #faf9f6;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Minimal Header */
+        .espresso-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 100;
+            background: transparent;
+            padding: clamp(10px, 2vh, 20px) clamp(15px, 3vw, 30px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            mix-blend-mode: difference;
+            color: #ffffff;
+            pointer-events: none;
+        }
+
+        /* Header Logo - PNG Image */
+        .header-logo-img {
+            height: clamp(25px, 5vh, 40px);
+            width: auto;
+            pointer-events: auto;
+            cursor: pointer;
+            filter: brightness(0) invert(1);
+            object-fit: contain;
+        }
+
+        .header-menu {
+            display: flex;
+            gap: clamp(10px, 2vw, 30px);
+            pointer-events: auto;
+        }
+
+        .header-menu span {
+            font-size: clamp(0.7rem, 2vw, 0.9rem);
+            font-weight: 300;
+            letter-spacing: 1px;
+            font-family: 'DM Sans', sans-serif;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+            color: #ffffff;
+        }
+
+        .header-menu span:hover {
+            opacity: 0.7;
+        }
+
+        /* Hide menu on mobile */
+        @media (max-width: 480px) {
+            .header-menu {
+                display: none;
+            }
+        }
+
+        /* Auto-playing Gallery - No pause */
+        .gallery-container {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .gallery-track {
+            display: flex;
+            flex-direction: column;
+            transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
+            height: 100%;
+            will-change: transform;
+        }
+
+        .gallery-frame {
+            width: 100%;
+            height: 100vh;
+            flex-shrink: 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .frame-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* CENTERED TEXT OVERLAY - Always visible */
+        .image-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.3);
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            pointer-events: none;
+        }
+
+        .image-title {
+            font-size: clamp(1.8rem, 8vw, 4rem);
+            font-weight: 700;
+            font-family: 'Playfair Display', serif;
+            margin-bottom: clamp(8px, 2vh, 15px);
+            line-height: 1.2;
+            text-shadow: 0 2px 15px rgba(0,0,0,0.5);
+            max-width: 90%;
+        }
+
+        .image-desc {
+            font-size: clamp(0.9rem, 4vw, 1.5rem);
+            font-weight: 300;
+            font-family: 'DM Sans', sans-serif;
+            letter-spacing: 1px;
+            opacity: 0.95;
+            text-shadow: 0 1px 10px rgba(0,0,0,0.5);
+            max-width: 80%;
+        }
+
+        /* "Let's Go" Button */
+        .button-container {
+            position: fixed;
+            bottom: clamp(20px, 5vh, 40px);
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            z-index: 50;
+            pointer-events: none;
+            padding: 0 20px;
+        }
+
+        .letsgo-btn {
+            padding: clamp(12px, 3vh, 18px) clamp(40px, 12vw, 70px);
+            font-size: clamp(1.1rem, 5vw, 1.6rem);
+            font-weight: 500;
+            border: none;
+            border-radius: clamp(30px, 8vw, 50px);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'DM Sans', sans-serif;
+            letter-spacing: clamp(2px, 1vw, 4px);
+            background: rgba(255, 255, 255, 0.95);
+            color: #111111;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            backdrop-filter: blur(5px);
+            pointer-events: auto;
+            text-transform: uppercase;
+            white-space: nowrap;
+            font-weight: 600;
+        }
+
+        .letsgo-btn:hover {
+            background: #faf9f6;
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+        }
+
+        /* Simple bottom line */
+        .bottom-line {
+            position: fixed;
+            bottom: clamp(10px, 2vh, 20px);
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: clamp(10px, 2vw, 15px);
+            z-index: 40;
+            pointer-events: none;
+            mix-blend-mode: difference;
+        }
+
+        .line {
+            width: clamp(40px, 10vw, 70px);
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.9), transparent);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Google Fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+        /* Landscape orientation */
+        @media (orientation: landscape) and (max-height: 600px) {
+            .image-title {
+                font-size: clamp(1.5rem, 6vh, 2.5rem);
+                margin-bottom: 5px;
+            }
+            
+            .image-desc {
+                font-size: clamp(0.8rem, 3vh, 1.1rem);
+            }
+            
+            .letsgo-btn {
+                padding: 8px 40px;
+                font-size: 1.1rem;
+            }
+        }
+
+        /* Tablet */
+        @media (min-width: 768px) and (max-width: 1024px) {
+            .image-title {
+                font-size: 3.5rem;
+            }
+        }
+
+        img {
+            margin: 0;
+            padding: 0;
+            display: block;
+        }
+    </style>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Loading Screen with PNG Logo -->
+    <div id="loading-screen">
+        <div class="loading-content">
+            <!-- PNG Logo in loading screen -->
+            <img src="static/logo.png" alt="Espresso Logo" class="loading-logo">
+            
+            <!-- Coffee Cup Animation -->
+            <div class="coffee-cup">
+                <div class="cup">
+                    <div class="cup-fill"></div>
+                    <div class="steam">
+                        <span></span><span></span><span></span>
+                    </div>
+                </div>
+                <div class="cup-handle"></div>
+            </div>
+            
+            <div class="loading-text">WELCOME YOUR ESPRESSO</div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Minimal Header with PNG Logo -->
+        <div class="espresso-header">
+            <!-- PNG Logo in header -->
+            <img src="static/logo.png" alt="Espresso" class="header-logo-img">
+        
+        </div>
+
+        <!-- Auto-playing Gallery - Continuous, no pause -->
+        <div class="gallery-container">
+            <div class="gallery-track" id="galleryTrack">
+                <!-- Image 1 -->
+                <div class="gallery-frame">
+                    <img src="../static/imgg.jpeg" alt="Espresso Shot" class="frame-image">
+                    <div class="image-overlay">
+                        <div class="image-title">Perfect Espresso</div>
+                        <div class="image-desc">Rich crema · 25 second extraction</div>
+                    </div>
+                </div>
+                
+                <!-- Image 2 -->
+                <div class="gallery-frame">
+                    <img src="../static/imgg12.jpeg" alt="Coffee Beans" class="frame-image">
+                    <div class="image-overlay">
+                        <div class="image-title">Premium Beans</div>
+                        <div class="image-desc">100% Arabica · Fresh roasted</div>
+                    </div>
+                </div>
+                
+                <!-- Image 3 -->
+                <div class="gallery-frame">
+                    <img src="../static/imgg2.jpeg" alt="Latte Art" class="frame-image">
+                    <div class="image-overlay">
+                        <div class="image-title">Latte Art</div>
+                        <div class="image-desc">Tulip · Rosetta · Heart</div>
+                    </div>
+                </div>
+                
+                <!-- Image 4 -->
+                <div class="gallery-frame">
+                    <img src="../static/imgg3.jpeg" alt="Espresso Machine" class="frame-image">
+                    <div class="image-overlay">
+                        <div class="image-title">La Marzocco</div>
+                        <div class="image-desc">Professional espresso machine</div>
+                    </div>
+                </div>
+                
+                <!-- Image 5 -->
+                <div class="gallery-frame">
+                    <img src="../static/imgg13.jpeg" alt="Coffee Grinder" class="frame-image">
+                    <div class="image-overlay">
+                        <div class="image-title">Precision Grinding</div>
+                        <div class="image-desc">Burr grinder · Perfect consistency</div>
+                    </div>
+                </div>
+                
+                <!-- Image 6 -->
+                <div class="gallery-frame">
+                    <img src="../static/imgg6.jpeg" alt="Coffee Cup" class="frame-image">
+                    <div class="image-overlay">
+                        <div class="image-title">Ceramic Cup</div>
+                        <div class="image-desc">Handcrafted · Perfect temperature</div>
+                    </div>
+                </div>
+                
+                <!-- Image 7 -->
+                <div class="gallery-frame">
+                    <img src="../static/imgg8.jpeg" alt="Coffee Bar" class="frame-image">
+                    <div class="image-overlay">
+                        <div class="image-title">Coffee Bar</div>
+                        <div class="image-desc">Professional setup · Workflow</div>
+                    </div>
+                </div>
+                
+                <!-- Image 8 -->
+                <div class="gallery-frame">
+                    <img src="../static/imgg9.jpeg" alt="Coffee Roasting" class="frame-image">
+                    <div class="image-overlay">
+                        <div class="image-title">Artisan Roasting</div>
+                        <div class="image-desc">Small batch · Medium roast</div>
+                    </div>
+                </div>
+                
+                <!-- Image 9 -->
+                <div class="gallery-frame">
+                    <img src="../static/imgg5.jpeg" alt="Coffee Tasting" class="frame-image">
+                    <div class="image-overlay">
+                        <div class="image-title">Cupping Session</div>
+                        <div class="image-desc">Flavor profiling · Aroma</div>
+                    </div>
+                </div>
+                
+                <!-- Image 10 -->
+                <div class="gallery-frame">
+                    <img src="../static/imgg11.jpeg" alt="Coffee Shop" class="frame-image">
+                    <div class="image-overlay">
+                        <div class="image-title">Coffee Shop</div>
+                        <div class="image-desc">Warm atmosphere · Fresh brew</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- "Let's Go" Button - Navigates to Login -->
+       <div class="button-container">
+    <button class="letsgo-btn" onclick="navigateToLogin()">
+        LET'S GO >>
+    </button>
+</div>
+
+        <!-- Simple bottom line -->
+        <div class="bottom-line">
+            <div class="line"></div>
+            <div class="line"></div>
+        </div>
+    </div>
+
+    <script>
+        // Hide loading screen after 4 seconds
+        setTimeout(() => {
+            document.getElementById('loading-screen').classList.add('hidden');
+        }, 4000);
+
+        // Auto-playing gallery - moves every 2 seconds, NO PAUSE
+        const track = document.getElementById('galleryTrack');
+        const frames = document.querySelectorAll('.gallery-frame');
+        const totalFrames = frames.length;
+        let currentIndex = 0;
+        let autoPlayInterval;
+        let isTransitioning = false;
+
+        // Move to next image
+        function nextImage() {
+            if (isTransitioning) return;
+            
+            isTransitioning = true;
+            currentIndex = (currentIndex + 1) % totalFrames;
+            
+            const transformValue = -(currentIndex * 100);
+            track.style.transform = `translateY(${transformValue}vh)`;
+            
+            setTimeout(() => {
+                isTransitioning = false;
+            }, 1000);
+        }
+
+        // Start autoplay - runs continuously
+        function startAutoPlay() {
+            if (autoPlayInterval) clearInterval(autoPlayInterval);
+            autoPlayInterval = setInterval(nextImage, 1000);
+        }
+
+        // Start autoplay when page loads
+        startAutoPlay();
+
+        // Handle window resize
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                const transformValue = -(currentIndex * 100);
+                track.style.transform = `translateY(${transformValue}vh)`;
+            }, 100);
+        });
+
+        // ===== NAVIGATION FUNCTION =====
+        // "Let's Go" Button Function - Navigates to login page
+        function navigateToLogin() {
+            // Option 1: Redirect to a login HTML page
+            window.location.href = 'register-splash';
+            
+            // Option 2: If you want to open in a new tab
+            // window.open('login.html', '_blank');
+            
+            // Option 3: For demo purposes, show alert and then redirect
+            // alert('Redirecting to login page...');
+            // setTimeout(() => {
+            //     window.location.href = 'login.html';
+            // }, 500);
+            
+            // Note: The slideshow will continue in the background
+            // but the page will navigate away
+        }
+        // ==============================
+
+        // Clean up on page unload
+        window.addEventListener('beforeunload', () => {
+            if (autoPlayInterval) {
+                clearInterval(autoPlayInterval);
+            }
+        });
+
+        // Handle visibility change (pause when tab is inactive - good for performance)
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                if (autoPlayInterval) clearInterval(autoPlayInterval);
+            } else {
+                startAutoPlay();
+            }
+        });
+
+        // No hover pause - removed all mouseenter/mouseleave events
+        // No touch pause - removed all touch events
+    </script>
+</body>
+</html>

@@ -1,206 +1,400 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-  <title>espresso · visual carousel</title>
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+  <title>espresso · vertical splash</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0,1" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    body { font-family: 'Inter', sans-serif; }
-    @keyframes float {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-4px); }
+    body {
+      font-family: 'Inter', sans-serif;
+      -webkit-tap-highlight-color: transparent;
     }
+
+    @keyframes float {
+
+      0%,
+      100% {
+        transform: translateY(0px);
+      }
+
+      50% {
+        transform: translateY(-3px);
+      }
+    }
+
+    @keyframes reveal {
+      0% {
+        opacity: 0;
+        transform: translateY(-20px) scale(0.95);
+        filter: blur(8px);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0);
+      }
+    }
+
+    @keyframes shimmer {
+      0% {
+        background-position: -200% center;
+      }
+
+      100% {
+        background-position: 200% center;
+      }
+    }
+
     .float-animation {
       animation: float 4s ease-in-out infinite;
     }
-    /* keep material symbols available, but we won't use them on slide 1 & 2 */
-    .material-symbols-rounded {
-      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+
+    .reveal-animation {
+      animation: reveal 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
     }
-    /* consistent image circle style */
-    .perk-image {
-      width: 56px;
-      height: 56px;
-      object-fit: cover;
-      border-radius: 9999px;
-      background-color: #ffffff;
-      border: 1px dashed #f0f0f0;
-      padding: 0.25rem;
+
+    .shimmer-logo {
+      position: relative;
+      overflow: hidden;
     }
-    .perk-image-large {
-      width: 120px;
-      height: 120px;
-      object-fit: cover;
-      border-radius: 9999px;
-      border: 1px dashed #f0f0f0;
-      padding: 0.5rem;
-      background-color: #ffffff;
+
+    .shimmer-logo::after {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(to bottom right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.1) 40%, rgba(255, 255, 255, 0.4) 50%, rgba(255, 255, 255, 0.1) 60%, rgba(255, 255, 255, 0) 100%);
+      transform: rotate(45deg);
+      animation: shimmer 6s infinite;
+      pointer-events: none;
     }
-    /* layout consistency */
-    .slide-content {
+
+    /* Stack Container */
+    .card-stack {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Individual Card Style */
+    .card {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: #ffffff;
+      /* uniform background or white if preferred */
+      border-radius: 0px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      width: 100%;
+      /* centering content */
+      transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.5s ease-out, filter 0.5s ease;
+      will-change: transform, opacity;
+      touch-action: none;
+    }
+
+    .hero-image-wrapper {
+      width: clamp(150px, 30vh, 220px);
+      height: clamp(150px, 30vh, 220px);
+      border-radius: 9999px;
+      border: 2px dashed #d1d5db;
+      background: #fdfbf8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.03);
+    }
+
+    .hero-image-wrapper img {
+      width: 75%;
+      height: 75%;
+      object-fit: contain;
+    }
+
+    /* States for the stack */
+    .card.top {
+      transform: translateY(0) scale(1) rotate(0);
+      opacity: 1;
+      z-index: 10;
+    }
+
+    .card.next {
+      transform: translateY(20px) scale(0.9) rotate(0);
+      opacity: 0.6;
+      z-index: 5;
+      filter: blur(2px);
+    }
+
+    .card.behind {
+      transform: translateY(40px) scale(0.8) rotate(0);
+      opacity: 0;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .card.dismissed {
+      transform: translateY(-120vh) scale(0.9) rotate(-10deg);
+      opacity: 0;
+      z-index: 20;
+      pointer-events: none;
+    }
+
+    /* Custom scroll indicator dots */
+    .dot-pill {
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @keyframes bounce-up {
+
+      0%,
+      20%,
+      50%,
+      80%,
+      100% {
+        transform: translateY(0);
+      }
+
+      40% {
+        transform: translateY(-8px);
+      }
+
+      60% {
+        transform: translateY(-4px);
+      }
+    }
+
+    .bounce-up {
+      animation: bounce-up 2s infinite;
     }
   </style>
 </head>
-<body class="bg-[#ffffff] p-0 m-0">
-  
-  <!-- Main Card Container -->
-  <div class="w-full h-[100dvh] overflow-hidden md:h-auto md:max-w-sm md:mx-auto md:my-8 bg-[#ffffff] flex flex-col p-8 shadow-xl md:rounded-3xl relative">
-    
-    <!-- TOP LOGO - NOW IN FLOW -->
-    <div class="flex justify-center mb-4 pt-4">
-      <img src="static/logo.png" alt="Espresso Logo" class="h-10 float-animation" 
-           onerror="this.src='data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22260%22%20height%3D%2280%22%20viewBox%3D%220%200%20260%2080%22%3E%3Crect%20width%3D%22260%22%20height%3D%2280%22%20fill%3D%22%23f9f1e7%22%2F%3E%3Ctext%20x%3D%2230%22%20y%3D%2252%22%20font-family%3D%22Montserrat%22%20font-size%3D%2232%22%20fill%3D%22%238b5a2b%22%3EESPRESSO%3C%2Ftext%3E%3C%2Fsvg%3E';">
-    </div>
-    
-    <!-- CAROUSEL SECTION -->
-    <div class="relative w-full overflow-hidden flex-1 flex items-center">
-      <!-- Carousel Track -->
-      <div class="flex transition-transform duration-300 ease-out w-full" id="carouselTrack">
-        
-        <!-- PAGE 1: 6th Cup Free — now using image instead of icons -->
-        <div class="w-full flex-shrink-0 px-2">
-          <div class="slide-content">
-            <div class="text-center mt-4">
-              <h1 class="text-[26px] leading-tight font-normal text-[#4a3a2b]">
-                6th cup <span class="font-semibold text-[#8B5A2B]">free</span>
-              </h1>
-              <p class="text-gray-500 text-sm mt-2">Collect stamps & get 1 free Drink</p>
-            </div>
-            
-            <!-- image row replaces icon row: exactly same spacing as before, but now all images -->
-              <div class="flex justify-center items-center mt-16">
-              <div class="w-48 h-48 rounded-full bg-[#ffffff] flex items-center justify-center border-2 border-dashed border-[#f0f0f0] p-4">
-                <img src="static/coffee-bottle-bottle-drink-svgrepo-com.svg" alt="Coffee Cup" class="w-32 h-32 object-contain rounded-full" onerror="this.src='data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22128%22%20height%3D%22128%22%20viewBox%3D%220%200%20128%20128%22%3E%3Ccircle%20cx%3D%2264%22%20cy%3D%2264%22%20r%3D%2260%22%20fill%3D%22%23f5f1eb%22%20stroke%3D%22%23d1d5db%22%20stroke-width%3D%222%22%20stroke-dasharray%3D%224%204%22%2F%3E%3Ctext%20x%3D%2232%22%20y%3D%2280%22%20font-size%3D%2220%22%20fill%3D%22%239ca3af%22%3Ecoffee%3C%2Ftext%3E%3C%2Fsvg%3E';">
-              </div>
-            </div>
-            <!-- Progress text -->
-            <p class="text-center text-sm text-gray-500 mt-8">6 collected next Drink free collected ·</p>
-          </div>
-        </div>
-        
-        <!-- PAGE 2: Top-up Bonus Money — now using image instead of money/material icons -->
-        <div class="w-full flex-shrink-0 px-2">
-          <div class="slide-content">
-            <div class="text-center mt-4">
-              <h1 class="text-[26px] leading-tight font-normal text-[#4a3a2b]">
-                Top-up & get <span class="font-semibold text-[#8B5A2B]">bonus</span>
-              </h1>
-              <p class="text-gray-500 text-sm mt-2">Extra money on every reload</p>
-            </div>
-            
-            <!-- all images row (replaces previous bolt/savings icons) -->
-             <div class="flex justify-center items-center mt-16">
-              <div class="w-48 h-48 rounded-full bg-[#ffffff] flex items-center justify-center border-2 border-dashed border-[#f0f0f0] p-4">
-                <img src="static/money-bag.svg" alt="Coffee Cup" class="w-32 h-32 object-contain rounded-full" onerror="this.src='data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22128%22%20height%3D%22128%22%20viewBox%3D%220%200%20128%20128%22%3E%3Ccircle%20cx%3D%2264%22%20cy%3D%2264%22%20r%3D%2260%22%20fill%3D%22%23f5f1eb%22%20stroke%3D%22%23d1d5db%22%20stroke-width%3D%222%22%20stroke-dasharray%3D%224%204%22%2F%3E%3Ctext%20x%3D%2232%22%20y%3D%2280%22%20font-size%3D%2220%22%20fill%3D%22%239ca3af%22%3Ecoffee%3C%2Ftext%3E%3C%2Fsvg%3E';">
-              </div>
-            </div>
-            
-            
-            <!-- descriptive text -->
-            <p class="text-center text-sm text-gray-500 mt-8">Top-up to unlock bonus levels</p>
-          </div>
-        </div>
-        
-        <!-- PAGE 3: Customize & Pickup - WITH COFFEE CUP IMAGE CENTERED (larger hero) -->
-        <div class="w-full flex-shrink-0 px-2">
-          <div class="slide-content">
-            <div class="text-center mt-4">
-              <h1 class="text-[26px] leading-tight font-normal text-[#4a3a2b]">
-                Customize & <span class="font-semibold text-[#8B5A2B]">pickup</span>
-              </h1>
-              <p class="text-gray-500 text-sm mt-2">Ready when you are</p>
-            </div>
-            
-            <!-- Centered large coffee cup image (hero style) -->
-            <div class="flex justify-center items-center mt-16">
-              <div class="w-48 h-48 rounded-full bg-[#ffffff] flex items-center justify-center border-2 border-dashed border-[#f0f0f0] p-4">
-                <img src="static/coffee_cup.jpg" alt="Coffee Cup" class="w-32 h-32 object-contain rounded-full" onerror="this.src='data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22128%22%20height%3D%22128%22%20viewBox%3D%220%200%20128%20128%22%3E%3Ccircle%20cx%3D%2264%22%20cy%3D%2264%22%20r%3D%2260%22%20fill%3D%22%23ffffff%22%20stroke%3D%22%23f0f0f0%22%20stroke-width%3D%222%22%20stroke-dasharray%3D%224%204%22%2F%3E%3Ctext%20x%3D%2232%22%20y%3D%2280%22%20font-size%3D%2220%22%20fill%3D%22%23f0f0f0%22%3Ecoffee%3C%2Ftext%3E%3C%2Fsvg%3E';">
-              </div>
-            </div>
-            
-            <!-- Pickup message -->
-            <p class="text-center text-sm text-gray-500 mt-8">Customize · fresh pack · 5-8 min</p>
-          </div>
-        </div>
+
+<body class="bg-white p-0 m-0 overflow-hidden">
+
+  <!-- Main Viewport Container -->
+  <div
+    class="w-full h-screen md:max-w-sm md:mx-auto md:my-8 bg-white flex flex-col justify-between shadow-2xl md:rounded-[40px] relative overflow-hidden"
+    style="padding-top: env(safe-area-inset-top, 2rem); padding-bottom: env(safe-area-inset-bottom, 2rem);">
+
+
+    <!-- Header Logo Area -->
+    <div
+      class="absolute top-[env(safe-area-inset-top,2rem)] mt-20 left-0 right-0 flex justify-center z-50 reveal-animation">
+      <div class="shimmer-logo p-2">
+        <img src="static/logo.png" alt="Espresso" class="h-14 float-animation">
       </div>
     </div>
- 
-    <!-- BOTTOM SECTION -->
-    <div class="w-full space-y-6 mt-auto pt-8 pb-4">
-      <!-- Carousel Indicators (dots) -->
-      <div class="flex justify-center gap-1.5" id="dotContainer">
-        <span class="w-6 h-1.5 bg-[#8B5A2B] rounded-full cursor-pointer" onclick="goToSlide(0)"></span>
-        <span class="w-1.5 h-1.5 bg-[#f0f0f0] rounded-full cursor-pointer" onclick="goToSlide(1)"></span>
-        <span class="w-1.5 h-1.5 bg-[#f0f0f0] rounded-full cursor-pointer" onclick="goToSlide(2)"></span>
+
+    <!-- Responsive Card Stack Section (Gap Removed) -->
+    <div class="flex-1 mt-0 relative px-6">
+      <div class="card-stack" id="cardStack">
+
+        <!-- CARD 1 -->
+        <div class="card top" id="card-0">
+          <div class="text-center mb-4 px-4">
+            <h1 class="text-2xl font-normal text-gray-800 leading-tight">6th cup <span
+                class="font-bold text-[#8b5a2b]">free</span></h1>
+            <p class="text-gray-500 text-xs mt-1">Collect stamps & get 1 free drink</p>
+          </div>
+          <div class="hero-image-wrapper overflow-hidden border-[1.5px] border-solid border-[#e8ddd4] shadow-xl">
+            <img src="static/coffee-bottle-bottle-drink-svgrepo-com.svg" alt="Free Drink"
+              class="w-full h-full object-cover">
+          </div>
+          <p class="text-gray-400 text-[10px] tracking-widest uppercase mt-4 mb-4">6 stamps for a reward</p>
+          <p class="text-[#8B5A2B] text-sm font-bold tracking-widest uppercase mt-4 mb-4 flex items-center gap-1">
+            SWIPE TOP
+            <div class="flex flex-col -space-y-2.5">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="18 15 12 9 6 15"></polyline>
+              </svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="18 15 12 9 6 15"></polyline>
+              </svg>
+            </div>
+          </p>
+
+        </div>
+
+        <!-- CARD 2 -->
+        <div class="card next" id="card-1">
+          <div class="text-center mb-4 px-4">
+            <h1 class="text-2xl font-normal text-gray-800 leading-tight">Top-up & <span
+                class="font-bold text-[#8b5a2b]">bonus</span></h1>
+            <p class="text-gray-500 text-xs mt-1">Extra credit on every reload</p>
+          </div>
+          <div class="hero-image-wrapper overflow-hidden border-[1.5px] border-solid border-[#e8ddd4] shadow-xl">
+            <img src="static/money-bag.svg" alt="Bonus" class="w-full h-full object-cover">
+          </div>
+          <p class="text-gray-400 text-[10px] tracking-widest uppercase mt-4 mb-4">Instant reload credits</p>
+          <p class="text-[#8B5A2B] text-sm font-bold tracking-widest uppercase mt-4 mb-4 flex items-center gap-1">
+            SWIPE TOP
+            <div class="flex flex-col -space-y-2.5">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="18 15 12 9 6 15"></polyline>
+              </svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="18 15 12 9 6 15"></polyline>
+              </svg>
+            </div>
+          </p>
+
+        </div>
+
+        <!-- CARD 3 -->
+        <div class="card behind" id="card-2">
+          <div class="text-center mb-4 px-4">
+            <h1 class="text-2xl font-normal text-gray-800 leading-tight">Fast <span
+                class="font-bold text-[#8b5a2b]">pickup</span></h1>
+            <p class="text-gray-500 text-xs mt-1">Ready when you are</p>
+          </div>
+          <div class="hero-image-wrapper overflow-hidden border-[1.5px] border-solid border-[#e8ddd4] shadow-xl">
+            <img src="static/coffee_cup.jpg" alt="Pickup" class="w-full h-full object-cover">
+          </div>
+          <p class="text-gray-400 text-[10px] tracking-widest uppercase mt-4 mb-4">Skip the queue</p>
+          <p class="text-[#8B5A2B] text-sm font-bold tracking-widest uppercase mt-4 mb-4 flex items-center gap-1">
+            SWIPE TOP
+            <div class="flex flex-col -space-y-2.5">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="18 15 12 9 6 15"></polyline>
+              </svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="18 15 12 9 6 15"></polyline>
+              </svg>
+            </div>
+          </p>
+
+
+        </div>
+
+
       </div>
-      
-      <!-- Next Button - navigates to /register -->
-      <button class="w-1/2 max-w-[200px] mx-auto bg-[#8B5A2B] text-white text-lg py-4 rounded-xl hover:bg-[#6B3E1A] transition-all font-medium block" id="nextBtn">
-        Next
-      </button>
     </div>
+
+    <!-- Interface Controls (Minimized) -->
+    <div class="relative w-full px-8 pb-4 flex flex-col gap-4 z-50">
+
+      <!-- Right Side Indicators (Responsive Sidebar) -->
+      <div class="absolute right-6 top-[-50vh] flex flex-col gap-2 scale-90 md:scale-100" id="dotContainer">
+        <div class="dot-pill w-1.5 h-8 bg-gray-800 rounded-full" onclick="resetStack()"></div>
+        <div class="dot-pill w-1.5 h-1.5 bg-gray-300 rounded-full"></div>
+        <div class="dot-pill w-1.5 h-1.5 bg-gray-300 rounded-full"></div>
+      </div>
+
+      <!-- Swipe Up Indicator -->
+      <div class="flex flex-col items-center gap-0.5 opacity-80">
+        <div class="flex flex-col -gap-1 bounce-up items-center">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#8B5A2B]" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 15l7-7 7 7" />
+          </svg>
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#8B5A2B] -mt-2.5" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 15l7-7 7 7" />
+          </svg>
+        </div>
+        <p class="text-center text-[10px] text-[#8B5A2B] font-bold tracking-[0.3em] uppercase cursor-pointer mt-1"
+          onclick="window.location.href='/register'" id="swipeHint">SWIPE TOP</p>
+      </div>
+    </div>
+
+  </div>
+
   </div>
 
   <script>
-    let currentSlide = 0;
-    const track = document.getElementById('carouselTrack');
-    const dots = document.querySelectorAll('#dotContainer span');
-    const nextBtn = document.getElementById('nextBtn');
-    
-    function goToSlide(index) {
-      if (index < 0) index = 0;
-      if (index > 2) index = 2;
-      
-      currentSlide = index;
-      
-      track.style.transform = `translateX(-${currentSlide * 100}%)`;
-      
-      dots.forEach((dot, i) => {
-        if (i === currentSlide) {
-          dot.className = 'w-6 h-1.5 bg-[#8B5A2B] rounded-full cursor-pointer';
+    let currentIdx = 0;
+    const totalCards = 3;
+    const cards = [document.getElementById('card-0'), document.getElementById('card-1'), document.getElementById('card-2')];
+    const dots = document.getElementById('dotContainer').children;
+    const mainBtn = document.getElementById('mainBtn');
+
+    function updateStack() {
+      cards.forEach((card, i) => {
+        card.className = 'card';
+        if (i < currentIdx) {
+          card.classList.add('dismissed');
+        } else if (i === currentIdx) {
+          card.classList.add('top');
+        } else if (i === currentIdx + 1) {
+          card.classList.add('next');
         } else {
-          dot.className = 'w-1.5 h-1.5 bg-[#f0f0f0] rounded-full cursor-pointer';
+          card.classList.add('behind');
         }
       });
-      
-      nextBtn.textContent = (currentSlide === 2) ? 'Next' : 'Next';
+
+      // Update dots
+      for (let i = 0; i < dots.length; i++) {
+        if (i === currentIdx) {
+          dots[i].className = 'dot-pill w-1.5 h-8 bg-gray-800 rounded-full';
+        } else {
+          dots[i].className = 'dot-pill w-1.5 h-1.5 bg-gray-300 rounded-full';
+        }
+      }
+
+      // Update button text on last card (No button anymore, but we can update text hint)
+      const hint = document.getElementById('swipeHint');
+      if (currentIdx === totalCards - 1) {
+        hint.textContent = 'TAP TO JOIN';
+      } else {
+        hint.textContent = 'SWIPE TOP';
+      }
     }
-    
-    nextBtn.addEventListener('click', () => {
-      if (currentSlide < 2) {
-        goToSlide(currentSlide + 1);
+
+    function nextCard() {
+      if (currentIdx < totalCards - 1) {
+        currentIdx++;
+        updateStack();
       } else {
         window.location.href = '/register';
       }
+    }
+
+    function resetStack() {
+      currentIdx = 0;
+      updateStack();
+    }
+
+    // Gestures
+    let startY = 0;
+    document.getElementById('cardStack').addEventListener('touchstart', (e) => {
+      startY = e.touches[0].clientY;
     });
-    
-    // Touch swipe support
-    let touchStartX = 0;
-    let touchEndX = 0;
-    
-    track.addEventListener('touchstart', (e) => {
-      touchStartX = e.changedTouches[0].screenX;
-    }, { passive: true });
-    
-    track.addEventListener('touchend', (e) => {
-      touchEndX = e.changedTouches[0].screenX;
-      const diff = touchStartX - touchEndX;
-      if (Math.abs(diff) > 50) {
-        if (diff > 0 && currentSlide < 2) goToSlide(currentSlide + 1);
-        else if (diff < 0 && currentSlide > 0) goToSlide(currentSlide - 1);
+
+    document.getElementById('cardStack').addEventListener('touchend', (e) => {
+      let endY = e.changedTouches[0].clientY;
+      if (startY - endY > 50) { // Swipe UP
+        nextCard();
+      } else if (endY - startY > 80) { // Swipe DOWN (experimental reset)
+        if (currentIdx > 0) {
+          currentIdx--;
+          updateStack();
+        }
       }
-    }, { passive: true });
-    
-    // Initialize
-    goToSlide(0);
+    });
+
+    // Keyboard support
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowUp' || e.key === ' ') nextCard();
+    });
+
   </script>
 </body>
+
 </html>
