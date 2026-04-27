@@ -5,12 +5,21 @@ app = Flask(__name__,
             template_folder="../templates", 
             static_folder="../static")
 
+
 @app.route('/')
 def loading():
     return render_template('loading.html')
 @app.route('/splash')
 def splash():
     return render_template('splash.html')
+
+@app.route('/allproject')
+def allproject():
+    return render_template('allproject.html')
+
+@app.route('/productdetails')
+def productdetails():
+    return render_template('productdetails.html')
 
 @app.route('/register-splash')
 def register_splash():
@@ -64,14 +73,38 @@ def wallet():
 def profile():
     return render_template('profile.html')
 
+@app.route('/settings')
+def settings():
+    return render_template('settings.html')
+
+@app.route('/help')
+def help():
+    return render_template('help.html')
+
+@app.route('/terms')
+def terms():
+    return render_template('terms.html')
+
+@app.route('/privacy')
+def privacy():
+    return render_template('privacy.html')
+
+@app.route('/change_password')
+def change_password():
+    return render_template('change_password.html')
+
+@app.route('/delete_account')
+def delete_account():
+    return render_template('delete_account.html')
+
+
 @app.route('/favorites')
 def favorites():
     """Favorites page with user's saved items"""
-    return render_template('favorites.html')
-
+    return render_template('favorites.html',)
 @app.route('/topup')
 def topup():
-    """Topup page"""
-    return render_template('topup.html')
+    """Favorites page with user's saved items"""
+    return render_template('topup.html',)
 
 # No app.run() for Vercel deployment

@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}Espresso · Privacy Policy{% endblock %}
+
+{% block extra_css %}
+<style>
+    .legal-container {
+        padding: 24px 16px 100px;
+    }
+
+    .legal-header {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 24px;
+    }
+
+    .legal-header h2 {
+        font-family: 'Playfair Display', serif;
+        font-size: 24px;
+        color: var(--text-primary);
+        font-weight: 700;
+    }
+
+    .legal-content {
+        background: #ffffff;
+        border-radius: 24px;
+        padding: 24px;
+        border: 1px solid #f0f0f0;
+        line-height: 1.6;
+        color: #444;
+    }
+
+    .legal-content h3 {
+        margin-top: 20px;
+        margin-bottom: 12px;
+        color: var(--text-primary);
+        font-size: 18px;
+    }
+
+    .legal-content p {
+        margin-bottom: 16px;
+        font-size: 14px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="legal-container">
+    <div class="legal-header">
+        <a href="javascript:history.back()" class="icon-btn">
+            <span class="material-symbols-outlined">arrow_back</span>
+        </a>
+        <h2>Privacy Policy</h2>
+    </div>
+
+    <div class="legal-content">
+        <p>Last updated: April 2026</p>
+        <p>Your privacy is important to us. This policy explains how we collect and protect your information.</p>
+
+        <h3>1. Information We Collect</h3>
+        <p>We collect information you provide directly to us, such as your name, email address, and order history.</p>
+
+        <h3>2. How We Use Information</h3>
+        <p>We use your information to process orders, provide customer support, and improve our services.</p>
+
+        <h3>3. Data Security</h3>
+        <p>We implement various security measures to maintain the safety of your personal information.</p>
+
+        <h3>4. Cookies</h3>
+        <p>We use cookies to enhance your experience and gather data about app traffic and interaction.</p>
+    </div>
+</div>
+{% endblock %}

@@ -8,11 +8,11 @@
     .balance-section { padding: 20px 16px 16px; }
 
     .balance-card {
-        background: #8B5A2B;
-        color: white;
-        border-radius: 30px;
+        background: var(--accent);
+        color: var(--text-primary);
+        border-radius: var(--radius-xl);
         padding: 40px 20px;
-        box-shadow: 0 15px 35px rgba(139, 90, 43, 0.15);
+        box-shadow: var(--shadow-lg);
         text-align: center;
         border: 1px solid rgba(255,255,255,0.1);
     }
@@ -25,7 +25,7 @@
         align-items: center;
         justify-content: center;
         gap: 6px;
-        color: rgba(255,255,255,0.9);
+        color: var(--text-primary);
     }
 
     .balance-label .material-symbols-outlined {
@@ -36,7 +36,7 @@
         font-size: 48px;
         font-weight: 700;
         font-family: 'Playfair Display', serif;
-        color: #ffffff;
+        color: var(--text-primary);
         text-align: center;
     }
 
@@ -49,7 +49,7 @@
 
     .action-btn {
         flex: 1;
-        background: #8B5A2B;
+        background: var(--accent);
         border: none;
         border-radius: 60px;
         padding: 16px 0;
@@ -58,18 +58,18 @@
         justify-content: center;
         gap: 10px;
         font-weight: 700;
-        color: #ffffff;
+        color: var(--text-primary);
         text-transform: uppercase;
         letter-spacing: 1px;
         cursor: pointer;
         transition: all 0.2s;
         font-family: 'Montserrat', sans-serif;
         font-size: 13px;
-        box-shadow: 0 4px 12px rgba(139, 90, 43, 0.1);
+        box-shadow: var(--shadow-md);
     }
 
-    .action-btn:active { transform: scale(0.98); background: #6B3E1A; }
-    .action-btn .material-symbols-outlined { font-size: 20px; color: #ffffff; }
+    .action-btn:active { transform: scale(0.98); background: var(--accent-hover); }
+    .action-btn .material-symbols-outlined { font-size: 20px; color: var(--text-primary); }
 
     /* Zero Balance Message */
     .zero-balance-message {
@@ -85,20 +85,20 @@
     }
 
     @keyframes pulse-warning {
-        0% { border-color: #8B5A2B; }
-        50% { border-color: #6B3E1A; }
-        100% { border-color: #8B5A2B; }
+        0% { border-color: #000000; }
+        50% { border-color: #333333; }
+        100% { border-color: #000000; }
     }
 
     .warning-icon {
         width: 48px;
         height: 48px;
-        background: #8B5A2B;
+        background: var(--accent);
         border-radius: 24px;
         display: flex;
         align-items: center;
         justify-content: center;
-        color: white;
+        color: var(--text-primary);
         flex-shrink: 0;
     }
 
@@ -108,7 +108,7 @@
 
     .warning-title {
         font-weight: 700;
-        color: #4a3a2b;
+        color: var(--text-primary);
         margin-bottom: 4px;
     }
 
@@ -130,7 +130,7 @@
     .section-header h2 {
         font-family: 'Playfair Display', serif;
         font-size: 20px;
-        color: #4a3a2b;
+        color: var(--text-primary);
         font-weight: 700;
     }
 
@@ -143,7 +143,7 @@
     }
 
     .view-all:hover {
-        color: #8B5A2B;
+        color: var(--text-primary);
     }
 
     .preset-grid {
@@ -170,14 +170,14 @@
     }
 
     .preset-card.active {
-        background: #8B5A2B;
-        border-color: #8B5A2B;
+        background: var(--accent);
+        border-color: var(--accent);
     }
 
     .preset-amount { 
         font-size: 18px; 
         font-weight: 700; 
-        color: #2d241c; 
+        color: var(--text-primary); 
     }
     
     .preset-bonus {  
@@ -188,8 +188,8 @@
     }
 
     .preset-card.active .preset-amount,
-    .preset-card.active .preset-bonus { color: white; }
-    .preset-card.active .preset-bonus { color: #cccccc; }
+    .preset-card.active .preset-bonus { color: var(--text-primary); }
+    .preset-card.active .preset-bonus { color: var(--text-primary); opacity: 0.8; }
 
     /* Custom Top-up */
     .custom-topup {
@@ -210,14 +210,14 @@
         border-radius: 40px;
         font-size: 16px;
         font-family: 'Montserrat', sans-serif;
-        color: #4a3a2b;
+        color: var(--text-primary);
         transition: all 0.2s;
     }
 
     .custom-input:focus { 
         outline: none; 
-        border-color: #8B5A2B;
-        box-shadow: 0 0 0 3px rgba(139, 90, 43, 0.1);
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(255, 222, 173, 0.2);
     }
 
     .custom-input::placeholder {
@@ -225,8 +225,8 @@
     }
 
     .apply-btn {
-        background: #8B5A2B;
-        color: white;
+        background: var(--accent);
+        color: var(--text-primary);
         border: none;
         padding: 14px 32px;
         border-radius: 60px;
@@ -242,11 +242,11 @@
         align-items: center;
         justify-content: center;
         gap: 8px;
-        box-shadow: 0 4px 12px rgba(139, 90, 43, 0.1);
+        box-shadow: var(--shadow-md);
     }
 
     .apply-btn:hover {
-        background: #6B3E1A;
+        background: #333333;
     }
 
     .apply-btn:active { 
@@ -296,7 +296,7 @@
     .security-text {
         font-size: 11px;
         font-weight: 600;
-        color: #4a3a2b;
+        color: var(--text-primary);
         letter-spacing: 0.5px;
     }
 
@@ -316,11 +316,11 @@
     }
 
     .toast {
-        background: #8B5A2B;
-        color: white;
+        background: var(--accent);
+        color: var(--text-primary);
         padding: 16px 20px;
         border-radius: 50px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        box-shadow: var(--shadow-lg);
         font-weight: 500;
         transform: translateY(100px);
         opacity: 0;
@@ -329,7 +329,7 @@
         align-items: center;
         gap: 12px;
         pointer-events: auto;
-        border: 1px solid #f0f0f0;
+        border: 1px solid rgba(255,255,255,0.1);
     }
 
     .toast.show {
@@ -379,7 +379,7 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(74, 58, 43, 0.85);
+        background: rgba(0, 0, 0, 0.85);
         display: flex;
         align-items: flex-end;
         justify-content: center;
@@ -422,7 +422,7 @@
     .modal-header h3 {
         font-size: 22px;
         font-weight: 700;
-        color: #4a3a2b;
+        color: var(--text-primary);
         display: flex;
         align-items: center;
         gap: 8px;
@@ -443,7 +443,7 @@
     }
 
     .close-modal:hover {
-        color: #8B5A2B;
+        color: var(--text-primary);
     }
 
     .filter-tabs {
@@ -466,15 +466,15 @@
         font-weight: 500;
         background: #ffffff;
         border: 1px solid #f0f0f0;
-        color: #4a3a2b;
+        color: #000000;
         white-space: nowrap;
         cursor: pointer;
         transition: all 0.2s;
     }
 
     .filter-tab.active {
-        background: #8B5A2B;
-        color: white;
+        background: var(--accent);
+        color: var(--text-primary);
     }
 
     .empty-history {
@@ -560,7 +560,7 @@
 
     .history-modal-title {
         font-weight: 600;
-        color: #2d241c;
+        color: var(--text-primary);
         margin-bottom: 4px;
         display: flex;
         align-items: center;
@@ -574,8 +574,8 @@
         border-radius: 30px;
         background: #ffffff;
         border: 1px solid #f0f0f0;
-        color: #8B5A2B;
-        font-weight: 600;
+        color: #000000;
+        font-weight: 700;
         text-transform: uppercase;
     }
 
@@ -621,8 +621,8 @@
         align-items: flex-end;
     }
 
-    .history-modal-amount.positive { color: #2e7d32; }
-    .history-modal-amount.negative { color: #c0392b; }
+    .history-modal-amount.positive { color: var(--text-primary); font-weight: 800; }
+    .history-modal-amount.negative { color: #000000; opacity: 0.6; }
 
     .history-modal-balance {
         font-size: 10px;
@@ -633,7 +633,7 @@
     .month-divider {
         font-size: 13px;
         font-weight: 600;
-        color: #4a3a2b;
+        color: var(--text-primary);
         background: #ffffff;
         border: 1px solid #f0f0f0;
         padding: 8px 12px;
@@ -666,7 +666,7 @@
     .summary-value {
         font-size: 18px;
         font-weight: 700;
-        color: #8B5A2B;
+        color: var(--text-primary);
     }
 
     .summary-value.positive { color: #2e7d32; }

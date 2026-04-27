@@ -1,0 +1,272 @@
+{% extends "base.html" %}
+
+{% block title %}Espresso · Settings{% endblock %}
+
+{% block extra_css %}
+<style>
+    .settings-container {
+        padding: 24px 16px 100px;
+    }
+
+    .settings-header {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 24px;
+    }
+
+    .settings-header h2 {
+        font-family: 'Playfair Display', serif;
+        font-size: 24px;
+        color: var(--text-primary);
+        font-weight: 700;
+    }
+
+    .settings-group {
+        background: #ffffff;
+        border-radius: 24px;
+        border: 1px solid #f0f0f0;
+        overflow: hidden;
+        margin-bottom: 24px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .settings-group-title {
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        color: #777777;
+        margin: 0 0 12px 16px;
+        font-weight: 600;
+    }
+
+    .settings-item {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 16px 20px;
+        border-bottom: 1px solid #f0f0f0;
+        cursor: pointer;
+        transition: background 0.2s;
+        color: var(--text-primary);
+        text-decoration: none;
+    }
+
+    .settings-item:last-child {
+        border-bottom: none;
+    }
+
+    .settings-item:active {
+        background: #fcfcfc;
+    }
+
+    .settings-icon {
+        width: 40px;
+        height: 40px;
+        background: #f9f9f9;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--text-primary);
+        flex-shrink: 0;
+    }
+
+    .settings-content {
+        flex: 1;
+    }
+
+    .settings-title {
+        font-weight: 600;
+        font-size: 15px;
+        margin-bottom: 2px;
+    }
+
+    .settings-subtitle {
+        font-size: 12px;
+        color: #777777;
+    }
+
+    .settings-value {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--accent);
+    }
+
+    /* Toggle Switch */
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 46px;
+        height: 24px;
+    }
+
+    .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #eee;
+        transition: .4s;
+        border-radius: 24px;
+    }
+
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 18px;
+        width: 18px;
+        left: 3px;
+        bottom: 3px;
+        background-color: white;
+        transition: .4s;
+        border-radius: 50%;
+    }
+
+    input:checked + .slider {
+        background-color: var(--accent);
+    }
+
+    input:checked + .slider:before {
+        transform: translateX(22px);
+    }
+
+    .danger-item {
+        color: #e74c3c;
+    }
+
+    .danger-item .settings-icon {
+        color: #e74c3c;
+        background: #fdf2f2;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="settings-container">
+    <div class="settings-header">
+        <a href="{{ url_for('profile') }}" class="icon-btn">
+            <span class="material-symbols-outlined">arrow_back</span>
+        </a>
+        <h2>Settings</h2>
+    </div>
+
+    <!-- Account Settings -->
+    <div class="settings-group-title">Account</div>
+    <div class="settings-group">
+        <a href="{{ url_for('profile') }}" class="settings-item">
+            <div class="settings-icon"><span class="material-symbols-outlined">person</span></div>
+            <div class="settings-content">
+                <div class="settings-title">Personal Information</div>
+                <div class="settings-subtitle">Name, email, and phone</div>
+            </div>
+            <span class="material-symbols-outlined" style="opacity: 0.3;">chevron_right</span>
+        </a>
+        <a href="{{ url_for('change_password') }}" class="settings-item">
+            <div class="settings-icon"><span class="material-symbols-outlined">lock</span></div>
+            <div class="settings-content">
+                <div class="settings-title">Change Password</div>
+                <div class="settings-subtitle">Update your security</div>
+            </div>
+            <span class="material-symbols-outlined" style="opacity: 0.3;">chevron_right</span>
+        </a>
+    </div>
+
+    <!-- Notifications -->
+    <div class="settings-group-title">Notifications</div>
+    <div class="settings-group">
+        <div class="settings-item">
+            <div class="settings-icon"><span class="material-symbols-outlined">notifications</span></div>
+            <div class="settings-content">
+                <div class="settings-title">Push Notifications</div>
+                <div class="settings-subtitle">Order updates & offers</div>
+            </div>
+            <label class="switch">
+                <input type="checkbox" checked>
+                <span class="slider"></span>
+            </label>
+        </div>
+        <div class="settings-item">
+            <div class="settings-icon"><span class="material-symbols-outlined">mail</span></div>
+            <div class="settings-content">
+                <div class="settings-title">Email Marketing</div>
+                <div class="settings-subtitle">News and promotions</div>
+            </div>
+            <label class="switch">
+                <input type="checkbox">
+                <span class="slider"></span>
+            </label>
+        </div>
+    </div>
+
+    <!-- Preferences -->
+    <div class="settings-group-title">Preferences</div>
+    <div class="settings-group">
+        <div class="settings-item">
+            <div class="settings-icon"><span class="material-symbols-outlined">language</span></div>
+            <div class="settings-content">
+                <div class="settings-title">App Language</div>
+                <div class="settings-subtitle">Choose your language</div>
+            </div>
+            <div class="settings-value">English</div>
+        </div>
+        <div class="settings-item">
+            <div class="settings-icon"><span class="material-symbols-outlined">dark_mode</span></div>
+            <div class="settings-content">
+                <div class="settings-title">Appearance</div>
+                <div class="settings-subtitle">Light & Dark mode</div>
+            </div>
+            <div class="settings-value">System Default</div>
+        </div>
+    </div>
+
+    <!-- Support & Legal -->
+    <div class="settings-group-title">More</div>
+    <div class="settings-group">
+        <a href="{{ url_for('help') }}" class="settings-item">
+            <div class="settings-icon"><span class="material-symbols-outlined">help</span></div>
+            <div class="settings-content">
+                <div class="settings-title">Help Center</div>
+                <div class="settings-subtitle">FAQs and support</div>
+            </div>
+            <span class="material-symbols-outlined" style="opacity: 0.3;">chevron_right</span>
+        </a>
+        <a href="{{ url_for('terms') }}" class="settings-item">
+            <div class="settings-icon"><span class="material-symbols-outlined">description</span></div>
+            <div class="settings-content">
+                <div class="settings-title">Terms & Conditions</div>
+                <div class="settings-subtitle">Legal information</div>
+            </div>
+            <span class="material-symbols-outlined" style="opacity: 0.3;">chevron_right</span>
+        </a>
+        <a href="{{ url_for('privacy') }}" class="settings-item">
+            <div class="settings-icon"><span class="material-symbols-outlined">security</span></div>
+            <div class="settings-content">
+                <div class="settings-title">Privacy Policy</div>
+                <div class="settings-subtitle">How we use your data</div>
+            </div>
+            <span class="material-symbols-outlined" style="opacity: 0.3;">chevron_right</span>
+        </a>
+    </div>
+
+    <!-- Danger Zone -->
+    <div class="settings-group-title">Danger Zone</div>
+    <div class="settings-group">
+        <a href="{{ url_for('delete_account') }}" class="settings-item danger-item">
+            <div class="settings-icon"><span class="material-symbols-outlined">delete</span></div>
+            <div class="settings-content">
+                <div class="settings-title">Delete Account</div>
+                <div class="settings-subtitle">Permanently remove data</div>
+            </div>
+        </a>
+    </div>
+</div>
+{% endblock %}

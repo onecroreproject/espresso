@@ -24,15 +24,15 @@
         width: 90px;
         height: 90px;
         border-radius: 45px;
-        background: linear-gradient(135deg, #8B5A2B, #4a3a2b);
+        background: linear-gradient(135deg, var(--accent), var(--accent-hover));
         display: flex;
         align-items: center;
         justify-content: center;
-        color: white;
+        color: var(--text-primary);
         font-size: 40px;
         font-weight: 700;
         font-family: 'Playfair Display', serif;
-        box-shadow: 0 4px 10px rgba(139, 90, 43, 0.2);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         position: relative;
         flex-shrink: 0;
     }
@@ -48,26 +48,26 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        border: 2px solid #8B5A2B;
+        border: 2px solid var(--accent);
         cursor: pointer;
         transition: all 0.2s;
     }
 
     .edit-avatar:active {
-        background: #8B5A2B;
+        background: var(--accent);
     }
     .edit-avatar:active .material-symbols-outlined {
-        color: white;
+        color: var(--text-primary);
     }
 
-    .edit-avatar .material-symbols-outlined { font-size: 16px; color: #8B5A2B; }
+    .edit-avatar .material-symbols-outlined { font-size: 16px; color: var(--text-primary); }
 
     .profile-info { flex: 1; min-width: 0; }
 
     .profile-name {
         font-size: 24px;
         font-weight: 700;
-        color: #4a3a2b;
+        color: var(--text-primary);
         margin-bottom: 4px;
         font-family: 'Playfair Display', serif;
         display: flex;
@@ -78,13 +78,10 @@
 
     .edit-name {
         font-size: 14px;
-        color: #8B5A2B;
+        color: var(--text-primary);
         cursor: pointer;
         transition: color 0.2s;
-    }
-
-    .edit-name:active {
-        color: #8B5A2B;
+        opacity: 0.8;
     }
 
     .profile-email {
@@ -102,7 +99,7 @@
     }
 
     .profile-email:active {
-        color: #8B5A2B;
+        color: #000000;
     }
 
     .profile-email .material-symbols-outlined {
@@ -111,13 +108,13 @@
     }
 
     .profile-badge {
-        background: #ffffff;
+        background: #f8f8f8;
         border: 1px solid #f0f0f0;
         padding: 6px 12px;
         border-radius: 30px;
         font-size: 12px;
         font-weight: 600;
-        color: #8B5A2B;
+        color: var(--text-primary);
         display: inline-flex;
         align-items: center;
         gap: 6px;
@@ -152,7 +149,7 @@
     .stat-value {
         font-size: 22px;
         font-weight: 700;
-        color: #8B5A2B;
+        color: var(--text-primary);
         margin-bottom: 4px;
     }
 
@@ -175,7 +172,7 @@
     .section-header h2 {
         font-family: 'Playfair Display', serif;
         font-size: 18px;
-        color: #2d241c;
+        color: var(--text-primary);
         font-weight: 700;
     }
 
@@ -210,16 +207,16 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        color: #8B5A2B;
+        color: var(--text-primary);
         flex-shrink: 0;
     }
 
     .menu-content { flex: 1; min-width: 0; }
-    .menu-title { font-weight: 600; color: #2d241c; margin-bottom: 4px; }
+    .menu-title { font-weight: 600; color: var(--text-primary); margin-bottom: 4px; }
     .menu-subtitle { font-size: 12px; color: #777777; }
     .menu-value { 
         font-weight: 600; 
-        color: #8B5A2B; 
+        color: var(--text-primary); 
         margin-right: 8px; 
         white-space: nowrap;
         background: #ffffff;
@@ -228,7 +225,7 @@
         border-radius: 30px;
         font-size: 13px;
     }
-    .menu-arrow { color: #8B5A2B; opacity: 0.5; }
+    .menu-arrow { color: var(--text-primary); opacity: 0.5; }
 
     /* Address */
     .address-section { padding: 0 16px 24px; }
@@ -258,7 +255,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        color: #8B5A2B;
+        color: var(--text-primary);
         flex-shrink: 0;
         box-shadow: 0 2px 5px rgba(0,0,0,0.02);
     }
@@ -266,23 +263,23 @@
     .address-details { flex: 1; min-width: 0; }
     .address-type { 
         font-weight: 600; 
-        color: #4a3a2b; 
+        color: var(--text-primary); 
         margin-bottom: 4px;
         display: flex;
         align-items: center;
         gap: 8px;
     }
-    .address-text { font-size: 13px; color: #4a3a2b; opacity: 0.7; margin-bottom: 4px; }
+    .address-text { font-size: 13px; color: var(--text-primary); opacity: 0.7; margin-bottom: 4px; }
 
     .address-default {
         font-size: 11px;
-        background: #ffffff;
+        background: #f8f8f8;
         border: 1px solid #f0f0f0;
         padding: 4px 8px;
         border-radius: 30px;
         display: inline-block;
         font-weight: 600;
-        color: #8B5A2B;
+        color: var(--text-primary);
     }
 
     .add-address {
@@ -297,12 +294,12 @@
         margin-top: 12px;
         cursor: pointer;
         transition: all 0.2s;
-        color: #8B5A2B;
+        color: var(--text-primary);
     }
 
     .add-address:active {
-        background: #8B5A2B;
-        color: white;
+        background: var(--accent);
+        color: var(--text-primary);
     }
 
     /* Preferences */
@@ -339,11 +336,11 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        color: #8B5A2B;
+        color: var(--text-primary);
         flex-shrink: 0;
     }
 
-    .pref-text { font-weight: 500; color: #2d241c; }
+    .pref-text { font-weight: 500; color: var(--text-primary); }
 
     /* Toggle */
     .switch { 
@@ -376,7 +373,7 @@
         border-radius: 50%;
     }
 
-    input:checked + .slider { background-color: #8B5A2B; }
+    input:checked + .slider { background-color: var(--accent); }
     input:checked + .slider:before { transform: translateX(24px); }
 
     /* Logout */
@@ -385,11 +382,11 @@
     .logout-btn {
         width: 100%;
         padding: 16px;
-        border: 2px solid #c0392b;
+        border: 2px solid var(--accent);
         background: transparent;
         border-radius: 40px;
         font-weight: 600;
-        color: #c0392b;
+        color: var(--text-primary);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -400,7 +397,7 @@
         transition: all 0.2s;
     }
 
-    .logout-btn:active { background: #c0392b; color: white; }
+    .logout-btn:active { background: var(--accent); color: var(--text-primary); }
 
     /* Toast Notifications */
     .toast-container {
@@ -415,8 +412,8 @@
     }
 
     .toast {
-        background: #8B5A2B;
-        color: white;
+        background: var(--accent);
+        color: var(--text-primary);
         padding: 12px 20px;
         border-radius: 50px;
         box-shadow: 0 4px 15px rgba(0,0,0,0.2);
@@ -430,6 +427,7 @@
         align-items: center;
         justify-content: center;
         gap: 8px;
+        border: 1px solid rgba(255,255,255,0.1);
     }
 
     .toast.show {
@@ -452,7 +450,7 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(74, 58, 43, 0.5);
+        background: rgba(0, 0, 0, 0.5);
         display: flex;
         align-items: flex-end;
         justify-content: center;
@@ -491,7 +489,7 @@
     .modal-header h3 {
         font-size: 20px;
         font-weight: 700;
-        color: #4a3a2b;
+        color: var(--text-primary);
     }
 
     .close-modal {
@@ -514,13 +512,13 @@
 
     .modal-input:focus {
         outline: none;
-        border-color: #8B5A2B;
+        border-color: var(--accent);
     }
 
     .modal-save-btn {
         width: 100%;
-        background: #8B5A2B;
-        color: white;
+        background: var(--accent);
+        color: var(--text-primary);
         border: none;
         padding: 16px;
         border-radius: 40px;
@@ -668,7 +666,7 @@
             <div class="address-text" id="addressText">245 Coffee Street, Building 12, Downtown</div>
             <span class="address-default" id="addressDefault">Default</span>
         </div>
-        <span class="material-symbols-outlined" style="color:#8B5A2B; opacity: 0.5;">edit</span>
+        <span class="material-symbols-outlined" style="color:var(--text-primary); opacity: 0.5;">edit</span>
     </div>
     <div class="add-address" onclick="addNewAddress()">
         <span class="material-symbols-outlined">add</span>
@@ -707,14 +705,14 @@
                 <div class="pref-icon"><span class="material-symbols-outlined">language</span></div>
                 <span class="pref-text">Language</span>
             </div>
-            <span style="color:#4a3a2b;font-weight:600;" id="currentLanguage">English</span>
+            <span style="color:var(--text-primary);font-weight:600;" id="currentLanguage">English</span>
         </div>
         <div class="pref-item" onclick="showPrivacySettings()">
             <div class="pref-left">
                 <div class="pref-icon"><span class="material-symbols-outlined">security</span></div>
                 <span class="pref-text">Privacy & Security</span>
             </div>
-            <span class="material-symbols-outlined" style="color:#8B5A2B; opacity: 0.5;">chevron_right</span>
+            <span class="material-symbols-outlined" style="color:var(--text-primary); opacity: 0.5;">chevron_right</span>
         </div>
     </div>
 </div>

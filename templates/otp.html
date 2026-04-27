@@ -39,7 +39,7 @@
       font-family: 'Playfair Display', serif;
       font-size: 22px;
       font-weight: 700;
-      color: #8B5A2B;
+      color: #3E2723;
       letter-spacing: 1px;
     }
 
@@ -47,7 +47,7 @@
       display: flex;
       align-items: center;
       gap: 6px;
-      color: #8B5A2B;
+      color: #3E2723;
       text-decoration: none;
       font-size: 13px;
       font-weight: 600;
@@ -87,24 +87,24 @@
       width: 88px;
       height: 88px;
       border-radius: 50%;
-      background: #8B5A2B;
+      background: #FFDEAD;
       display: flex;
       align-items: center;
       justify-content: center;
       margin: 0 auto 24px;
-      box-shadow: 0 8px 20px rgba(139, 90, 43, 0.2);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
     }
 
     .icon-ring .material-symbols-outlined {
       font-size: 44px;
-      color: #FFFFFF;
+      color: #3E2723;
     }
 
     .page-title {
       font-family: 'Playfair Display', serif;
       font-size: 28px;
       font-weight: 700;
-      color: #2d241c;
+      color: #3E2723;
       text-align: center;
       margin-bottom: 12px;
     }
@@ -118,9 +118,9 @@
     }
 
     .page-sub strong {
-      color: #8B5A2B;
+      color: #3E2723;
       font-weight: 700;
-      background: rgba(139, 90, 43, 0.08);
+      background: #FFDEAD;
       padding: 2px 8px;
       border-radius: 20px;
       display: inline-block;
@@ -143,20 +143,20 @@
       font-size: 30px;
       font-weight: 700;
       font-family: 'Montserrat', sans-serif;
-      color: #2d241c;
+      color: #3E2723;
       text-align: center;
       outline: none;
-      caret-color: #8B5A2B;
+      caret-color: #3E2723;
       transition: all 0.2s ease;
     }
 
     .otp-box:focus {
-      border-color: #8B5A2B;
-      box-shadow: 0 0 0 4px rgba(139, 90, 43, 0.1);
+      border-color: #FFDEAD;
+      box-shadow: 0 0 0 4px rgba(255, 222, 173, 0.2);
     }
 
     .otp-box.filled {
-      border-color: #8B5A2B;
+      border-color: #FFDEAD;
       background: #fcfcfc;
     }
 
@@ -171,7 +171,7 @@
 
     .timer-row span {
       font-weight: 700;
-      color: #8B5A2B;
+      color: #3E2723;
       background: #ffffff;
       border: 1px solid #f0f0f0;
       padding: 3px 10px;
@@ -188,7 +188,7 @@
     .resend-btn {
       background: none;
       border: none;
-      color: #8B5A2B;
+      color: #3E2723;
       font-size: 14px;
       font-weight: 700;
       font-family: 'Montserrat', sans-serif;
@@ -212,8 +212,8 @@
     /* Verify button - espresso brown */
     .btn-verify {
       width: 100%;
-      background: #8B5A2B;
-      color: white;
+      background: #FFDEAD;
+      color: #3E2723;
       border: none;
       border-radius: 60px;
       padding: 16px 20px;
@@ -227,7 +227,7 @@
       align-items: center;
       justify-content: center;
       gap: 10px;
-      box-shadow: 0 4px 14px rgba(139, 90, 43, 0.25);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
     }
 
     .btn-verify:active {
@@ -262,11 +262,11 @@
     }
 
     .dot.done {
-      background: #8B5A2B;
+      background: #FFDEAD;
     }
 
     .dot.active {
-      background: #8B5A2B;
+      background: #FFDEAD;
       width: 24px;
       border-radius: 6px;
     }
@@ -305,14 +305,14 @@
       bottom: 80px;
       left: 50%;
       transform: translateX(-50%) translateY(20px);
-      background-color: #8B5A2B;
-      color: white;
+      background-color: #FFDEAD;
+      color: #3E2723;
       padding: 10px 24px;
       border-radius: 48px;
       font-size: 13px;
       font-weight: 600;
       z-index: 1000;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
       opacity: 0;
       transition: opacity 0.2s ease, transform 0.2s ease;
       pointer-events: none;
@@ -451,11 +451,11 @@
         if (isError) {
           toastEl.style.backgroundColor = '#D32F2F';
         } else {
-          toastEl.style.backgroundColor = '#8B5A2B';
+          toastEl.style.backgroundColor = '#000000';
         }
         activeToastTimeout = setTimeout(() => {
           toastEl.classList.remove('show');
-          toastEl.style.backgroundColor = '#8B5A2B';
+          toastEl.style.backgroundColor = '#000000';
         }, 2600);
       }
 
@@ -734,7 +734,7 @@
           // If there's unsaved nothing, just mimic go back
           showToast('Returning to registration', false);
           setTimeout(() => {
-            window.location.href = 'register.html';
+            window.location.href = 'register';
           }, 200);
         });
       }

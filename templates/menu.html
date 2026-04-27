@@ -4,6 +4,39 @@
 
 {% block extra_css %}
 <style>
+    .options-pills {
+        display: flex;
+        gap: 10px;
+        overflow-x: auto;
+        padding: 4px 0 12px;
+        scrollbar-width: none;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .options-pills::-webkit-scrollbar {
+        display: none;
+    }
+
+    .pill-option {
+        padding: 10px 20px;
+        border: 1px solid #f0f0f0;
+        border-radius: 40px;
+        font-size: 13px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        white-space: nowrap;
+        background: #ffffff;
+        color: #666;
+    }
+
+    .pill-option.active {
+        background: var(--accent);
+        color: var(--text-primary);
+        border-color: var(--accent);
+        font-weight: 600;
+    }
+
 
     .options-checklist {
         display: flex;
@@ -25,7 +58,7 @@
     }
 
     .checklist-row.active {
-        border-color: #8B5A2B;
+        border-color: var(--accent);
         background: #fafafa;
     }
 
@@ -45,7 +78,7 @@
 
     .checklist-row.active .checklist-info .material-symbols-outlined,
     .checklist-row.active .checklist-info {
-        color: #8B5A2B;
+        color: var(--text-primary);
     }
 
     .checklist-check {
@@ -60,8 +93,8 @@
     }
 
     .checklist-row.active .checklist-check {
-        background: #8B5A2B;
-        border-color: #8B5A2B;
+        background: var(--accent);
+        border-color: var(--accent);
     }
 
     .checklist-check::after {
@@ -87,7 +120,7 @@
     .section-title {
         font-family: 'Playfair Display', serif;
         font-size: clamp(18px, 5vw, 22px);
-        color: #4a3a2b;
+        color: var(--text-primary);
         margin-bottom: 16px;
         font-weight: 700;
         padding-left: 4px;
@@ -133,9 +166,9 @@
     }
 
     .category-item.active .category-image {
-        border-color: #8B5A2B;
+        border-color: var(--accent);
         transform: scale(1.05);
-        box-shadow: 0 6px 15px rgba(139, 90, 43, 0.15);
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
     }
 
     .category-image img {
@@ -154,7 +187,7 @@
     }
 
     .category-item.active .category-name {
-        color: #8B5A2B;
+        color: var(--text-primary);
         font-weight: 700;
     }
 
@@ -209,7 +242,7 @@
     }
 
     .carousel-dot.active {
-        background: #000000;
+        background: var(--accent);
         transform: scale(1.3);
     }
 
@@ -244,7 +277,7 @@
 
     .modal-action-btn.active .material-symbols-outlined {
         font-variation-settings: 'FILL' 1;
-        color: #ff6b6b;
+        color: var(--text-primary);
     }
 
     .modal-action-btn .material-symbols-outlined {
@@ -325,7 +358,7 @@
     }
 
     .favorite-heart.active .material-symbols-outlined {
-        color: #ff6b6b;
+        color: var(--text-primary);
         font-variation-settings: 'FILL' 1;
         animation: heart-pop 0.3s ease;
     }
@@ -419,7 +452,7 @@
     .item-name {
         font-size: 15px;
         font-weight: 700;
-        color: #000000;
+        color: var(--text-primary);
         margin-bottom: 2px;
     }
 
@@ -437,7 +470,7 @@
     .item-price {
         font-size: 14px;
         font-weight: 700;
-        color: #000000;
+        color: var(--text-primary);
         white-space: nowrap;
     }
 
@@ -469,19 +502,19 @@
     }
 
     .favorite-filter.active {
-        background: #8B5A2B;
-        border-color: #8B5A2B;
-        color: white;
+        background: var(--accent);
+        border-color: var(--accent);
+        color: var(--text-primary);
     }
 
     .favorite-filter.active .material-symbols-outlined {
-        color: white;
+        color: var(--text-primary);
         font-variation-settings: 'FILL' 1;
     }
 
     .favorite-filter .material-symbols-outlined {
         font-size: 18px;
-        color: #ff6b6b;
+        color: var(--text-primary);
     }
 
     .favorite-filter span:last-child {
@@ -494,7 +527,7 @@
         position: fixed;
         top: 0; left: 0;
         width: 100%; height: 100%;
-        background: rgba(74, 58, 43, 0.5);
+        background: rgba(0, 0, 0, 0.5);
         display: flex;
         align-items: flex-end;
         justify-content: center;
@@ -535,7 +568,7 @@
     .modal-header h3 {
         font-size: clamp(20px, 6vw, 24px);
         font-weight: 700;
-        color: #4a3a2b;
+        color: var(--text-primary);
     }
 
     .close-modal {
@@ -543,7 +576,7 @@
         border: none;
         font-size: 32px;
         cursor: pointer;
-        color: #8B5A2B;
+        color: var(--text-primary);
         padding: 0 8px;
     }
 
@@ -564,12 +597,41 @@
         object-fit: cover;
     }
 
-    .modal-item-name {
-        font-size: clamp(22px, 6.5vw, 26px);
+    .modal-category {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        color: #888;
+        margin-bottom: 8px;
+        display: block;
         font-weight: 600;
-        color: #2d241c;
-        margin-bottom: 20px;
-        text-align: center;
+        text-align: left;
+    }
+
+    .modal-item-name {
+        font-family: 'Playfair Display', serif;
+        font-size: clamp(24px, 7vw, 30px);
+        font-weight: 900;
+        line-height: 1.2;
+        color: var(--text-primary);
+        margin-bottom: 8px;
+        text-align: left;
+    }
+
+    .modal-price-tag {
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin-bottom: 16px;
+        text-align: left;
+    }
+
+    .modal-description-text {
+        font-size: 14px;
+        color: #666;
+        line-height: 1.6;
+        margin-bottom: 24px;
+        text-align: left;
     }
 
     /* Option sections */
@@ -580,7 +642,7 @@
     .option-label {
         font-size: clamp(15px, 4vw, 16px);
         font-weight: 600;
-        color: #4a3a2b;
+        color: var(--text-primary);
         margin-bottom: 12px;
         display: flex;
         align-items: center;
@@ -602,7 +664,7 @@
         background: #ffffff;
         font-size: clamp(13px, 3.5vw, 14px);
         font-weight: 500;
-        color: #8B5A2B;
+        color: var(--text-primary);
         cursor: pointer;
         transition: all 0.2s;
         display: flex;
@@ -612,9 +674,9 @@
     }
 
     .option-btn.active {
-        background: #8B5A2B;
-        color: #ffffff;
-        border-color: #8B5A2B;
+        background: var(--accent);
+        color: var(--text-primary);
+        border-color: var(--accent);
     }
 
     .option-btn:disabled {
@@ -624,13 +686,13 @@
 
     .extra-cost {
         font-size: 11px;
-        color: #4a3a2b;
+        color: var(--text-primary);
         opacity: 0.6;
         margin-left: 4px;
     }
 
     .option-btn.active .extra-cost {
-        color: #ffffff;
+        color: var(--text-primary);
         opacity: 0.9;
     }
 
@@ -654,7 +716,7 @@
         background: #ffffff;
         font-size: clamp(22px, 6vw, 24px);
         font-weight: 600;
-        color: #8B5A2B;
+        color: var(--text-primary);
         box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         display: flex;
         align-items: center;
@@ -664,15 +726,15 @@
     .qty-number {
         font-size: clamp(22px, 6vw, 24px);
         font-weight: 700;
-        color: #2d241c;
+        color: var(--text-primary);
         min-width: 50px;
         text-align: center;
     }
 
     .add-to-cart-btn {
         width: 100%;
-        background: #8B5A2B;
-        color: white;
+        background: var(--accent);
+        color: var(--text-primary);
         border: none;
         padding: 16px;
         border-radius: 60px;
@@ -688,7 +750,7 @@
 
     .add-to-cart-btn:active {
         transform: scale(0.98);
-        background: #6B3E1A;
+        background: var(--accent-hover);
     }
 
     .add-to-cart-btn .price-display::before {
@@ -703,8 +765,8 @@
         bottom: 20px;
         left: 50%;
         transform: translateX(-50%) translateY(100px);
-        background: #8B5A2B;
-        color: white;
+        background: var(--accent);
+        color: var(--text-primary);
         padding: 12px 24px;
         border-radius: 40px;
         font-weight: 500;
@@ -713,6 +775,7 @@
         transition: transform 0.3s ease;
         text-align: center;
         min-width: 200px;
+        border: 1px solid rgba(255,255,255,0.1);
     }
 
     .success-toast.show {
@@ -799,7 +862,10 @@
                 <!-- Dots added by JS -->
             </div>
         </div>
+        <div class="modal-category" id="modalCategory">Signature Espresso</div>
         <div class="modal-item-name" id="modalItemName">Espresso</div>
+        <div class="modal-price-tag">BD <span id="modalPrice">2.500</span></div>
+        <div class="modal-description-text" id="modalDescription">A rich, full-bodied espresso shot with a smooth crema.</div>
         <div id="modalOptionsContainer">
             <!-- Options dynamically rendered by JS -->
         </div>
@@ -927,26 +993,33 @@
     // Menu items data
     const menuItems = [
         // NEW ITEMS - Top 5
-        { name: 'Honey Almond Latte', price: 4.200, category: 'espresso', images: ["{{ url_for('static', filename='imgg.jpeg') }}", "{{ url_for('static', filename='imgg1.jpeg') }}", "{{ url_for('static', filename='imgg2.jpeg') }}"], isNew: true, type: 'drink', desc: 'Sweet honey & almond' },
-        { name: 'Salted Caramel Mocha', price: 4.500, category: 'espresso', images: ["{{ url_for('static', filename='imgg1.jpeg') }}", "{{ url_for('static', filename='imgg3.jpeg') }}", "{{ url_for('static', filename='imgg5.jpeg') }}"], isNew: true, type: 'drink', desc: 'Rich caramel with sea salt' },
-        { name: 'Lavender Oat Latte', price: 4.300, category: 'espresso', images: ["{{ url_for('static', filename='imgg2.jpeg') }}", "{{ url_for('static', filename='imgg11.jpeg') }}", "{{ url_for('static', filename='imgg12.jpeg') }}"], isNew: true, type: 'drink', desc: 'Floral & creamy' },
-        { name: 'Brown Sugar Shaken', price: 3.900, category: 'cold', images: ["{{ url_for('static', filename='imgg3.jpeg') }}", "{{ url_for('static', filename='img4.jpeg') }}", "{{ url_for('static', filename='img6.jpeg') }}"], isNew: true, type: 'drink', desc: 'Brown sugar & cinnamon' },
-        { name: 'Tiramisu Cup', price: 3.800, category: 'pastry', images: ["{{ url_for('static', filename='imgg4.jpeg') }}", "{{ url_for('static', filename='img7.jpeg') }}", "{{ url_for('static', filename='img8.jpeg') }}"], isNew: true, type: 'food', desc: 'Coffee flavored dessert' },
+        { name: 'Honey Almond Latte', price: 4.200, category: 'espresso', images: ["{{ url_for('static', filename='imgg.jpeg') }}", "{{ url_for('static', filename='imgg1.jpeg') }}", "{{ url_for('static', filename='imgg2.jpeg') }}"], isNew: true, type: 'drink', desc: 'Silky espresso infused with organic honey and toasted almond notes.' },
+        { name: 'Salted Caramel Mocha', price: 4.500, category: 'espresso', images: ["{{ url_for('static', filename='imgg1.jpeg') }}", "{{ url_for('static', filename='imgg3.jpeg') }}", "{{ url_for('static', filename='imgg5.jpeg') }}"], isNew: true, type: 'drink', desc: 'Rich dark cocoa and espresso finished with a swirl of house-made salted caramel.' },
+        { name: 'Lavender Oat Latte', price: 4.300, category: 'espresso', images: ["{{ url_for('static', filename='imgg2.jpeg') }}", "{{ url_for('static', filename='imgg11.jpeg') }}", "{{ url_for('static', filename='imgg12.jpeg') }}"], isNew: true, type: 'drink', desc: 'A calming blend of botanical lavender and creamy oat milk with our signature espresso.' },
+        { name: 'Brown Sugar Shaken', price: 3.900, category: 'cold', images: ["{{ url_for('static', filename='imgg3.jpeg') }}", "{{ url_for('static', filename='img4.jpeg') }}", "{{ url_for('static', filename='img6.jpeg') }}"], isNew: true, type: 'drink', desc: 'Espresso shaken with brown sugar and cinnamon, served over ice with a splash of milk.' },
+        { name: 'Tiramisu Cup', price: 3.800, category: 'pastry', images: ["{{ url_for('static', filename='imgg4.jpeg') }}", "{{ url_for('static', filename='img7.jpeg') }}", "{{ url_for('static', filename='img8.jpeg') }}"], isNew: true, type: 'food', desc: 'Layers of coffee-soaked ladyfingers and mascarpone cream, dusted with cocoa.' },
         
         // Regular Items
-        { name: 'Espresso', price: 2.500, category: 'espresso', images: ["{{ url_for('static', filename='imgg8.jpeg') }}", "{{ url_for('static', filename='imgg9.jpeg') }}"], type: 'drink', desc: 'Single shot of pure espresso' },
-        { name: 'Double Espresso', price: 3.500, category: 'espresso', images: ["{{ url_for('static', filename='imgg9.jpeg') }}", "{{ url_for('static', filename='imgg8.jpeg') }}"], type: 'drink', desc: 'Two shots of pure espresso' },
-        { name: 'Cappuccino', price: 3.000, category: 'espresso', images: ["{{ url_for('static', filename='imgg11.jpeg') }}", "{{ url_for('static', filename='imgg12.jpeg') }}"], type: 'drink', desc: 'Rich espresso with steamed milk' },
-        { name: 'Latte', price: 3.200, category: 'espresso', images: ["{{ url_for('static', filename='imgg12.jpeg') }}", "{{ url_for('static', filename='imgg11.jpeg') }}"], type: 'drink', desc: 'Smooth & creamy' },
-        { name: 'Caramel Macchiato', price: 3.500, category: 'espresso', images: ["{{ url_for('static', filename='imgg13.jpeg') }}", "{{ url_for('static', filename='imgg12.jpeg') }}"], type: 'drink', desc: 'Vanilla & caramel' },
-        { name: 'Cold Brew', price: 2.800, category: 'cold', images: ["{{ url_for('static', filename='imgg5.jpeg') }}", "{{ url_for('static', filename='imgg7.jpeg') }}"], type: 'drink', desc: '12-hour steeped, smooth taste' },
-        { name: 'Iced Latte', price: 3.200, category: 'cold', images: ["{{ url_for('static', filename='imgg6.jpeg') }}", "{{ url_for('static', filename='imgg5.jpeg') }}"], type: 'drink', desc: 'With vanilla syrup' },
-        { name: 'Iced Americano', price: 2.600, category: 'cold', images: ["{{ url_for('static', filename='imgg7.jpeg') }}", "{{ url_for('static', filename='imgg5.jpeg') }}"], type: 'drink', desc: 'Espresso with cold water' },
-        { name: 'Cold Drink', price: 2.200, category: 'cold', images: ["{{ url_for('static', filename='img4.jpeg') }}", "{{ url_for('static', filename='imgg3.jpeg') }}"], type: 'drink', desc: 'Refreshing beverage' },
-        { name: 'Pour Over', price: 2.800, category: 'brewed', images: ["{{ url_for('static', filename='imgg10.jpeg') }}", "{{ url_for('static', filename='img1.jpeg') }}"], type: 'drink', desc: 'Single origin pour over' },
-        { name: 'French Press', price: 2.500, category: 'brewed', images: ["{{ url_for('static', filename='img1.jpeg') }}", "{{ url_for('static', filename='imgg10.jpeg') }}"], type: 'drink', desc: 'Full-bodied brewed coffee' },
-        { name: 'Croissant', price: 1.800, category: 'pastry', images: ["{{ url_for('static', filename='y-jKMyLA.jpeg') }}", "{{ url_for('static', filename='img7.jpeg') }}"], type: 'food', desc: 'Flaky, buttery, fresh baked' },
-        { name: 'Chocolate Cake', price: 3.000, category: 'pastry', images: ["{{ url_for('static', filename='img8.jpeg') }}", "{{ url_for('static', filename='imgg4.jpeg') }}"], type: 'food', desc: 'Rich chocolate layer cake' }
+        { name: 'Espresso', price: 2.500, category: 'espresso', images: ["{{ url_for('static', filename='imgg8.jpeg') }}", "{{ url_for('static', filename='imgg9.jpeg') }}"], type: 'drink', desc: 'A concentrated shot of our signature house blend with a rich, golden crema.' },
+        { name: 'Double Espresso', price: 3.500, category: 'espresso', images: ["{{ url_for('static', filename='imgg9.jpeg') }}", "{{ url_for('static', filename='imgg8.jpeg') }}"], type: 'drink', desc: 'Two shots of our premium espresso for an intense coffee experience.' },
+        { name: 'Cappuccino', price: 3.000, category: 'espresso', images: ["{{ url_for('static', filename='imgg11.jpeg') }}", "{{ url_for('static', filename='imgg12.jpeg') }}"], type: 'drink', desc: 'Equal parts espresso, steamed milk, and airy foam for a classic balance.' },
+        { name: 'Latte', price: 3.200, category: 'espresso', images: ["{{ url_for('static', filename='imgg12.jpeg') }}", "{{ url_for('static', filename='imgg11.jpeg') }}", "{{ url_for('static', filename='imgg12.jpeg') }}"], type: 'drink', desc: 'Smooth espresso with a generous amount of steamed milk and a thin layer of foam.' },
+        { name: 'Caramel Macchiato', price: 3.500, category: 'espresso', images: ["{{ url_for('static', filename='imgg13.jpeg') }}", "{{ url_for('static', filename='imgg12.jpeg') }}"], type: 'drink', desc: 'Vanilla-flavored milk marked with espresso and drizzled with buttery caramel.' },
+        { name: 'Cold Brew', price: 2.800, category: 'cold', images: ["{{ url_for('static', filename='imgg5.jpeg') }}", "{{ url_for('static', filename='imgg7.jpeg') }}"], type: 'drink', desc: 'Slow-steeped for 12 hours in cold water for an exceptionally smooth, low-acid coffee.' },
+        { name: 'Iced Latte', price: 3.200, category: 'cold', images: ["{{ url_for('static', filename='imgg6.jpeg') }}", "{{ url_for('static', filename='imgg5.jpeg') }}"], type: 'drink', desc: 'Chilled espresso and milk over ice, customizable with your choice of syrup.' },
+        { name: 'Iced Americano', price: 2.600, category: 'cold', images: ["{{ url_for('static', filename='imgg7.jpeg') }}", "{{ url_for('static', filename='imgg5.jpeg') }}"], type: 'drink', desc: 'Espresso shots topped with cold water and served over ice for a refreshing lift.' },
+        { name: 'Nitro Cold Brew', price: 4.500, category: 'cold', images: ["{{ url_for('static', filename='imgg3.jpeg') }}", "{{ url_for('static', filename='imgg5.jpeg') }}"], type: 'drink', desc: 'Our signature Cold Brew infused with nitrogen for a velvety, creamy texture.' },
+        { name: 'V60 Pour Over', price: 3.800, category: 'brewed', images: ["{{ url_for('static', filename='imgg10.jpeg') }}", "{{ url_for('static', filename='img1.jpeg') }}"], type: 'drink', desc: 'Hand-poured single origin coffee, highlighting delicate flavor profiles.' },
+        { name: 'French Press', price: 3.500, category: 'brewed', images: ["{{ url_for('static', filename='img1.jpeg') }}", "{{ url_for('static', filename='imgg10.jpeg') }}"], type: 'drink', desc: 'Traditional immersion brewing for a full-bodied, robust cup of coffee.' },
+        { name: 'Butter Croissant', price: 1.800, category: 'pastry', images: ["{{ url_for('static', filename='y-jKMyLA.jpeg') }}", "{{ url_for('static', filename='img7.jpeg') }}"], type: 'food', desc: 'Classic French pastry with a flaky, buttery exterior and soft, honeycomb interior.' },
+        { name: 'Pain au Chocolat', price: 2.200, category: 'pastry', images: ["{{ url_for('static', filename='img7.jpeg') }}", "{{ url_for('static', filename='y-jKMyLA.jpeg') }}"], type: 'food', desc: 'Buttery croissant dough filled with two batons of premium dark chocolate.' },
+        { name: 'Belgian Chocolate Cake', price: 3.500, category: 'pastry', images: ["{{ url_for('static', filename='img8.jpeg') }}", "{{ url_for('static', filename='imgg4.jpeg') }}"], type: 'food', desc: 'Decadent flourless chocolate cake made with 70% dark Belgian cocoa.' },
+        { name: 'Matcha Latte', price: 4.500, category: 'espresso', images: ["{{ url_for('static', filename='imgg11.jpeg') }}", "{{ url_for('static', filename='imgg12.jpeg') }}"], type: 'drink', desc: 'Ceremonial grade Japanese matcha whisked with your choice of milk.' },
+        { name: 'Spanish Latte', price: 4.200, category: 'espresso', images: ["{{ url_for('static', filename='imgg13.jpeg') }}", "{{ url_for('static', filename='imgg12.jpeg') }}"], type: 'drink', desc: 'Espresso combined with condensed milk for a sweet, creamy texture.' },
+        { name: 'Flat White', price: 3.500, category: 'espresso', images: ["{{ url_for('static', filename='imgg12.jpeg') }}", "{{ url_for('static', filename='imgg11.jpeg') }}"], type: 'drink', desc: 'Micro-foam poured over a double shot of espresso for a silky finish.' },
+        { name: 'Iced Americano', price: 2.800, category: 'cold', images: ["{{ url_for('static', filename='imgg7.jpeg') }}", "{{ url_for('static', filename='imgg5.jpeg') }}"], type: 'drink', desc: 'Chilled espresso topped with cold water for a crisp, refreshing coffee.' },
+        { name: 'Cheesecake', price: 4.200, category: 'pastry', images: ["{{ url_for('static', filename='imgg4.jpeg') }}", "{{ url_for('static', filename='img8.jpeg') }}"], type: 'food', desc: 'Creamy New York style cheesecake with a buttery graham cracker crust.' },
+        { name: 'Blueberry Muffin', price: 2.500, category: 'pastry', images: ["{{ url_for('static', filename='img7.jpeg') }}", "{{ url_for('static', filename='y-jKMyLA.jpeg') }}"], type: 'food', desc: 'Moist muffin bursting with fresh blueberries and topped with a sugar crumble.' }
     ];
 
     const menuGrid = document.getElementById('menuGrid');
@@ -1049,6 +1122,8 @@
         };
         
         modalItemName.textContent = item.name;
+        document.getElementById('modalCategory').textContent = item.category.toUpperCase();
+        document.getElementById('modalDescription').textContent = item.desc || '';
         qtyDisplay.textContent = '1';
 
         // Setup Carousel
@@ -1123,11 +1198,11 @@
         optionsContainer.innerHTML = '';
 
         const sections = [
-            { id: 'size', label: 'size', icon: 'straighten', options: ['small', 'medium', 'large'] },
-            { id: 'temp', label: 'temperature', icon: 'thermostat', options: ['hot', 'cold'], hideForFood: true },
-            { id: 'ice', label: 'ice level', icon: 'icecream', options: ['regular', 'less', 'extra', 'no'], showOnlyIf: () => currentOptions.temp === 'cold' },
-            { id: 'sugar', label: 'sugar level', icon: 'cookie', options: ['regular', 'less', 'half', 'no', 'extra'] },
-            { id: 'milk', label: 'milk selection', icon: 'local_cafe', options: ['whole', 'skim', 'oat', 'almond'], hideForFood: true }
+            { id: 'size', label: 'Select Size', icon: 'straighten', options: ['small', 'medium', 'large'] },
+            { id: 'temp', label: 'Temperature', icon: 'thermostat', options: ['hot', 'cold'], hideForFood: true },
+            { id: 'ice', label: 'Ice Level', icon: 'icecream', options: ['regular', 'less', 'extra', 'no'], showOnlyIf: () => currentOptions.temp === 'cold' },
+            { id: 'sugar', label: 'Sugar Level', icon: 'cookie', options: ['regular', 'less', 'half', 'no', 'extra'] },
+            { id: 'milk', label: 'Milk Selection', icon: 'local_cafe', options: ['whole', 'skim', 'oat', 'almond'], hideForFood: true }
         ];
 
         sections.forEach(section => {
@@ -1138,16 +1213,13 @@
             sectionDiv.className = 'option-section';
             sectionDiv.innerHTML = `
                 <div class="option-label">
-                    <span class="material-symbols-outlined">${section.icon}</span> ${section.label}
+                    ${section.label}
                 </div>
-                <div class="options-checklist">
+                <div class="options-pills">
                     ${section.options.map(opt => `
-                        <div class="checklist-row ${currentOptions[section.id] === opt ? 'active' : ''}" 
+                        <div class="pill-option ${currentOptions[section.id] === opt ? 'active' : ''}" 
                              onclick="selectOption('${section.id}', '${opt}')">
-                            <div class="checklist-info">
-                                ${opt}
-                            </div>
-                            <div class="checklist-check"></div>
+                            ${opt}
                         </div>
                     `).join('')}
                 </div>
@@ -1241,22 +1313,7 @@
 
     // Add to cart
     document.getElementById('addToCartBtn').addEventListener('click', function () {
-        const cartItem = {
-            id: Date.now(),
-            name: currentItem.name,
-            price: calculatePrice(),
-            quantity: currentQty,
-            options: { ...currentOptions },
-            image: currentItem.images[0],
-            type: currentItem.type
-        };
-        
-        cart.push(cartItem);
-        localStorage.setItem('cart', JSON.stringify(cart));
-        updateCartCount();
-        
-        showToast(`Added ${currentQty}x ${currentItem.name} to cart!`);
-        closeModal();
+        window.location.href = '/login';
     });
 
     // Touch feedback

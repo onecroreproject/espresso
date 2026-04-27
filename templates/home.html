@@ -4,134 +4,143 @@
 
 {% block extra_css %}
 <style>
-    /* Banner Carousel Styles */
-    .banner-carousel-section {
-        padding: 16px 16px 8px;
+    /* Banner Video Styles */
+    .banner-video-section {
+        padding: 0;
+        margin-bottom: 12px;
     }
 
-    .banner-carousel-container {
+    .banner-video-container {
         position: relative;
         width: 100%;
-        border-radius: 30px;
+        height: 380px;
         overflow: hidden;
-        box-shadow: 0 8px 25px rgba(139, 90, 43, 0.25);
+        background: #000;
     }
 
-    .banner-carousel {
-        display: flex;
-        transition: transform 0.3s ease;
+    .banner-video-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
         width: 100%;
+        height: 100%;
+        background: linear-gradient(to bottom, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0.1) 70%, rgba(0, 0, 0, 0.8) 100%);
+        z-index: 1;
     }
 
-    .banner-carousel-item {
-        flex: 0 0 100%;
+    .banner-video {
         width: 100%;
-        position: relative;
-        display: none;
-    }
-
-    .banner-carousel-item.active {
-        display: block;
-    }
-
-    .banner-carousel-image {
-        width: 100%;
-        height: 220px;
+        height: 100%;
         object-fit: cover;
         display: block;
+        transform: scale(1.1);
+        animation: slow-zoom 30s infinite alternate ease-in-out;
     }
 
-    .banner-carousel-caption {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background: linear-gradient(transparent, rgba(74, 58, 43, 0.8));
-        color: white;
-        padding: 30px 20px 20px;
-        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    @keyframes slow-zoom {
+        from {
+            transform: scale(1.1);
+        }
+
+        to {
+            transform: scale(1.25);
+        }
     }
 
-    .banner-carousel-caption h3 {
-        font-size: 22px;
-        font-weight: 700;
-        font-family: 'Playfair Display', serif;
-        margin-bottom: 4px;
-    }
-
-    .banner-carousel-caption p {
-        font-size: 14px;
-        opacity: 0.95;
-        display: flex;
-        align-items: center;
-        gap: 4px;
-    }
-
-    /* Carousel Indicators */
-    .carousel-indicators {
-        position: absolute;
-        bottom: 15px;
-        right: 15px;
-        display: flex;
-        gap: 8px;
-        z-index: 10;
-    }
-
-    .indicator {
-        width: 10px;
-        height: 10px;
-        border-radius: 10px;
-        background: rgba(255, 255, 255, 0.4);
-        cursor: pointer;
-        transition: all 0.2s;
-    }
-
-    .indicator.active {
-        width: 20px;
-        background: #8B5A2B;
-    }
-
-    /* Navigation Arrows */
-    .carousel-arrow {
+    .banner-video-caption {
         position: absolute;
         top: 50%;
-        transform: translateY(-50%);
-        width: 40px;
-        height: 40px;
-        border-radius: 20px;
-        background: rgba(255, 255, 255, 0.3);
-        backdrop-filter: blur(4px);
-        border: 1px solid rgba(255, 255, 255, 0.5);
-        color: white;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        z-index: 10;
-        transition: all 0.2s;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100%;
+        text-align: center;
+        padding: 0 30px;
+        z-index: 2;
     }
 
-    .carousel-arrow:hover {
-        background: rgba(255, 255, 255, 0.5);
+    .typing-cursor::after {
+        content: '|';
+        animation: blink 0.7s infinite;
+        margin-left: 4px;
+        color: #ffffff;
+        font-weight: 300;
     }
 
-    .carousel-arrow.prev {
-        left: 10px;
+    @keyframes blink {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0; }
     }
 
-    .carousel-arrow.next {
-        right: 10px;
+    #bannerHeadline, #bannerSubtext {
+        opacity: 0;
+        transition: opacity 0.3s;
     }
 
-    .carousel-arrow .material-symbols-outlined {
-        font-size: 24px;
+    #bannerHeadline, #bannerSubtext {
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+
+
+    .banner-video-caption .brand-tag {
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 10px;
+        color: #ffffff;
+        margin-bottom: 24px;
+        font-weight: 500;
+        display: block;
+        text-indent: 10px;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .banner-video-caption h3 {
+        font-size: 54px;
+        font-weight: 400;
+        font-family: 'Playfair Display', serif;
+        margin-bottom: 16px;
+        line-height: 1.2;
+        letter-spacing: 2px;
+        text-shadow: 0 4px 30px rgba(0, 0, 0, 0.6);
+        position: relative;
+    }
+
+    .banner-video-caption h3::after {
+        content: '';
+        display: block;
+        width: 80px;
+        height: 1.5px;
+        background: var(--accent);
+        margin: 20px auto 0;
+        opacity: 0;
+        transform: scaleX(0);
+        transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .banner-video-caption h3.finished::after {
+        opacity: 0.8;
+        transform: scaleX(1);
+    }
+
+    .banner-video-caption p {
+        font-size: 16px;
+        color: #ffffff;
+        opacity: 1;
+        font-weight: 300;
+        line-height: 1.8;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+        margin: 0 auto;
+        text-shadow: 0 2px 15px rgba(0, 0, 0, 0.5);
+        letter-spacing: 1px;
     }
 
     /* Section Title */
     .section-title {
         font-family: 'Playfair Display', serif;
         font-size: 20px;
-        color: #4a3a2b;
+        color: var(--text-primary);
         margin-bottom: 16px;
         font-weight: 700;
         display: flex;
@@ -140,7 +149,7 @@
     }
 
     .section-title .material-symbols-outlined {
-        color: #8B5A2B;
+        color: var(--text-primary);
         opacity: 0.5;
     }
 
@@ -164,93 +173,83 @@
     }
 
     .carousel::-webkit-scrollbar-thumb {
-        background-color: #8B5A2B;
+        background-color: var(--accent);
         border-radius: 20px;
     }
 
-    .menu-carousel-item {
-        scroll-snap-align: start;
-        flex: 0 0 200px;
-        border-radius: 25px;
-        overflow: hidden;
-        background: #ffffff;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-        border: 1px solid #f0f0f0;
-        cursor: pointer;
-        transition: all 0.2s ease;
+    /* Bento Grid Featured Section */
+    .popular-bento-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-auto-rows: 180px;
+        gap: 12px;
+        padding: 0 16px 24px;
+    }
+
+    .bento-item {
         position: relative;
-    }
-
-    .menu-carousel-item:active {
-        transform: scale(0.98);
-    }
-
-    .menu-carousel-image {
-        width: 100%;
-        height: 140px;
-        object-fit: cover;
-        display: block;
-    }
-
-    .menu-carousel-caption {
-        padding: 12px 10px;
-    }
-
-    .menu-carousel-caption h3 {
-        font-size: 15px;
-        font-weight: 700;
-        color: #2d241c;
-        margin-bottom: 2px;
-        white-space: nowrap;
+        border-radius: 24px;
         overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    .menu-carousel-caption p {
-        font-size: 11px;
-        color: #777777;
-        margin-bottom: 6px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    .menu-carousel-price {
-        font-weight: 700;
-        color: #8B5A2B;
-        font-size: 15px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-
-    .menu-carousel-price::before {
-        content: 'BD ';
-        font-size: 11px;
-        font-weight: 500;
-    }
-
-    .quick-add-btn {
-        width: 28px;
-        height: 28px;
-        border-radius: 14px;
-        background: #8B5A2B;
-        color: white;
-        border: none;
-        display: flex;
-        align-items: center;
-        justify-content: center;
         cursor: pointer;
-        transition: all 0.2s;
+        background: #f9f9f9;
     }
 
-    .quick-add-btn:active {
-        transform: scale(0.9);
-        background: #6B3E1A;
+    .bento-item.large {
+        grid-row: span 2;
     }
 
-    .quick-add-btn .material-symbols-outlined {
-        font-size: 16px;
+    .bento-item.wide {
+        grid-column: span 2;
+        grid-row: span 1.5;
+    }
+
+    .bento-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .bento-item:hover .bento-image {
+        transform: scale(1.08);
+    }
+
+    .bento-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 20px;
+        background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+        color: white;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        height: 50%;
+    }
+
+    .bento-tag {
+        font-size: 9px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        color: var(--accent);
+        margin-bottom: 4px;
+    }
+
+    .bento-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 18px;
+        font-weight: 700;
+    }
+
+    .bento-item.large .bento-title {
+        font-size: 24px;
+    }
+
+    .bento-price {
+        font-size: 13px;
+        opacity: 0.9;
+        margin-top: 2px;
     }
 
     /* Category Pills */
@@ -274,16 +273,16 @@
         border-radius: 40px;
         font-size: 14px;
         font-weight: 500;
-        color: #4a3a2b;
+        color: #000000;
         white-space: nowrap;
         cursor: pointer;
         transition: all 0.2s;
     }
 
     .category-pill.active {
-        background: #8B5A2B;
-        color: white;
-        border-color: #8B5A2B;
+        background: var(--accent);
+        color: var(--text-primary);
+        border-color: var(--accent);
     }
 
     .category-pill:active {
@@ -305,7 +304,7 @@
     .menu-list-header h2 {
         font-family: 'Playfair Display', serif;
         font-size: 22px;
-        color: #4a3a2b;
+        color: var(--text-primary);
     }
 
     .view-all-link {
@@ -320,7 +319,7 @@
     }
 
     .view-all-link:active {
-        color: #8B5A2B;
+        color: #000000;
     }
 
     .menu-list {
@@ -356,7 +355,7 @@
         border-radius: 35px;
         overflow: hidden;
         border: 2px solid #ffffff;
-        box-shadow: 0 4px 10px rgba(139, 90, 43, 0.1);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
         flex-shrink: 0;
     }
 
@@ -374,7 +373,7 @@
     .menu-list-name {
         font-size: 16px;
         font-weight: 700;
-        color: #2d241c;
+        color: var(--text-primary);
         margin-bottom: 4px;
         white-space: nowrap;
         overflow: hidden;
@@ -394,7 +393,7 @@
         display: flex;
         gap: 12px;
         font-size: 11px;
-        color: #4a3a2b;
+        color: var(--text-primary);
     }
 
     .menu-list-badge {
@@ -404,12 +403,12 @@
         border-radius: 30px;
         font-size: 11px;
         font-weight: 600;
-        color: #8B5A2B;
+        color: var(--text-primary);
     }
 
     .menu-list-price {
         font-weight: 700;
-        color: #8B5A2B;
+        color: var(--text-primary);
         font-size: 18px;
         min-width: 70px;
         text-align: right;
@@ -431,19 +430,19 @@
         width: 32px;
         height: 32px;
         border-radius: 16px;
-        background: #ffffff;
-        border: 1px solid #f0f0f0;
-        color: #8B5A2B;
+        background: var(--accent);
+        border: 1px solid var(--accent);
+        color: var(--text-primary);
         display: flex;
         align-items: center;
         justify-content: center;
         cursor: pointer;
         transition: all 0.2s;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
     }
 
     .list-add-btn:active {
-        background: #8B5A2B;
+        background: #333333;
         color: white;
         transform: scale(0.9);
     }
@@ -465,11 +464,11 @@
     }
 
     .toast {
-        background: #8B5A2B;
-        color: white;
-        padding: 12px 20px;
+        background: var(--accent);
+        color: var(--text-primary);
+        padding: 12px 24px;
         border-radius: 50px;
-        box-shadow: 0 4px 15px rgba(139, 90, 43, 0.2);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         font-weight: 500;
         transform: translateY(100px);
         opacity: 0;
@@ -480,6 +479,7 @@
         align-items: center;
         justify-content: center;
         gap: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     .toast.show {
@@ -543,7 +543,7 @@
     }
 
     .carousel-dot.active {
-        background: #000000;
+        background: var(--accent);
         transform: scale(1.3);
     }
 
@@ -568,7 +568,7 @@
         justify-content: center;
         border: 1px solid #f0f0f0;
         cursor: pointer;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         transition: all 0.2s ease;
     }
 
@@ -607,7 +607,7 @@
     }
 
     .checklist-row.active {
-        border-color: #000000;
+        border-color: var(--accent);
         background: #fafafa;
     }
 
@@ -632,8 +632,8 @@
     }
 
     .checklist-row.active .checklist-check {
-        background: #000000;
-        border-color: #000000;
+        background: var(--accent);
+        border-color: var(--accent);
     }
 
     .checklist-check::after {
@@ -699,7 +699,7 @@
     .modal-header h3 {
         font-size: 24px;
         font-weight: 700;
-        color: #000;
+        color: var(--text-primary);
     }
 
     .close-modal {
@@ -707,13 +707,13 @@
         border: none;
         font-size: 32px;
         cursor: pointer;
-        color: #000;
+        color: var(--text-primary);
     }
 
     .modal-item-name {
         font-size: 26px;
         font-weight: 700;
-        color: #000;
+        color: var(--text-primary);
         margin-bottom: 24px;
         text-align: left;
     }
@@ -725,7 +725,7 @@
     .option-label {
         font-size: 16px;
         font-weight: 700;
-        color: #000;
+        color: var(--text-primary);
         margin-bottom: 12px;
         display: flex;
         align-items: center;
@@ -752,7 +752,7 @@
         background: #fff;
         font-size: 24px;
         font-weight: 600;
-        color: #000;
+        color: var(--text-primary);
         cursor: pointer;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     }
@@ -760,13 +760,13 @@
     .qty-number {
         font-size: 24px;
         font-weight: 700;
-        color: #000;
+        color: var(--text-primary);
     }
 
     .add-to-cart-btn {
         width: 100%;
-        background: #000;
-        color: #fff;
+        background: var(--accent);
+        color: var(--text-primary);
         border: none;
         padding: 20px;
         border-radius: 16px;
@@ -853,62 +853,28 @@
 <div class="toast-container" id="toastContainer"></div>
 
 <!-- Banner Carousel -->
-<div class="banner-carousel-section">
-    <div class="banner-carousel-container">
-        <div class="banner-carousel" id="bannerCarousel">
-            <div class="banner-carousel-item active">
-                <img src="https://lh3.googleusercontent.com/gps-cs-s/AHVAweoZVh_5HjTgNzKwrgrU8Qodmda0OFZP0ozz-C64yNzJGNJpMGpU3fh9Dph_RXHj0Fmoz1FuP8JbYSq_L1NDmv3pn3Am7VJLF2tUXqbI_fEYdeImkgaXj8kE1PONHnf7G0JcF8iu=s1360-w1360-h1020-rw"
-                    alt="Cafe Interior" class="banner-carousel-image"
-                    onerror="this.onerror=null; this.src='{{ banner_fallback_1 }}';">
-                <div class="banner-carousel-caption">
-                    <h3>Cozy Interior</h3>
-                    <p>Comfortable seating area</p>
-                </div>
-            </div>
-            <div class="banner-carousel-item">
-                <img src="https://lh3.googleusercontent.com/gps-cs-s/AHVAwepZYfEuPLc42rQLouJSfQEKy4LIbJQds6wqLdQ3HsElOXbptf0_kFxBpOELY-6dcrbTbKx3EaYJqqIpK9d1mc-UjCUJqRwwdsf8FPJ4ELu0W09SjUt_5DFYHjixuy-ncywj6iByBQ=s1360-w1360-h1020-rw"
-                    alt="Coffee Bar" class="banner-carousel-image"
-                    onerror="this.onerror=null; this.src='{{ banner_fallback_2 }}';">
-                <div class="banner-carousel-caption">
-                    <h3>Coffee Bar</h3>
-                    <p>Professional La Marzocco</p>
-                </div>
-            </div>
-            <div class="banner-carousel-item">
-                <img src="https://lh3.googleusercontent.com/gps-cs-s/AHVAweqAPFSWqT8k5WRDZguaeRaCFOdHV7uGVYciO3EVqmtjP6qKJtMM3yn9fGF28XPINI04gU6PeItxpZ1IMXVSgoZPVxnJjG1lYY2i6R3opAI-4pyrp3EzMWcR-odssEFzVN9FgSvtv3xgU4A=s1360-w1360-h1020-rw"
-                    alt="Outdoor Seating" class="banner-carousel-image"
-                    onerror="this.onerror=null; this.src='{{ banner_fallback_3 }}';">
-                <div class="banner-carousel-caption">
-                    <h3>Outdoor Area</h3>
-                    <p>Patio seating available</p>
-                </div>
-            </div>
+<!-- Banner Video -->
+<div class="banner-video-section">
+    <div class="banner-video-container">
+        <div class="banner-video-overlay"></div>
+        <video autoplay muted loop playsinline class="banner-video">
+            <source src="{{ url_for('static', filename='espresso.mp4') }}" type="video/mp4">
+        </video>
+        <div class="banner-video-caption">
+            <span class="brand-tag">Signature Experience</span>
+            <h3 id="bannerHeadline"></h3>
+            <p id="bannerSubtext"></p>
         </div>
-
-        <!-- Carousel Indicators -->
-        <div class="carousel-indicators">
-            <span class="indicator active" onclick="slideTo(0)"></span>
-            <span class="indicator" onclick="slideTo(1)"></span>
-            <span class="indicator" onclick="slideTo(2)"></span>
-        </div>
-
-        <!-- Navigation Arrows -->
-        <button class="carousel-arrow prev" onclick="slidePrev()">
-            <span class="material-symbols-outlined">chevron_left</span>
-        </button>
-        <button class="carousel-arrow next" onclick="slideNext()">
-            <span class="material-symbols-outlined">chevron_right</span>
-        </button>
     </div>
 </div>
 
-<!-- Second Carousel - Menu Items (Horizontal Scroll) -->
-<div class="carousel-section">
-    <div class="section-title">
-        <span class="material-symbols-outlined">restaurant_menu</span>
-        Popular Now
+<!-- Bento Grid Featured Section -->
+<div class="popular-bento-section">
+    <div class="section-title" style="padding: 24px 16px 12px;">
+        <span class="material-symbols-outlined">grid_view</span>
+        Weekly Favorites
     </div>
-    <div class="carousel" id="popularCarousel">
+    <div class="popular-bento-grid" id="popularCarousel">
         <!-- Will be populated dynamically -->
     </div>
 </div>
@@ -961,7 +927,7 @@
             </div>
         </div>
         <div class="modal-item-name" id="modalItemName">Espresso</div>
-        
+
         <div id="modalOptionsContainer">
             <!-- Options dynamically rendered by JS -->
         </div>
@@ -1053,21 +1019,28 @@
 
     // Menu items data - Unified with menu.html
     const menuItems = [
-        { name: 'Honey Almond Latte', price: 4.200, category: 'espresso', images: ["{{ url_for('static', filename='imgg.jpeg') }}", "{{ url_for('static', filename='imgg1.jpeg') }}", "{{ url_for('static', filename='imgg2.jpeg') }}"], isNew: true, type: 'drink', desc: 'Sweet honey & almond' },
-        { name: 'Salted Caramel Mocha', price: 4.500, category: 'espresso', images: ["{{ url_for('static', filename='imgg1.jpeg') }}", "{{ url_for('static', filename='imgg3.jpeg') }}", "{{ url_for('static', filename='imgg5.jpeg') }}"], isNew: true, type: 'drink', desc: 'Rich caramel with sea salt' },
-        { name: 'Lavender Oat Latte', price: 4.300, category: 'espresso', images: ["{{ url_for('static', filename='imgg2.jpeg') }}", "{{ url_for('static', filename='imgg11.jpeg') }}", "{{ url_for('static', filename='imgg12.jpeg') }}"], isNew: true, type: 'drink', desc: 'Floral & creamy' },
-        { name: 'Brown Sugar Shaken', price: 3.900, category: 'cold', images: ["{{ url_for('static', filename='imgg3.jpeg') }}", "{{ url_for('static', filename='img4.jpeg') }}", "{{ url_for('static', filename='img6.jpeg') }}"], isNew: true, type: 'drink', desc: 'Brown sugar & cinnamon' },
-        { name: 'Tiramisu Cup', price: 3.800, category: 'pastry', images: ["{{ url_for('static', filename='imgg4.jpeg') }}", "{{ url_for('static', filename='img7.jpeg') }}", "{{ url_for('static', filename='img8.jpeg') }}"], isNew: true, type: 'food', desc: 'Coffee flavored dessert' },
-        { name: 'Espresso', price: 2.500, category: 'espresso', images: ["{{ url_for('static', filename='imgg8.jpeg') }}", "{{ url_for('static', filename='imgg9.jpeg') }}"], type: 'drink', desc: 'Single shot of pure espresso' },
-        { name: 'Double Espresso', price: 3.500, category: 'espresso', images: ["{{ url_for('static', filename='imgg9.jpeg') }}", "{{ url_for('static', filename='imgg8.jpeg') }}"], type: 'drink', desc: 'Two shots of pure espresso' },
-        { name: 'Cappuccino', price: 3.000, category: 'espresso', images: ["{{ url_for('static', filename='imgg11.jpeg') }}", "{{ url_for('static', filename='imgg12.jpeg') }}"], type: 'drink', desc: 'Rich espresso with steamed milk' },
-        { name: 'Latte', price: 3.200, category: 'espresso', images: ["{{ url_for('static', filename='imgg12.jpeg') }}", "{{ url_for('static', filename='imgg11.jpeg') }}"], type: 'drink', desc: 'Smooth & creamy' },
-        { name: 'Caramel Macchiato', price: 3.500, category: 'espresso', images: ["{{ url_for('static', filename='imgg13.jpeg') }}", "{{ url_for('static', filename='imgg12.jpeg') }}"], type: 'drink', desc: 'Vanilla & caramel' },
-        { name: 'Cold Brew', price: 2.800, category: 'cold', images: ["{{ url_for('static', filename='imgg5.jpeg') }}", "{{ url_for('static', filename='imgg7.jpeg') }}"], type: 'drink', desc: '12-hour steeped, smooth taste' },
-        { name: 'Iced Latte', price: 3.200, category: 'cold', images: ["{{ url_for('static', filename='imgg6.jpeg') }}", "{{ url_for('static', filename='imgg5.jpeg') }}"], type: 'drink', desc: 'With vanilla syrup' },
-        { name: 'Iced Americano', price: 2.600, category: 'cold', images: ["{{ url_for('static', filename='imgg7.jpeg') }}", "{{ url_for('static', filename='imgg5.jpeg') }}"], type: 'drink', desc: 'Espresso with cold water' },
-        { name: 'Pour Over', price: 2.800, category: 'brewed', images: ["{{ url_for('static', filename='imgg10.jpeg') }}", "{{ url_for('static', filename='img1.jpeg') }}"], type: 'drink', desc: 'Single origin pour over' },
-        { name: 'Croissant', price: 1.800, category: 'pastry', images: ["{{ url_for('static', filename='y-jKMyLA.jpeg') }}", "{{ url_for('static', filename='img7.jpeg') }}"], type: 'food', desc: 'Flaky, buttery, fresh baked' }
+        { name: 'Honey Almond Latte', price: 4.200, category: 'espresso', images: ["{{ url_for('static', filename='imgg.jpeg') }}", "{{ url_for('static', filename='imgg1.jpeg') }}", "{{ url_for('static', filename='imgg2.jpeg') }}"], isNew: true, type: 'drink', desc: 'Silky espresso infused with organic honey and toasted almond notes.' },
+        { name: 'Salted Caramel Mocha', price: 4.500, category: 'espresso', images: ["{{ url_for('static', filename='imgg1.jpeg') }}", "{{ url_for('static', filename='imgg3.jpeg') }}", "{{ url_for('static', filename='imgg5.jpeg') }}"], isNew: true, type: 'drink', desc: 'Rich dark cocoa and espresso finished with a swirl of house-made salted caramel.' },
+        { name: 'Lavender Oat Latte', price: 4.300, category: 'espresso', images: ["{{ url_for('static', filename='imgg2.jpeg') }}", "{{ url_for('static', filename='imgg11.jpeg') }}", "{{ url_for('static', filename='imgg12.jpeg') }}"], isNew: true, type: 'drink', desc: 'A calming blend of botanical lavender and creamy oat milk with our signature espresso.' },
+        { name: 'Brown Sugar Shaken', price: 3.900, category: 'cold', images: ["{{ url_for('static', filename='imgg3.jpeg') }}", "{{ url_for('static', filename='img4.jpeg') }}", "{{ url_for('static', filename='img6.jpeg') }}"], isNew: true, type: 'drink', desc: 'Espresso shaken with brown sugar and cinnamon, served over ice with a splash of milk.' },
+        { name: 'Tiramisu Cup', price: 3.800, category: 'pastry', images: ["{{ url_for('static', filename='imgg4.jpeg') }}", "{{ url_for('static', filename='img7.jpeg') }}", "{{ url_for('static', filename='img8.jpeg') }}"], isNew: true, type: 'food', desc: 'Layers of coffee-soaked ladyfingers and mascarpone cream, dusted with cocoa.' },
+        { name: 'Espresso', price: 2.500, category: 'espresso', images: ["{{ url_for('static', filename='imgg8.jpeg') }}", "{{ url_for('static', filename='imgg9.jpeg') }}"], type: 'drink', desc: 'A concentrated shot of our signature house blend with a rich, golden crema.' },
+        { name: 'Double Espresso', price: 3.500, category: 'espresso', images: ["{{ url_for('static', filename='imgg9.jpeg') }}", "{{ url_for('static', filename='imgg8.jpeg') }}"], type: 'drink', desc: 'Two shots of our premium espresso for an intense coffee experience.' },
+        { name: 'Cappuccino', price: 3.000, category: 'espresso', images: ["{{ url_for('static', filename='imgg11.jpeg') }}", "{{ url_for('static', filename='imgg12.jpeg') }}"], type: 'drink', desc: 'Equal parts espresso, steamed milk, and airy foam for a classic balance.' },
+        { name: 'Latte', price: 3.200, category: 'espresso', images: ["{{ url_for('static', filename='imgg12.jpeg') }}", "{{ url_for('static', filename='imgg11.jpeg') }}"], type: 'drink', desc: 'Smooth espresso with a generous amount of steamed milk and a thin layer of foam.' },
+        { name: 'Caramel Macchiato', price: 3.500, category: 'espresso', images: ["{{ url_for('static', filename='imgg13.jpeg') }}", "{{ url_for('static', filename='imgg12.jpeg') }}"], type: 'drink', desc: 'Vanilla-flavored milk marked with espresso and drizzled with buttery caramel.' },
+        { name: 'Cold Brew', price: 2.800, category: 'cold', images: ["{{ url_for('static', filename='imgg5.jpeg') }}", "{{ url_for('static', filename='imgg7.jpeg') }}"], type: 'drink', desc: 'Slow-steeped for 12 hours in cold water for an exceptionally smooth, low-acid coffee.' },
+        { name: 'Iced Latte', price: 3.200, category: 'cold', images: ["{{ url_for('static', filename='imgg6.jpeg') }}", "{{ url_for('static', filename='imgg5.jpeg') }}"], type: 'drink', desc: 'Chilled espresso and milk over ice, customizable with your choice of syrup.' },
+        { name: 'Nitro Cold Brew', price: 4.500, category: 'cold', images: ["{{ url_for('static', filename='imgg3.jpeg') }}", "{{ url_for('static', filename='imgg5.jpeg') }}"], type: 'drink', desc: 'Our signature Cold Brew infused with nitrogen for a velvety, creamy texture.' },
+        { name: 'V60 Pour Over', price: 3.800, category: 'brewed', images: ["{{ url_for('static', filename='imgg10.jpeg') }}", "{{ url_for('static', filename='img1.jpeg') }}"], type: 'drink', desc: 'Hand-poured single origin coffee, highlighting delicate flavor profiles.' },
+        { name: 'Butter Croissant', price: 1.800, category: 'pastry', images: ["{{ url_for('static', filename='y-jKMyLA.jpeg') }}", "{{ url_for('static', filename='img7.jpeg') }}"], type: 'food', desc: 'Classic French pastry with a flaky, buttery exterior and soft, honeycomb interior.' },
+        { name: 'Pain au Chocolat', price: 2.200, category: 'pastry', images: ["{{ url_for('static', filename='img7.jpeg') }}", "{{ url_for('static', filename='y-jKMyLA.jpeg') }}"], type: 'food', desc: 'Buttery croissant dough filled with two batons of premium dark chocolate.' },
+        { name: 'Matcha Latte', price: 4.500, category: 'espresso', images: ["{{ url_for('static', filename='imgg11.jpeg') }}", "{{ url_for('static', filename='imgg12.jpeg') }}"], type: 'drink', desc: 'Ceremonial grade Japanese matcha whisked with your choice of milk.' },
+        { name: 'Spanish Latte', price: 4.200, category: 'espresso', images: ["{{ url_for('static', filename='imgg13.jpeg') }}", "{{ url_for('static', filename='imgg12.jpeg') }}"], type: 'drink', desc: 'Espresso combined with condensed milk for a sweet, creamy texture.' },
+        { name: 'Flat White', price: 3.500, category: 'espresso', images: ["{{ url_for('static', filename='imgg12.jpeg') }}", "{{ url_for('static', filename='imgg11.jpeg') }}"], type: 'drink', desc: 'Micro-foam poured over a double shot of espresso for a silky finish.' },
+        { name: 'Iced Americano', price: 2.800, category: 'cold', images: ["{{ url_for('static', filename='imgg7.jpeg') }}", "{{ url_for('static', filename='imgg5.jpeg') }}"], type: 'drink', desc: 'Chilled espresso topped with cold water for a crisp, refreshing coffee.' },
+        { name: 'Cheesecake', price: 4.200, category: 'pastry', images: ["{{ url_for('static', filename='imgg4.jpeg') }}", "{{ url_for('static', filename='img8.jpeg') }}"], type: 'food', desc: 'Creamy New York style cheesecake with a buttery graham cracker crust.' },
+        { name: 'Blueberry Muffin', price: 2.500, category: 'pastry', images: ["{{ url_for('static', filename='img7.jpeg') }}", "{{ url_for('static', filename='y-jKMyLA.jpeg') }}"], type: 'food', desc: 'Moist muffin bursting with fresh blueberries and topped with a sugar crumble.' }
     ];
 
     let currentItem = null;
@@ -1101,7 +1074,7 @@
         currentQty = 1;
         currentImageIndex = 0;
         currentOptions = { size: 'small', temp: 'hot', ice: 'regular', sugar: 'regular', milk: 'whole' };
-        
+
         modalItemName.textContent = item.name;
         qtyDisplay.textContent = '1';
 
@@ -1126,11 +1099,11 @@
 
         renderOptionSections(item);
         updateModalPrice();
-        
+
         // Favorite state
         const modalFavBtn = document.getElementById('modalFavBtn');
         modalFavBtn.classList.toggle('active', isFavorite(item.name));
-        
+
         modalOverlay.classList.add('active');
         document.body.style.overflow = 'hidden';
     }
@@ -1181,21 +1154,21 @@
         document.body.style.overflow = '';
     }
 
-    // Home specific rendering
+    // Home specific rendering - Updated to Bento Grid
     function renderPopularCarousel() {
         const carousel = document.getElementById('popularCarousel');
-        const popularItems = menuItems.filter(item => item.isNew).slice(0, 8);
-        carousel.innerHTML = popularItems.map(item => `
-            <div class="menu-carousel-item" onclick="openModal(${JSON.stringify(item).replace(/"/g, '&quot;')})">
-                <img src="${item.images[0]}" class="menu-carousel-image" onerror="this.src='{{ banner_fallback_1 }}';">
-                <div class="menu-carousel-caption">
-                    <h3>${item.name}</h3>
-                    <p>${item.desc || ''}</p>
-                    <div class="menu-carousel-price">${item.price.toFixed(3)}
-                        <button class="quick-add-btn" onclick="event.stopPropagation(); openModal(${JSON.stringify(item).replace(/"/g, '&quot;')})">
-                            <span class="material-symbols-outlined">add</span>
-                        </button>
-                    </div>
+        const popularItems = menuItems.filter(item => item.isNew).slice(0, 4);
+        if (popularItems.length < 4) return;
+
+        const layouts = ['large', '', '', 'wide'];
+
+        carousel.innerHTML = popularItems.map((item, idx) => `
+            <div class="bento-item ${layouts[idx]}" onclick="openModal(${JSON.stringify(item).replace(/"/g, '&quot;')})">
+                <img src="${item.images[0]}" class="bento-image" onerror="this.src='{{ banner_fallback_1 }}';">
+                <div class="bento-overlay">
+                    <div class="bento-tag">Featured</div>
+                    <div class="bento-title">${item.name}</div>
+                    <div class="bento-price">BD ${item.price.toFixed(3)}</div>
                 </div>
             </div>`).join('');
     }
@@ -1226,23 +1199,7 @@
         });
     }
 
-    // Banner Carousel logic
-    let bannerSlide = 0;
-    function showBanner(index) {
-        const slides = document.querySelectorAll('.banner-carousel-item');
-        const dots = document.querySelectorAll('.indicator');
-        if (index >= slides.length) index = 0;
-        if (index < 0) index = slides.length - 1;
-        slides.forEach(s => s.classList.remove('active'));
-        dots.forEach(d => d.classList.remove('active'));
-        slides[index].classList.add('active');
-        dots[index].classList.add('active');
-        bannerSlide = index;
-    }
-    function slideNext() { showBanner(bannerSlide + 1); }
-    function slidePrev() { showBanner(bannerSlide - 1); }
-    function slideTo(index) { showBanner(index); }
-    setInterval(slideNext, 5000);
+
 
     // Event Listeners
     document.getElementById('closeModal').addEventListener('click', closeModal);
@@ -1255,20 +1212,58 @@
     document.getElementById('closeFullView').addEventListener('click', () => document.getElementById('fullViewOverlay').classList.remove('active'));
     document.getElementById('incrementQty').addEventListener('click', () => { currentQty++; qtyDisplay.textContent = currentQty; updateModalPrice(); });
     document.getElementById('decrementQty').addEventListener('click', () => { if (currentQty > 1) { currentQty--; qtyDisplay.textContent = currentQty; updateModalPrice(); } });
-    
+
     document.getElementById('addToCartBtn').addEventListener('click', () => {
-        const cartItem = { id: Date.now(), name: currentItem.name, price: calculatePrice(), quantity: currentQty, options: { ...currentOptions }, image: currentItem.images[0], type: currentItem.type };
-        cart.push(cartItem);
-        localStorage.setItem('cart', JSON.stringify(cart));
-        updateCartCount();
-        showToast(`Added ${currentItem.name} to cart`);
-        closeModal();
+        window.location.href = '/login';
     });
+
+    function initBannerTypewriter() {
+        const headline = "The Perfect Brew";
+        const subtext = "Elevate your day with artisanal coffee crafted with passion and precision.";
+        const headlineEl = document.getElementById('bannerHeadline');
+        const subtextEl = document.getElementById('bannerSubtext');
+
+        if (!headlineEl || !subtextEl) return;
+
+        function type(el, text, speed, callback) {
+            let i = 0;
+            el.style.opacity = 1;
+            el.classList.add('typing-cursor');
+            
+            function step() {
+                if (i < text.length) {
+                    if (text.charAt(i) === '<') {
+                        let end = text.indexOf('>', i);
+                        el.innerHTML += text.substring(i, end + 1);
+                        i = end + 1;
+                    } else {
+                        el.innerHTML += text.charAt(i);
+                        i++;
+                    }
+                    setTimeout(step, speed);
+                } else {
+                    el.classList.remove('typing-cursor');
+                    if (callback) callback();
+                }
+            }
+            step();
+        }
+
+        setTimeout(() => {
+            type(headlineEl, headline, 100, () => {
+                headlineEl.classList.add('finished');
+                setTimeout(() => {
+                    type(subtextEl, subtext, 40);
+                }, 500);
+            });
+        }, 800);
+    }
 
     window.addEventListener('load', () => {
         renderPopularCarousel();
         renderMenuList();
         updateCartCount();
+        initBannerTypewriter();
     });
 </script>
 {% endblock %}

@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+
+{% block title %}Espresso · Help Center{% endblock %}
+
+{% block extra_css %}
+<style>
+    .help-container {
+        padding: 24px 16px 100px;
+    }
+
+    .help-header {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 24px;
+    }
+
+    .help-header h2 {
+        font-family: 'Playfair Display', serif;
+        font-size: 24px;
+        color: var(--text-primary);
+        font-weight: 700;
+    }
+
+    .search-bar {
+        background: #f9f9f9;
+        border-radius: 20px;
+        padding: 12px 20px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 24px;
+        border: 1px solid #f0f0f0;
+    }
+
+    .search-bar input {
+        border: none;
+        background: transparent;
+        flex: 1;
+        font-size: 15px;
+        outline: none;
+    }
+
+    .faq-section {
+        margin-bottom: 32px;
+    }
+
+    .faq-section h3 {
+        font-size: 18px;
+        margin-bottom: 16px;
+        color: var(--text-primary);
+    }
+
+    .faq-item {
+        background: #ffffff;
+        border-radius: 20px;
+        border: 1px solid #f0f0f0;
+        padding: 20px;
+        margin-bottom: 12px;
+        cursor: pointer;
+    }
+
+    .faq-question {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-weight: 600;
+        font-size: 15px;
+    }
+
+    .faq-answer {
+        margin-top: 12px;
+        font-size: 14px;
+        color: #666;
+        line-height: 1.6;
+        display: none;
+    }
+
+    .faq-item.active .faq-answer {
+        display: block;
+    }
+
+    .faq-item.active .material-symbols-outlined {
+        transform: rotate(180deg);
+    }
+
+    .contact-card {
+        background: var(--accent);
+        border-radius: 24px;
+        padding: 24px;
+        text-align: center;
+        color: var(--text-primary);
+    }
+
+    .contact-card h4 {
+        font-size: 20px;
+        margin-bottom: 8px;
+    }
+
+    .contact-card p {
+        font-size: 14px;
+        margin-bottom: 20px;
+        opacity: 0.8;
+    }
+
+    .contact-btn {
+        background: var(--text-primary);
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 30px;
+        font-weight: 600;
+        cursor: pointer;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="help-container">
+    <div class="help-header">
+        <a href="javascript:history.back()" class="icon-btn">
+            <span class="material-symbols-outlined">arrow_back</span>
+        </a>
+        <h2>Help Center</h2>
+    </div>
+
+    <div class="search-bar">
+        <span class="material-symbols-outlined">search</span>
+        <input type="text" placeholder="Search for help...">
+    </div>
+
+    <div class="faq-section">
+        <h3>Common Questions</h3>
+        <div class="faq-item" onclick="this.classList.toggle('active')">
+            <div class="faq-question">
+                <span>How can I track my order?</span>
+                <span class="material-symbols-outlined">expand_more</span>
+            </div>
+            <div class="faq-answer">
+                You can track your order in the "My Orders" section of your profile. We'll also send you push notifications for status updates.
+            </div>
+        </div>
+        <div class="faq-item" onclick="this.classList.toggle('active')">
+            <div class="faq-question">
+                <span>What are the reward points?</span>
+                <span class="material-symbols-outlined">expand_more</span>
+            </div>
+            <div class="faq-answer">
+                You earn points for every purchase. These points can be redeemed for discounts, free coffee, and exclusive rewards.
+            </div>
+        </div>
+        <div class="faq-item" onclick="this.classList.toggle('active')">
+            <div class="faq-question">
+                <span>How do I top up my wallet?</span>
+                <span class="material-symbols-outlined">expand_more</span>
+            </div>
+            <div class="faq-answer">
+                Go to the Wallet section and click "Top Up". You can use any saved payment method or a new credit card.
+            </div>
+        </div>
+    </div>
+
+    <div class="contact-card">
+        <h4>Need more help?</h4>
+        <p>Our support team is available 24/7 to assist you with any questions.</p>
+        <button class="contact-btn">Contact Support</button>
+    </div>
+</div>
+{% endblock %}
