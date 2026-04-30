@@ -110,7 +110,7 @@
         }
 
         .dot.active {
-            background: var(--text-primary);
+            background: var(--accent);
             transform: scale(1.4);
         }
 
@@ -136,7 +136,7 @@
         }
 
         .title {
-            font-family: 'Playfair Display', serif;
+            font-family: 'Montserrat', sans-serif;
             font-size: 32px;
             font-weight: 900;
             line-height: 1.2;
@@ -193,13 +193,13 @@
             cursor: pointer;
             transition: all 0.2s ease;
             white-space: nowrap;
-            background: #ffffff;
+            background: var(--surface);
             color: #666;
         }
 
         .pill.active {
             background: var(--accent);
-            color: var(--text-primary);
+            color: #000000;
             border-color: var(--accent);
         }
 
@@ -224,7 +224,7 @@
             height: 44px;
             border-radius: 50%;
             border: none;
-            background: #ffffff;
+            background: var(--surface);
             font-size: 20px;
             font-weight: 600;
             color: var(--text-primary);
@@ -248,7 +248,7 @@
             bottom: 0;
             left: 0;
             width: 100%;
-            background: #ffffff;
+            background: var(--surface);
             padding: 20px 24px 34px;
             border-top: 1px solid var(--border);
             display: flex;
@@ -261,7 +261,7 @@
             flex: 1;
             height: 60px;
             background: var(--accent);
-            color: var(--text-primary);
+            color: #000000;
             border: none;
             border-radius: 60px;
             font-size: 16px;
@@ -287,7 +287,7 @@
             bottom: 120px;
             left: 50%;
             transform: translateX(-50%) translateY(20px);
-            background: var(--text-primary);
+            background: var(--accent);
             color: #ffffff;
             padding: 14px 28px;
             border-radius: 50px;
@@ -531,13 +531,21 @@
 
         // Add to Cart
         function addToCart() {
-            const toast = document.getElementById('toast');
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 2000);
-            
-            setTimeout(() => {
+            if (localStorage.getItem('isLoggedIn') !== 'true') {
                 window.location.href = '/login';
-            }, 1000);
+                return;
+            }
+            
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            cart.push({
+                name: 'Signature Espresso',
+                price: calculatePrice(),
+                quantity: quantity,
+                image: track.querySelectorAll('img')[0].src
+            });
+            localStorage.setItem('cart', JSON.stringify(cart));
+            
+            showToast("Added to your basket");
         }
 
         function showToast(msg) {

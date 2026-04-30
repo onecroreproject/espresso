@@ -9,7 +9,7 @@
 
     .balance-card {
         background: var(--accent);
-        color: var(--text-primary);
+        color: #000000;
         border-radius: var(--radius-xl);
         padding: 40px 20px;
         box-shadow: var(--shadow-lg);
@@ -35,7 +35,7 @@
     .balance-amount {
         font-size: 48px;
         font-weight: 700;
-        font-family: 'Playfair Display', serif;
+        font-family: 'Montserrat', sans-serif;
         color: var(--text-primary);
         text-align: center;
     }
@@ -58,7 +58,7 @@
         justify-content: center;
         gap: 10px;
         font-weight: 700;
-        color: var(--text-primary);
+        color: #000000;
         text-transform: uppercase;
         letter-spacing: 1px;
         cursor: pointer;
@@ -73,7 +73,7 @@
 
     /* Zero Balance Message */
     .zero-balance-message {
-        background: #ffffff;
+        background: var(--surface);
         border: 1px solid #f0f0f0;
         border-radius: 20px;
         padding: 16px;
@@ -85,9 +85,9 @@
     }
 
     @keyframes pulse-warning {
-        0% { border-color: #000000; }
-        50% { border-color: #333333; }
-        100% { border-color: #000000; }
+        0% { border-color: var(--text-primary); }
+        50% { border-color: var(--text-muted); }
+        100% { border-color: var(--text-primary); }
     }
 
     .warning-icon {
@@ -98,7 +98,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        color: var(--text-primary);
+        color: #000000;
         flex-shrink: 0;
     }
 
@@ -114,7 +114,7 @@
 
     .warning-desc {
         font-size: 12px;
-        color: #777777;
+        color: var(--text-muted);
     }
 
     /* Top-up Presets */
@@ -128,14 +128,14 @@
     }
 
     .section-header h2 {
-        font-family: 'Playfair Display', serif;
+        font-family: 'Montserrat', sans-serif;
         font-size: 20px;
         color: var(--text-primary);
         font-weight: 700;
     }
 
     .view-all { 
-        color: #888888; 
+        color: var(--text-muted); 
         font-size: 13px; 
         font-weight: 500; 
         cursor: pointer;
@@ -154,7 +154,7 @@
     }
 
     .preset-card {
-        background: #ffffff;
+        background: var(--surface);
         border: 1px solid #f0f0f0;
         border-radius: 25px;
         padding: 16px 8px;
@@ -182,7 +182,7 @@
     
     .preset-bonus {  
         font-size: 12px; 
-        color: #888888; 
+        color: var(--text-muted); 
         font-weight: 600; 
         margin-top: 4px; 
     }
@@ -193,7 +193,7 @@
 
     /* Custom Top-up */
     .custom-topup {
-        background: #ffffff;
+        background: var(--surface);
         border-radius: 40px;
         padding: 16px;
         border: 1px solid #f0f0f0;
@@ -226,7 +226,7 @@
 
     .apply-btn {
         background: var(--accent);
-        color: var(--text-primary);
+        color: #000000;
         border: none;
         padding: 14px 32px;
         border-radius: 60px;
@@ -270,7 +270,7 @@
     }
 
     .security-item {
-        background: #ffffff;
+        background: var(--surface);
         border-radius: 20px;
         padding: 16px 8px;
         text-align: center;
@@ -285,7 +285,7 @@
     }
 
     .security-icon {
-        color: #888888;
+        color: var(--text-muted);
         margin-bottom: 8px;
     }
 
@@ -317,7 +317,7 @@
 
     .toast {
         background: var(--accent);
-        color: var(--text-primary);
+        color: #000000;
         padding: 16px 20px;
         border-radius: 50px;
         box-shadow: var(--shadow-lg);
@@ -395,7 +395,7 @@
     }
 
     .history-modal-content {
-        background: #ffffff;
+        background: var(--surface);
         width: 100%;
         max-width: 450px;
         border-radius: 32px 32px 0 0;
@@ -429,7 +429,7 @@
     }
 
     .modal-header h3 .material-symbols-outlined {
-        color: #888888;
+        color: var(--text-muted);
     }
 
     .close-modal {
@@ -437,7 +437,7 @@
         border: none;
         font-size: 28px;
         cursor: pointer;
-        color: #888888;
+        color: var(--text-muted);
         padding: 0 8px;
         transition: color 0.2s;
     }
@@ -464,9 +464,9 @@
         border-radius: 40px;
         font-size: 13px;
         font-weight: 500;
-        background: #ffffff;
+        background: var(--surface);
         border: 1px solid #f0f0f0;
-        color: #000000;
+        color: var(--text-primary);
         white-space: nowrap;
         cursor: pointer;
         transition: all 0.2s;
@@ -474,13 +474,13 @@
 
     .filter-tab.active {
         background: var(--accent);
-        color: var(--text-primary);
+        color: #000000;
     }
 
     .empty-history {
         text-align: center;
         padding: 40px 20px;
-        color: #777777;
+        color: var(--text-muted);
     }
 
     .empty-history .material-symbols-outlined {
@@ -512,7 +512,7 @@
         align-items: center;
         gap: 12px;
         padding: 16px;
-        background: #ffffff;
+        background: var(--surface);
         border-radius: 20px;
         border: 1px solid #f0f0f0;
         transition: all 0.2s;
@@ -535,7 +535,7 @@
 
     .history-modal-icon.topup { 
         background: #eeeeee; 
-        color: #2e7d32; 
+        color: var(--text-primary); 
     }
     
     .history-modal-icon.payment { 
@@ -545,12 +545,12 @@
     
     .history-modal-icon.bonus { 
         background: #f0f0f0; 
-        color: #888888; 
+        color: var(--text-muted); 
     }
     
     .history-modal-icon.refund { 
         background: #e8f0fe; 
-        color: #1976d2; 
+        color: var(--text-primary); 
     }
 
     .history-modal-details {
@@ -572,21 +572,21 @@
         font-size: 10px;
         padding: 3px 8px;
         border-radius: 30px;
-        background: #ffffff;
+        background: var(--surface);
         border: 1px solid #f0f0f0;
-        color: #000000;
+        color: var(--text-primary);
         font-weight: 700;
         text-transform: uppercase;
     }
 
     .history-modal-type.topup { 
         background: #eeeeee; 
-        color: #2e7d32; 
+        color: var(--text-primary); 
     }
     
     .history-modal-type.bonus { 
         background: #f0f0f0; 
-        color: #888888; 
+        color: var(--text-muted); 
     }
     
     .history-modal-type.payment { 
@@ -596,12 +596,12 @@
     
     .history-modal-type.refund { 
         background: #e8f0fe; 
-        color: #1976d2; 
+        color: var(--text-primary); 
     }
 
     .history-modal-date {
         font-size: 11px;
-        color: #777777;
+        color: var(--text-muted);
         display: flex;
         align-items: center;
         gap: 4px;
@@ -609,7 +609,7 @@
 
     .history-modal-date .material-symbols-outlined {
         font-size: 12px;
-        color: #888888;
+        color: var(--text-muted);
     }
 
     .history-modal-amount {
@@ -622,11 +622,11 @@
     }
 
     .history-modal-amount.positive { color: var(--text-primary); font-weight: 800; }
-    .history-modal-amount.negative { color: #000000; opacity: 0.6; }
+    .history-modal-amount.negative { color: var(--text-primary); opacity: 0.6; }
 
     .history-modal-balance {
         font-size: 10px;
-        color: #777777;
+        color: var(--text-muted);
         font-weight: 400;
     }
 
@@ -634,7 +634,7 @@
         font-size: 13px;
         font-weight: 600;
         color: var(--text-primary);
-        background: #ffffff;
+        background: var(--surface);
         border: 1px solid #f0f0f0;
         padding: 8px 12px;
         border-radius: 30px;
@@ -659,7 +659,7 @@
 
     .summary-label {
         font-size: 11px;
-        color: #777777;
+        color: var(--text-muted);
         margin-bottom: 4px;
     }
 
@@ -669,7 +669,7 @@
         color: var(--text-primary);
     }
 
-    .summary-value.positive { color: #2e7d32; }
+    .summary-value.positive { color: var(--text-primary); }
     .summary-value.negative { color: #c0392b; }
 
     /* Responsive */
@@ -776,7 +776,7 @@
 </div>
 
 <!-- Debug Button - Remove after testing -->
-<!-- <button onclick="addTestTopup()" style="margin: 10px 16px; padding: 10px; background: #111111; color: white; border: none; border-radius: 40px; width: calc(100% - 32px);">
+<!-- <button onclick="addTestTopup()" style="margin: 10px 16px; padding: 10px; background: var(--accent); color: #000000; border: none; border-radius: 40px; width: calc(100% - 32px);">
     Add Test Top-up (Debug)
 </button> -->
 

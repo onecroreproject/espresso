@@ -20,7 +20,7 @@
 
         body {
             font-family: 'Montserrat', sans-serif;
-            background: #ffffff;
+            background: var(--surface);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -48,7 +48,7 @@
 
         /* espresso tagline */
         .espresso-tagline {
-            font-family: 'Playfair Display', serif;
+            font-family: 'Montserrat', sans-serif;
             font-size: 13px;
             letter-spacing: 5px;
             color: #555555;
@@ -65,7 +65,7 @@
             border: 1px solid #f0f0f0;
             border-radius: 60px;
             font-size: 16px;
-            background: #ffffff;
+            background: var(--surface);
             font-family: 'Montserrat', sans-serif;
             transition: border 0.2s, box-shadow 0.2s;
             outline: none;
@@ -74,7 +74,7 @@
 
   .input-field:focus {
     border-color: #FFDEAD;
-    background: #ffffff;
+    background: var(--surface);
     box-shadow: 0 0 0 3px rgba(255, 222, 173, 0.2);
   }
 
@@ -93,7 +93,7 @@
 
         /* phone block - exactly like login page */
         .phone-block {
-            background: #ffffff;
+            background: var(--surface);
             border-radius: 60px;
             border: 1px solid #f0f0f0;
             margin-bottom: 20px;
@@ -107,7 +107,7 @@
 
         .phone-block:focus-within {
             border-color: #FFDEAD;
-            background: #ffffff;
+            background: var(--surface);
         }
 
         /* country dropdown styled as pill */
@@ -125,7 +125,7 @@
             font-family: 'Montserrat', sans-serif;
             font-weight: 500;
             font-size: 15px;
-            color: #3E2723;
+            color: var(--text-primary);
             cursor: pointer;
             outline: none;
             width: 100%;
@@ -159,7 +159,7 @@
         .register-btn {
             width: 100%;
             background: #FFDEAD;
-            color: #3E2723;
+            color: var(--text-primary);
             border: none;
             padding: 14px 20px;
             border-radius: 40px;
@@ -191,11 +191,11 @@
         .login-prompt {
             margin-top: 28px;
             font-size: 15px;
-            color: #3E2723;
+            color: var(--text-primary);
         }
         
         .login-link {
-            color: #3E2723;
+            color: var(--text-primary);
             font-weight: 700;
             text-decoration: none;
             border-bottom: 2px solid #FFDEAD;
@@ -206,7 +206,7 @@
         
         .login-link:hover {
             background: #FFDEAD;
-            color: #3E2723;
+            color: var(--text-primary);
         }
 
         /* inline validation tooltip style */
@@ -218,7 +218,7 @@
             display: flex;
             align-items: center;
             gap: 6px;
-            color: #777777;
+            color: var(--text-muted);
             background: rgba(255, 255, 255, 0.96);
             padding: 5px 16px;
             border-radius: 40px;
@@ -237,9 +237,9 @@
         }
 
         .field-feedback.success {
-            color: #2f7d4f;
+            color: var(--text-primary);
             background: #f0fff4;
-            border-color: #2f7d4f;
+            border-color: var(--text-primary);
         }
 
         @keyframes fadeIn {

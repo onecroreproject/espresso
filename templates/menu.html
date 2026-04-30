@@ -26,13 +26,13 @@
         cursor: pointer;
         transition: all 0.2s ease;
         white-space: nowrap;
-        background: #ffffff;
+        background: var(--surface);
         color: #666;
     }
 
     .pill-option.active {
         background: var(--accent);
-        color: var(--text-primary);
+        color: #000000;
         border-color: var(--accent);
         font-weight: 600;
     }
@@ -50,7 +50,7 @@
         justify-content: space-between;
         align-items: center;
         padding: 14px 16px;
-        background: #ffffff;
+        background: var(--surface);
         border: 1px solid #f0f0f0;
         border-radius: 12px;
         cursor: pointer;
@@ -68,7 +68,7 @@
         gap: 12px;
         font-size: 14px;
         font-weight: 500;
-        color: #1a1a1a;
+        color: var(--text-primary);
     }
 
     .checklist-info .material-symbols-outlined {
@@ -118,7 +118,7 @@
     }
 
     .section-title {
-        font-family: 'Playfair Display', serif;
+        font-family: 'Montserrat', sans-serif;
         font-size: clamp(18px, 5vw, 22px);
         color: var(--text-primary);
         margin-bottom: 16px;
@@ -161,7 +161,7 @@
         border: 2px solid #f0f0f0;
         margin-bottom: 8px;
         transition: all 0.3s ease;
-        background: #ffffff;
+        background: var(--surface);
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
     }
 
@@ -282,7 +282,7 @@
 
     .modal-action-btn .material-symbols-outlined {
         font-size: 22px;
-        color: #333;
+        color: var(--text-primary);
     }
 
     /* FULL VIEW OVERLAY */
@@ -415,7 +415,7 @@
         flex-shrink: 0;
         border-radius: 12px;
         overflow: hidden;
-        background: #ffffff;
+        background: var(--surface);
         border: 1px solid #f0f0f0;
         position: relative;
     }
@@ -493,7 +493,7 @@
         display: flex;
         align-items: center;
         gap: 8px;
-        background: #ffffff;
+        background: var(--surface);
         border: 1px solid #f0f0f0;
         border-radius: 40px;
         padding: 8px 16px;
@@ -504,7 +504,7 @@
     .favorite-filter.active {
         background: var(--accent);
         border-color: var(--accent);
-        color: var(--text-primary);
+        color: #000000;
     }
 
     .favorite-filter.active .material-symbols-outlined {
@@ -543,7 +543,7 @@
     }
 
     .modal-content {
-        background: #ffffff;
+        background: var(--surface);
         width: 100%;
         max-width: 450px;
         border-radius: 32px 32px 0 0;
@@ -609,7 +609,7 @@
     }
 
     .modal-item-name {
-        font-family: 'Playfair Display', serif;
+        font-family: 'Montserrat', sans-serif;
         font-size: clamp(24px, 7vw, 30px);
         font-weight: 900;
         line-height: 1.2;
@@ -661,7 +661,7 @@
         padding: 12px 0;
         border: 2px solid #f0f0f0;
         border-radius: 40px;
-        background: #ffffff;
+        background: var(--surface);
         font-size: clamp(13px, 3.5vw, 14px);
         font-weight: 500;
         color: var(--text-primary);
@@ -675,7 +675,7 @@
 
     .option-btn.active {
         background: var(--accent);
-        color: var(--text-primary);
+        color: #000000;
         border-color: var(--accent);
     }
 
@@ -702,7 +702,7 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        background: #ffffff;
+        background: var(--surface);
         border: 1px solid #f0f0f0;
         border-radius: 60px;
         padding: 6px;
@@ -713,7 +713,7 @@
         height: clamp(44px, 12vw, 48px);
         border-radius: 50%;
         border: none;
-        background: #ffffff;
+        background: var(--surface);
         font-size: clamp(22px, 6vw, 24px);
         font-weight: 600;
         color: var(--text-primary);
@@ -734,7 +734,7 @@
     .add-to-cart-btn {
         width: 100%;
         background: var(--accent);
-        color: var(--text-primary);
+        color: #000000;
         border: none;
         padding: 16px;
         border-radius: 60px;
@@ -766,7 +766,7 @@
         left: 50%;
         transform: translateX(-50%) translateY(100px);
         background: var(--accent);
-        color: var(--text-primary);
+        color: #000000;
         padding: 12px 24px;
         border-radius: 40px;
         font-weight: 500;
@@ -1313,7 +1313,30 @@
 
     // Add to cart
     document.getElementById('addToCartBtn').addEventListener('click', function () {
-        window.location.href = '/login';
+        if (localStorage.getItem('isLoggedIn') !== 'true') {
+            window.location.href = '/login';
+            return;
+        }
+        
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        if (currentItem) {
+            cart.push({
+                name: currentItem.name,
+                price: typeof calculatePrice === 'function' ? calculatePrice() : currentItem.price,
+                quantity: currentQty,
+                image: currentItem.images[0]
+            });
+            localStorage.setItem('cart', JSON.stringify(cart));
+            
+            const toast = document.getElementById('successToast');
+            if (toast) {
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 2000);
+            }
+            
+            if (typeof updateCartCount === 'function') updateCartCount();
+            if (typeof closeModal === 'function') closeModal();
+        }
     });
 
     // Touch feedback

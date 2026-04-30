@@ -40,7 +40,7 @@
 
         body {
             font-family: 'Montserrat', sans-serif;
-            background: #ffffff;
+            background: var(--surface);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -85,7 +85,7 @@
             background: var(--accent);
             padding: 30px 20px;
             text-align: center;
-            color: var(--text-primary);
+            color: #000000;
             border-bottom: 1px solid var(--border-dark);
         }
 
@@ -152,7 +152,7 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            color: #000000;
+            color: var(--text-primary);
             text-decoration: none;
             font-size: 14px;
             font-weight: 600;
@@ -165,7 +165,7 @@
 
         .sidebar-logout:hover {
             background: var(--accent);
-            color: var(--text-primary);
+            color: #000000;
         }
 
         /* ── MENU BUTTON ── */
@@ -187,7 +187,7 @@
 
         .menu-button .material-symbols-outlined {
             font-size: 24px;
-            color: #000000;
+            color: var(--text-primary);
         }
 
         /* ── CONTENT WRAPPER ── */
@@ -270,14 +270,14 @@
             border-radius: 50%;
             cursor: pointer;
             transition: all 0.2s ease;
-            color: #000000;
+            color: var(--text-primary);
             text-decoration: none;
         }
 
         .icon-btn:active { background: var(--accent-light); }
 
         .header-page-title {
-            font-family: 'Playfair Display', serif;
+            font-family: 'Montserrat', sans-serif;
             font-size: 18px;
             font-weight: 700;
             color: var(--text-primary);
@@ -295,7 +295,7 @@
             top: -2px;
             right: 0px;
             background: var(--accent);
-            color: var(--text-primary);
+            color: #000000;
             font-size: 9px;
             font-weight: 700;
             min-width: 16px;
@@ -374,7 +374,7 @@
         }
 
         .nav-item.active {
-            color: #000000;
+            color: var(--text-primary);
             background: var(--surface);
             border: 1px solid var(--border);
         }
@@ -382,7 +382,7 @@
         .nav-item.active .material-symbols-outlined { font-weight: 700; }
 
         .nav-item:hover {
-            color: #000000;
+            color: var(--text-primary);
             background: var(--accent-light);
             border: 1px solid var(--border);
             transform: translateY(-2px);
@@ -391,7 +391,7 @@
         /* QR center button */
         .nav-item.qr-center {
             background: var(--accent);
-            color: var(--text-primary);
+            color: #000000;
             border-radius: 40px;
             padding: 8px 20px;
             margin-top: -28px;
@@ -425,7 +425,7 @@
 
         /* ── UTILITIES ── */
         .section-title {
-            font-family: 'Playfair Display', serif;
+            font-family: 'Montserrat', sans-serif;
             font-size: 20px;
             color: var(--text-primary);
             margin-bottom: 16px;
@@ -474,7 +474,7 @@
         }
 
         .category-pill:hover  { background: var(--accent-light); border-color: var(--accent); }
-        .category-pill.active { background: var(--accent); color: var(--text-primary); border-color: var(--accent); }
+        .category-pill.active { background: var(--accent); color: #000000; border-color: var(--accent); }
 
         /* QR card */
         .qr-card {
@@ -508,7 +508,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--text-primary);
+            color: #000000;
         }
 
         .qr-code-icon .material-symbols-outlined { font-size: 36px; }
@@ -542,12 +542,12 @@
 
         input:focus, textarea:focus, select:focus {
             outline: none;
-            border-color: #000000;
+            border-color: var(--text-primary);
         }
 
         button {
             background: var(--accent);
-            color: var(--text-primary);
+            color: #000000;
             border: none;
             padding: 10px 20px;
             border-radius: 8px;
@@ -580,6 +580,51 @@
             .nav-item .material-symbols-outlined { font-size: 20px; }
             .header-logo { max-width: min(120px, 35vw); }
             .nav-item.qr-center { padding: 6px 10px; min-width: 55px; }
+        }
+        /* ── DARK MODE STYLES ── */
+        body.dark-mode {
+            --accent:        #D2B48C;
+            --accent-hover:  #C19A6B;
+            --accent-light:  #3E2723;
+            --text-primary:  #F5F5F5;
+            --text-secondary: #E0E0E0;
+            --text-muted:    #BDBDBD;
+            --border:        #4E342E;
+            --border-dark:   #3E2723;
+            --surface:       #121212;
+            --surface-alt:   #1E1E1E;
+            --shadow-sm:     0 2px 8px rgba(0,0,0,0.5);
+            --shadow-md:     0 4px 16px rgba(0,0,0,0.6);
+            --shadow-lg:     0 12px 32px rgba(0,0,0,0.7);
+        }
+        body.dark-mode .header-logo {
+            filter: brightness(0) invert(1);
+        }
+        body.dark-mode .icon-btn, body.dark-mode .menu-button .material-symbols-outlined, body.dark-mode .sidebar-logout {
+            color: var(--text-primary);
+        }
+        body.dark-mode .sidebar-logout:hover {
+            color: var(--text-primary);
+        }
+        body.dark-mode .nav-item {
+            color: var(--text-muted);
+        }
+        body.dark-mode .nav-item.active, body.dark-mode .nav-item:hover {
+            color: var(--text-primary);
+            background: var(--surface-alt);
+        }
+        body.dark-mode .nav-item.qr-center {
+            background: var(--accent);
+            color: #000000;
+        }
+        body.dark-mode .nav-item.qr-center:hover {
+            background: var(--accent-hover);
+            color: var(--text-primary);
+        }
+        body.dark-mode input, body.dark-mode textarea, body.dark-mode select {
+            background: #1E1E1E;
+            color: #F5F5F5;
+            border-color: #4E342E;
         }
     </style>
 </head>
@@ -774,5 +819,28 @@
     </script>
 
     {% block extra_js %}{% endblock %}
+    <script>
+        // Dark Mode Logic
+        const themeToggleBtn = document.getElementById('themeToggleBtn');
+        const themeIcon = document.getElementById('themeIcon');
+        
+        // Check saved theme or system preference
+        const savedTheme = localStorage.getItem('espresso_theme');
+        const systemPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        
+        if (savedTheme === 'dark' || (!savedTheme && systemPrefersDark)) {
+            document.body.classList.add('dark-mode');
+            if (themeIcon) themeIcon.textContent = 'light_mode';
+        }
+
+        if (themeToggleBtn) {
+            themeToggleBtn.addEventListener('click', () => {
+                document.body.classList.toggle('dark-mode');
+                const isDark = document.body.classList.contains('dark-mode');
+                localStorage.setItem('espresso_theme', isDark ? 'dark' : 'light');
+                if (themeIcon) themeIcon.textContent = isDark ? 'light_mode' : 'dark_mode';
+            });
+        }
+    </script>
 </body>
 </html>

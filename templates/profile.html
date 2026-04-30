@@ -10,7 +10,7 @@
     }
 
     .profile-card {
-        background: #ffffff;
+        background: var(--surface);
         border-radius: 30px;
         padding: 24px 20px;
         border: 1px solid #f0f0f0;
@@ -31,7 +31,7 @@
         color: var(--text-primary);
         font-size: 40px;
         font-weight: 700;
-        font-family: 'Playfair Display', serif;
+        font-family: 'Montserrat', sans-serif;
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         position: relative;
         flex-shrink: 0;
@@ -43,7 +43,7 @@
         right: 0;
         width: 28px;
         height: 28px;
-        background: #ffffff;
+        background: var(--surface);
         border-radius: 14px;
         display: flex;
         align-items: center;
@@ -69,7 +69,7 @@
         font-weight: 700;
         color: var(--text-primary);
         margin-bottom: 4px;
-        font-family: 'Playfair Display', serif;
+        font-family: 'Montserrat', sans-serif;
         display: flex;
         align-items: center;
         gap: 8px;
@@ -86,7 +86,7 @@
 
     .profile-email {
         font-size: 14px;
-        color: #777777;
+        color: var(--text-muted);
         margin-bottom: 8px;
         display: flex;
         align-items: center;
@@ -99,7 +99,7 @@
     }
 
     .profile-email:active {
-        color: #000000;
+        color: var(--text-primary);
     }
 
     .profile-email .material-symbols-outlined {
@@ -133,7 +133,7 @@
     }
 
     .stat-card {
-        background: #ffffff;
+        background: var(--surface);
         border-radius: 25px;
         padding: 16px 8px;
         text-align: center;
@@ -155,7 +155,7 @@
 
     .stat-label {
         font-size: 11px;
-        color: #777777;
+        color: var(--text-muted);
         font-weight: 500;
     }
 
@@ -170,14 +170,14 @@
     }
 
     .section-header h2 {
-        font-family: 'Playfair Display', serif;
+        font-family: 'Montserrat', sans-serif;
         font-size: 18px;
         color: var(--text-primary);
         font-weight: 700;
     }
 
     .menu-grid {
-        background: #ffffff;
+        background: var(--surface);
         border-radius: 30px;
         border: 1px solid #f0f0f0;
         overflow: hidden;
@@ -201,7 +201,7 @@
     .menu-icon {
         width: 44px;
         height: 44px;
-        background: #ffffff;
+        background: var(--surface);
         border: 1px solid #f0f0f0;
         border-radius: 22px;
         display: flex;
@@ -213,13 +213,13 @@
 
     .menu-content { flex: 1; min-width: 0; }
     .menu-title { font-weight: 600; color: var(--text-primary); margin-bottom: 4px; }
-    .menu-subtitle { font-size: 12px; color: #777777; }
+    .menu-subtitle { font-size: 12px; color: var(--text-muted); }
     .menu-value { 
         font-weight: 600; 
         color: var(--text-primary); 
         margin-right: 8px; 
         white-space: nowrap;
-        background: #ffffff;
+        background: var(--surface);
         border: 1px solid #f0f0f0;
         padding: 4px 10px;
         border-radius: 30px;
@@ -231,7 +231,7 @@
     .address-section { padding: 0 16px 24px; }
 
     .address-card {
-        background: #ffffff;
+        background: var(--surface);
         border-radius: 30px;
         padding: 20px;
         border: 1px solid #f0f0f0;
@@ -249,7 +249,7 @@
     .address-icon {
         width: 48px;
         height: 48px;
-        background: #ffffff;
+        background: var(--surface);
         border: 1px solid #f0f0f0;
         border-radius: 24px;
         display: flex;
@@ -288,7 +288,7 @@
         justify-content: center;
         gap: 8px;
         padding: 16px;
-        background: #ffffff;
+        background: var(--surface);
         border: 1.5px dashed #f0f0f0;
         border-radius: 40px;
         margin-top: 12px;
@@ -299,14 +299,14 @@
 
     .add-address:active {
         background: var(--accent);
-        color: var(--text-primary);
+        color: #000000;
     }
 
     /* Preferences */
     .pref-section { padding: 0 16px 24px; }
 
     .pref-card {
-        background: #ffffff;
+        background: var(--surface);
         border-radius: 30px;
         padding: 20px;
         border: 1px solid #f0f0f0;
@@ -330,7 +330,7 @@
     .pref-icon {
         width: 36px;
         height: 36px;
-        background: #ffffff;
+        background: var(--surface);
         border: 1px solid #f0f0f0;
         border-radius: 18px;
         display: flex;
@@ -397,7 +397,7 @@
         transition: all 0.2s;
     }
 
-    .logout-btn:active { background: var(--accent); color: var(--text-primary); }
+    .logout-btn:active { background: var(--accent); color: #000000; }
 
     /* Toast Notifications */
     .toast-container {
@@ -413,7 +413,7 @@
 
     .toast {
         background: var(--accent);
-        color: var(--text-primary);
+        color: #000000;
         padding: 12px 20px;
         border-radius: 50px;
         box-shadow: 0 4px 15px rgba(0,0,0,0.2);
@@ -466,7 +466,7 @@
     }
 
     .modal-content {
-        background: #ffffff;
+        background: var(--surface);
         width: 100%;
         max-width: 450px;
         border-radius: 32px 32px 0 0;
@@ -497,7 +497,7 @@
         border: none;
         font-size: 28px;
         cursor: pointer;
-        color: #777777;
+        color: var(--text-muted);
     }
 
     .modal-input {
@@ -518,7 +518,7 @@
     .modal-save-btn {
         width: 100%;
         background: var(--accent);
-        color: var(--text-primary);
+        color: #000000;
         border: none;
         padding: 16px;
         border-radius: 40px;
@@ -1011,6 +1011,17 @@
     function savePreference(pref, value) {
         profileData[pref] = value;
         saveProfileData();
+        
+        if (pref === 'darkMode') {
+            if (value) {
+                document.body.classList.add('dark-mode');
+                localStorage.setItem('espresso_theme', 'dark');
+            } else {
+                document.body.classList.remove('dark-mode');
+                localStorage.setItem('espresso_theme', 'light');
+            }
+        }
+        
         showToast(`${pref === 'notifications' ? 'Notifications' : 'Dark mode'} ${value ? 'enabled' : 'disabled'}`);
     }
 
@@ -1067,6 +1078,7 @@
     function logout() {
         if (confirm('Logout from Espresso?')) {
             // Clear session data if needed
+            localStorage.removeItem('isLoggedIn');
             showToast('👋 Logged out successfully', 'success');
             setTimeout(() => {
                 window.location.href = "{{ url_for('login') }}";
@@ -1085,7 +1097,10 @@
         
         // Load preferences
         document.getElementById('notificationsToggle').checked = profileData.notifications;
-        document.getElementById('darkModeToggle').checked = profileData.darkMode;
+        
+        const isDark = document.body.classList.contains('dark-mode');
+        document.getElementById('darkModeToggle').checked = isDark;
+        profileData.darkMode = isDark;
         document.getElementById('currentLanguage').textContent = profileData.language;
         
         // Load addresses

@@ -13,9 +13,9 @@
         }
 
         body {
-            font-family: 'Playfair Display', 'Cormorant Garamond', serif;
-            background: #ffffff;
-            color: #000000;
+            font-family: 'Montserrat', sans-serif;
+            background: var(--surface);
+            color: var(--text-primary);
             min-height: 100vh;
             overflow: hidden;
         }
@@ -29,7 +29,7 @@
             margin: 0;
             padding: 0;
             opacity: 1;
-            background: #ffffff;
+            background: var(--surface);
             position: relative;
             overflow: hidden;
         }
@@ -71,7 +71,7 @@
             font-size: clamp(0.7rem, 2vw, 0.9rem);
             font-weight: 300;
             letter-spacing: 1px;
-            font-family: 'DM Sans', sans-serif;
+            font-family: 'Montserrat', sans-serif;
             text-transform: uppercase;
             cursor: pointer;
             transition: opacity 0.3s ease;
@@ -141,7 +141,7 @@
         .image-title {
             font-size: clamp(1.8rem, 8vw, 4rem);
             font-weight: 700;
-            font-family: 'Playfair Display', serif;
+            font-family: 'Montserrat', sans-serif;
             margin-bottom: clamp(8px, 2vh, 15px);
             line-height: 1.2;
             text-shadow: 0 2px 15px rgba(0, 0, 0, 0.5);
@@ -151,7 +151,7 @@
         .image-desc {
             font-size: clamp(0.9rem, 4vw, 1.5rem);
             font-weight: 300;
-            font-family: 'DM Sans', sans-serif;
+            font-family: 'Montserrat', sans-serif;
             letter-spacing: 1px;
             opacity: 0.95;
             text-shadow: 0 1px 10px rgba(0, 0, 0, 0.5);
@@ -179,10 +179,10 @@
             border-radius: clamp(30px, 8vw, 50px);
             cursor: pointer;
             transition: all 0.3s ease;
-            font-family: 'DM Sans', sans-serif;
+            font-family: 'Montserrat', sans-serif;
             letter-spacing: clamp(2px, 1vw, 4px);
             background: #FFDEAD;
-            color: #3E2723;
+            color: var(--text-primary);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             border: 1px solid rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(5px);

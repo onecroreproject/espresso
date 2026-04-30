@@ -14,11 +14,11 @@
         }
 
         body {
-            background: #ffffff;
+            background: var(--surface);
             min-height: 100vh;
             overflow: hidden;
             position: relative;
-            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            font-family: 'Montserrat', sans-serif;
         }
 
         /* Fullscreen Video - Dual Buffer System */
@@ -61,7 +61,7 @@
             background: rgba(255, 222, 173, 0.8);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(0, 0, 0, 0.1);
-            color: #3E2723;
+            color: var(--text-primary);
             font-size: 13px;
             font-weight: 500;
             letter-spacing: 1.5px;
@@ -94,7 +94,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: #ffffff;
+            background: var(--surface);
             z-index: 50;
             opacity: 0;
             pointer-events: none;

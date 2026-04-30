@@ -36,10 +36,10 @@
     }
 
     .header-logo-text {
-      font-family: 'Playfair Display', serif;
+      font-family: 'Montserrat', sans-serif;
       font-size: 22px;
       font-weight: 700;
-      color: #3E2723;
+      color: var(--text-primary);
       letter-spacing: 1px;
     }
 
@@ -47,13 +47,13 @@
       display: flex;
       align-items: center;
       gap: 6px;
-      color: #3E2723;
+      color: var(--text-primary);
       text-decoration: none;
       font-size: 13px;
       font-weight: 600;
       padding: 8px 16px;
       border-radius: 40px;
-      background: #ffffff;
+      background: var(--surface);
       border: 1px solid #f0f0f0;
       transition: all 0.2s ease;
       box-shadow: 0 2px 5px rgba(0,0,0,0.05);
@@ -97,28 +97,28 @@
 
     .icon-ring .material-symbols-outlined {
       font-size: 44px;
-      color: #3E2723;
+      color: var(--text-primary);
     }
 
     .page-title {
-      font-family: 'Playfair Display', serif;
+      font-family: 'Montserrat', sans-serif;
       font-size: 28px;
       font-weight: 700;
-      color: #3E2723;
+      color: var(--text-primary);
       text-align: center;
       margin-bottom: 12px;
     }
 
     .page-sub {
       font-size: 14px;
-      color: #888888;
+      color: var(--text-muted);
       line-height: 1.5;
       text-align: center;
       margin-bottom: 40px;
     }
 
     .page-sub strong {
-      color: #3E2723;
+      color: var(--text-primary);
       font-weight: 700;
       background: #FFDEAD;
       padding: 2px 8px;
@@ -139,14 +139,14 @@
       height: 76px;
       border: 1px solid #f0f0f0;
       border-radius: 20px;
-      background: #ffffff;
+      background: var(--surface);
       font-size: 30px;
       font-weight: 700;
       font-family: 'Montserrat', sans-serif;
-      color: #3E2723;
+      color: var(--text-primary);
       text-align: center;
       outline: none;
-      caret-color: #3E2723;
+      caret-color: var(--text-primary);
       transition: all 0.2s ease;
     }
 
@@ -171,12 +171,12 @@
 
     .timer-row span {
       font-weight: 700;
-      color: #3E2723;
-      background: #ffffff;
+      color: var(--text-primary);
+      background: var(--surface);
       border: 1px solid #f0f0f0;
       padding: 3px 10px;
       border-radius: 30px;
-      font-family: monospace;
+      font-family: 'Montserrat', sans-serif;
       font-size: 14px;
     }
 
@@ -188,7 +188,7 @@
     .resend-btn {
       background: none;
       border: none;
-      color: #3E2723;
+      color: var(--text-primary);
       font-size: 14px;
       font-weight: 700;
       font-family: 'Montserrat', sans-serif;
@@ -213,7 +213,7 @@
     .btn-verify {
       width: 100%;
       background: #FFDEAD;
-      color: #3E2723;
+      color: var(--text-primary);
       border: none;
       border-radius: 60px;
       padding: 16px 20px;
@@ -306,7 +306,7 @@
       left: 50%;
       transform: translateX(-50%) translateY(20px);
       background-color: #FFDEAD;
-      color: #3E2723;
+      color: var(--text-primary);
       padding: 10px 24px;
       border-radius: 48px;
       font-size: 13px;
@@ -594,6 +594,7 @@
         verifyBtn.innerHTML = '<span class="material-symbols-outlined">check_circle</span> Verifying...';
         // Simulate network delay
         setTimeout(() => {
+          localStorage.setItem('isLoggedIn', 'true');
           // final redirect - using window.location as per requirement
           window.location.href = 'home';
         }, 800);
