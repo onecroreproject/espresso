@@ -606,7 +606,31 @@
   </div>
   <div class="toast-container" id="toastContainer"></div>
 
+  <script id="exchange-rates-data" type="application/json">
+      {{ (rates if rates else {"bd": 1.0, "usd": 0.377, "eur": 0.35}) | tojson | safe }}
+  </script>
   <script>
+    const exchangeRates = JSON.parse(document.getElementById('exchange-rates-data').textContent);
+
+    function formatPrice(basePrice, currency) {
+        const rate = exchangeRates[currency] || 1.0;
+        const converted = basePrice * rate;
+        const symbols = { 'bd': 'BD', 'usd': '$', 'eur': '€' };
+        const symbol = symbols[currency] || 'BD';
+        
+        if (currency === 'bd') {
+            return `${symbol} ${converted.toFixed(3)}`;
+        } else {
+            return `${symbol}${converted.toFixed(2)}`;
+        }
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
     // Toast helpers
     function showToast(message, type = 'success', duration = 3200) {
       const container = document.getElementById('toastContainer');
@@ -627,7 +651,12 @@
     let orderData = null;
     let walletBalance = 50.000;
 
-    function loadWalletBalance() { const saved = localStorage.getItem('walletBalance'); if (saved) walletBalance = parseFloat(saved); document.getElementById('walletBalance').innerHTML = `BD ${walletBalance.toFixed(3)} left`; }
+    function loadWalletBalance() { 
+      const saved = localStorage.getItem('walletBalance'); 
+      if (saved) walletBalance = parseFloat(saved); 
+      const currency = localStorage.getItem('preferredCurrency') || 'bd';
+      document.getElementById('walletBalance').innerHTML = `<span data-base-price="${walletBalance}">${formatPrice(walletBalance, currency)}</span> left`; 
+    }
     function saveWalletBalance() { localStorage.setItem('walletBalance', walletBalance.toFixed(3)); }
 
     function loadOrderData() {
@@ -666,22 +695,39 @@
       document.getElementById('paymentContent').style.display = 'block';
       const container = document.getElementById('orderItems');
       let html = '';
+      const currency = localStorage.getItem('preferredCurrency') || 'bd';
       if (orderData.items && orderData.items.length) {
         orderData.items.forEach(it => {
           const qty = it.quantity || 1;
           const lineTotal = (it.price || 0) * qty;
-          html += `<div class="summary-row"><span class="item-name">${escapeHtml(it.name || 'Item')}<span class="item-qty-badge">×${qty}</span></span><span>BD ${lineTotal.toFixed(3)}</span></div>`;
+          html += `<div class="summary-row"><span class="item-name">${escapeHtml(it.name || 'Item')}<span class="item-qty-badge">×${qty}</span></span><span data-base-price="${lineTotal}">${formatPrice(lineTotal, currency)}</span></div>`;
         });
-      } else html = '<div class="summary-row"><span>No items</span><span>BD 0.000</span></div>';
+      } else html = `<div class="summary-row"><span>No items</span><span data-base-price="0">${formatPrice(0, currency)}</span></div>`;
       container.innerHTML = html;
-      document.getElementById('subtotalAmount').innerHTML = `BD ${(orderData.subtotal || 0).toFixed(3)}`;
-      document.getElementById('serviceCharge').innerHTML = `BD ${(orderData.serviceCharge || 0).toFixed(3)}`;
-      document.getElementById('vatAmount').innerHTML = `BD ${(orderData.vat || 0).toFixed(3)}`;
+      const subtotalEl = document.getElementById('subtotalAmount');
+      subtotalEl.innerHTML = formatPrice(orderData.subtotal || 0, currency);
+      subtotalEl.setAttribute('data-base-price', orderData.subtotal || 0);
+
+      const serviceEl = document.getElementById('serviceCharge');
+      serviceEl.innerHTML = formatPrice(orderData.serviceCharge || 0, currency);
+      serviceEl.setAttribute('data-base-price', orderData.serviceCharge || 0);
+
+      const vatEl = document.getElementById('vatAmount');
+      vatEl.innerHTML = formatPrice(orderData.vat || 0, currency);
+      vatEl.setAttribute('data-base-price', orderData.vat || 0);
+
       const tipVal = orderData.tip || 0;
-      if (tipVal > 0) { document.getElementById('tipRow').style.display = 'flex'; document.getElementById('tipAmount').innerHTML = `BD ${tipVal.toFixed(3)}`; }
+      if (tipVal > 0) { 
+        document.getElementById('tipRow').style.display = 'flex'; 
+        const tipEl = document.getElementById('tipAmount');
+        tipEl.innerHTML = formatPrice(tipVal, currency); 
+        tipEl.setAttribute('data-base-price', tipVal);
+      }
       else document.getElementById('tipRow').style.display = 'none';
       const total = (orderData.total || 0) + tipVal;
-      document.getElementById('totalAmount').innerHTML = `BD ${total.toFixed(3)}`;
+      const totalEl = document.getElementById('totalAmount');
+      totalEl.innerHTML = formatPrice(total, currency);
+      totalEl.setAttribute('data-base-price', total);
       updateWalletStatus(total);
       updatePaymentButton();
     }
@@ -689,12 +735,13 @@
     function updateWalletStatus(total) {
       const walletDiv = document.getElementById('walletMethod');
       const chip = document.getElementById('walletBalance');
+      const currency = localStorage.getItem('preferredCurrency') || 'bd';
       if (walletBalance >= total) {
-        chip.innerHTML = `BD ${walletBalance.toFixed(3)} left`;
+        chip.innerHTML = `<span data-base-price="${walletBalance}">${formatPrice(walletBalance, currency)}</span> left`;
         chip.classList.remove('insufficient');
         walletDiv.classList.remove('disabled');
       } else {
-        chip.innerHTML = `Insufficient (need BD ${(total - walletBalance).toFixed(3)})`;
+        chip.innerHTML = `Insufficient (need ${formatPrice(total - walletBalance, currency)})`;
         chip.classList.add('insufficient');
         walletDiv.classList.add('disabled');
         if (selectedMethod === 'wallet') {
@@ -793,7 +840,11 @@
       setTimeout(() => { closeCardModal(); completePayment(); btn.disabled = false; btn.innerHTML = `<span class="material-symbols-outlined">lock</span> Pay <span id="modalPayAmount">${document.getElementById('totalAmount').innerText}</span>`; }, 1200);
     }
     function processPayment(method) {
-      const totalDue = parseFloat(document.getElementById('totalAmount').innerText.replace('BD ', '')) || 0;
+      const currency = localStorage.getItem('preferredCurrency') || 'bd';
+      const totalText = document.getElementById('totalAmount').innerText;
+      // We need to parse the total amount from text, but since it's already formatted, 
+      // it's safer to use orderData.total + orderData.tip
+      const totalDue = (orderData.total || 0) + (orderData.tip || 0);
       if (method === 'wallet') {
         if (walletBalance < totalDue) { showToast('Insufficient wallet balance', 'error'); return; }
         walletBalance -= totalDue;

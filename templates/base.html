@@ -148,6 +148,17 @@
             border-top: 1px solid var(--border);
         }
 
+        .sidebar-user-balance {
+            margin-top: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--accent);
+            background: rgba(255, 222, 173, 0.1);
+            padding: 4px 12px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+
         .sidebar-logout {
             display: flex;
             align-items: center;
@@ -641,6 +652,7 @@
             </div>
             <div class="sidebar-user-name">{% block user_name %}Guest User{% endblock %}</div>
             <div class="sidebar-user-email">guest@example.com</div>
+            <div class="sidebar-user-balance" id="sidebarBalance" data-base-price="0">BD 0.000</div>
         </div>
         <div class="sidebar-menu">
             <a href="{{ url_for('home') }}" class="sidebar-menu-item {% if request.endpoint == 'home' %}active{% endif %}">
@@ -683,6 +695,17 @@
                 <span class="material-symbols-outlined">help</span>
                 <span>Help & Support</span>
             </a>
+            <div class="sidebar-menu-item" style="cursor: default; margin-top: 20px; border-top: 1px solid var(--border); padding-top: 20px;">
+                <span class="material-symbols-outlined">payments</span>
+                <span>Currency</span>
+            </div>
+            <div style="padding: 0 24px 20px;">
+                <select id="currencySelector" style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--border); background: var(--surface); color: var(--text-primary); font-weight: 600;">
+                    <option value="bd">BD (Bahraini Dinar)</option>
+                    <option value="usd">USD (US Dollar)</option>
+                    <option value="eur">EUR (Euro)</option>
+                </select>
+            </div>
         </div>
         <div class="sidebar-footer">
             <div class="sidebar-logout" onclick="handleLogout()">
@@ -799,6 +822,61 @@
         function addToOrder(item) {
             alert(`🛒 ${item} added to your order`);
         }
+
+        // --- Currency Handling ---
+        </script>
+        <script id="exchange-rates-data" type="application/json">
+            {{ (rates if rates else {"bd": 1.0, "usd": 0.377, "eur": 0.35}) | tojson | safe }}
+        </script>
+        <script>
+        const exchangeRates = JSON.parse(document.getElementById('exchange-rates-data').textContent);
+        const currencySelector = document.getElementById('currencySelector');
+
+        function formatPrice(basePrice, currency) {
+            const rate = exchangeRates[currency] || 1.0;
+            const converted = basePrice * rate;
+            const symbols = { 'bd': 'BD', 'usd': '$', 'eur': '€' };
+            const symbol = symbols[currency] || 'BD';
+            
+            if (currency === 'bd') {
+                return `${symbol} ${converted.toFixed(3)}`;
+            } else {
+                return `${symbol}${converted.toFixed(2)}`;
+            }
+        }
+
+        function updateAllPrices() {
+            const currency = localStorage.getItem('preferredCurrency') || 'bd';
+            if (currencySelector) currencySelector.value = currency;
+            
+            document.querySelectorAll('[data-base-price]').forEach(el => {
+                const basePrice = parseFloat(el.getAttribute('data-base-price'));
+                el.innerText = formatPrice(basePrice, currency);
+            });
+        }
+
+        if (currencySelector) {
+            currencySelector.addEventListener('change', function() {
+                localStorage.setItem('preferredCurrency', this.value);
+                updateAllPrices();
+            });
+
+            // Sync sidebar balance
+            function syncSidebarBalance() {
+                const balance = localStorage.getItem('walletBalance') || 0;
+                const balanceEl = document.getElementById('sidebarBalance');
+                if (balanceEl) {
+                    balanceEl.setAttribute('data-base-price', balance);
+                    balanceEl.textContent = formatPrice(parseFloat(balance), localStorage.getItem('preferredCurrency') || 'bd');
+                }
+            }
+            syncSidebarBalance();
+            window.addEventListener('storage', syncSidebarBalance);
+            // Also check every few seconds as backup
+            setInterval(syncSidebarBalance, 2000);
+        }
+
+        document.addEventListener('DOMContentLoaded', updateAllPrices);
 
         function updateCartBadge() {
             const cartItems = JSON.parse(localStorage.getItem('cart')) || [];

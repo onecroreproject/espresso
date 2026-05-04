@@ -576,7 +576,7 @@
         <div class="stat-label">Orders</div>
     </div>
     <div class="stat-card" onclick="viewWallet()">
-        <div class="stat-value" id="walletBalance">BD 0</div>
+        <div class="stat-value" id="walletBalance" data-base-price="0">0.000</div>
         <div class="stat-label">Saved</div>
     </div>
     <div class="stat-card" onclick="viewRewards()">
@@ -606,7 +606,7 @@
                 <div class="menu-title">Wallet</div>
                 <div class="menu-subtitle">Balance & transactions</div>
             </div>
-            <div class="menu-value" id="walletValue">BD 0</div>
+            <div class="menu-value" id="walletValue" data-base-price="0">0.000</div>
             <span class="material-symbols-outlined menu-arrow">chevron_right</span>
         </a>
         <a href="{{ url_for('reward') }}" class="menu-item">
@@ -796,7 +796,18 @@
     function loadAppData() {
         // Load wallet balance
         const walletBalance = localStorage.getItem('walletBalance');
-        const walletValue = walletBalance ? parseFloat(walletBalance).toFixed(3) : '0.000';
+        const currency = localStorage.getItem('preferredCurrency') || 'bd';
+        const balance = walletBalance ? parseFloat(walletBalance) : 0;
+        const walletFormatted = formatPrice(balance, currency);
+        
+        const balanceEl = document.getElementById('walletBalance');
+        const valueEl = document.getElementById('walletValue');
+        
+        balanceEl.textContent = walletFormatted;
+        balanceEl.setAttribute('data-base-price', balance);
+        
+        valueEl.textContent = walletFormatted;
+        valueEl.setAttribute('data-base-price', balance);
         
         // Load order history count
         const orderHistory = JSON.parse(localStorage.getItem('orderHistory')) || [];

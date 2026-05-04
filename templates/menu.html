@@ -462,6 +462,7 @@
         margin-bottom: 4px;
         display: -webkit-box;
         -webkit-line-clamp: 1;
+        line-clamp: 1;
         -webkit-box-orient: vertical;
         overflow: hidden;
         width: 100%;
@@ -753,9 +754,7 @@
         background: var(--accent-hover);
     }
 
-    .add-to-cart-btn .price-display::before {
-        content: 'BD ';
-        margin-right: 2px;
+    .add-to-cart-btn .price-display {
         font-weight: 500;
     }
 
@@ -1059,13 +1058,16 @@
     }
 
     function updateModalPrice() {
+        if (!currentItem) return;
         const price = calculatePrice();
-        modalPrice.textContent = price.toFixed(3);
+        const currency = localStorage.getItem('preferredCurrency') || 'bd';
+        modalPrice.textContent = formatPrice(price, currency);
     }
 
     function renderMenu(category = 'all') {
         currentCategory = category;
         menuGrid.innerHTML = '';
+        const currency = localStorage.getItem('preferredCurrency') || 'bd';
         
         // Filter by category
         let filtered = category === 'all' ? menuItems : menuItems.filter(i => i.category === category);
@@ -1079,11 +1081,6 @@
             const card = document.createElement('div');
             card.className = 'menu-item-card';
             
-            const isFav = isFavorite(item.name);
-            const heartFill = isFav ? '1' : '0';
-            const heartColor = isFav ? '#ff6b6b' : '#999999';
-            const heartClass = isFav ? 'active' : '';
-            
             card.innerHTML = `
                 <div class="item-image">
                     <img src="${item.images[0]}" alt="${item.name}" onerror="this.parentElement.style.background='#cccccc';">
@@ -1093,7 +1090,7 @@
                         <div class="item-name">${item.name}</div>
                         <div class="item-desc">${item.desc || ''}</div>
                     </div>
-                    <div class="item-price"><span>BD</span>${item.price.toFixed(3)}</div>
+                    <div class="item-price" data-base-price="${item.price}">${formatPrice(item.price, currency)}</div>
                 </div>
             `;
             card.addEventListener('click', () => openModal(item));

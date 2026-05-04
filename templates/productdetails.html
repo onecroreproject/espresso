@@ -358,7 +358,7 @@
         <h1 class="title">Hand-Crafted<br>Signature Espresso</h1>
         
         <div class="price-row">
-            <div class="price" id="displayPrice">BD 2.800</div>
+            <div class="price" id="displayPrice" data-base-price="2.800">BD 2.800</div>
         </div>
         
         <p class="description">
@@ -428,7 +428,25 @@
         <img id="fullImg" src="" alt="Full View">
     </div>
 
+    <script id="exchange-rates-data" type="application/json">
+        {{ (rates if rates else {"bd": 1.0, "usd": 0.377, "eur": 0.35}) | tojson | safe }}
+    </script>
     <script>
+        const exchangeRates = JSON.parse(document.getElementById('exchange-rates-data').textContent);
+
+        function formatPrice(basePrice, currency) {
+            const rate = exchangeRates[currency] || 1.0;
+            const converted = basePrice * rate;
+            const symbols = { 'bd': 'BD', 'usd': '$', 'eur': '€' };
+            const symbol = symbols[currency] || 'BD';
+            
+            if (currency === 'bd') {
+                return `${symbol} ${converted.toFixed(3)}`;
+            } else {
+                return `${symbol}${converted.toFixed(2)}`;
+            }
+        }
+
         let currentImgIndex = 0;
         const track = document.getElementById('carouselTrack');
         const dots = document.querySelectorAll('.dot');
@@ -505,8 +523,11 @@
         }
 
         function updatePrice() {
-            const total = calculatePrice().toFixed(3);
-            document.getElementById('displayPrice').textContent = `BD ${total}`;
+            const total = calculatePrice();
+            const currency = localStorage.getItem('preferredCurrency') || 'bd';
+            const priceEl = document.getElementById('displayPrice');
+            priceEl.textContent = formatPrice(total, currency);
+            priceEl.setAttribute('data-base-price', total);
         }
 
         // Favorite
@@ -554,6 +575,10 @@
             toast.classList.add('show');
             setTimeout(() => toast.classList.remove('show'), 2000);
         }
+
+        window.addEventListener('load', () => {
+            updatePrice();
+        });
     </script>
 </body>
 </html>

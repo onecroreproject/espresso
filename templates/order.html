@@ -1411,7 +1411,7 @@
                         <div class="order-item-meta">${optionsSummary.join(' · ')}</div>
                     </div>
                     <div class="order-item-right" onclick="event.stopPropagation()">
-                        <div class="order-item-price">BD ${(item.price * item.quantity).toFixed(3)}</div>
+                        <div class="order-item-price" data-base-price="${item.price * item.quantity}">${formatPrice(item.price * item.quantity, localStorage.getItem('preferredCurrency') || 'bd')}</div>
                         <div class="order-item-actions">
                             <button class="item-qty-btn" onclick="updateQty(${index}, -1)">−</button>
                             <span class="item-qty">${item.quantity}</span>
@@ -1455,12 +1455,13 @@
     // Update bill summary
     function updateBillSummary() {
         if (!cart || cart.length === 0) {
+            const currency = localStorage.getItem('preferredCurrency') || 'bd';
             document.getElementById('itemCount').textContent = '0';
-            document.getElementById('subtotalAmount').textContent = 'BD 0.000';
-            document.getElementById('serviceCharge').textContent = 'BD 0.000';
-            document.getElementById('vat').textContent = 'BD 0.000';
-            document.getElementById('totalAmount').textContent = 'BD 0.000';
-            document.getElementById('payButtonAmount').textContent = 'BD 0.000';
+            document.getElementById('subtotalAmount').textContent = formatPrice(0, currency);
+            document.getElementById('serviceCharge').textContent = formatPrice(0, currency);
+            document.getElementById('vat').textContent = formatPrice(0, currency);
+            document.getElementById('totalAmount').textContent = formatPrice(0, currency);
+            document.getElementById('payButtonAmount').textContent = formatPrice(0, currency);
             
             // Reset tip checkboxes
             document.querySelectorAll('.tip-checkbox').forEach(cb => cb.checked = false);
@@ -1476,10 +1477,20 @@
         vat = subtotal * 0.05; // 5%
         baseTotal = subtotal + serviceCharge + vat;
         
+        const currency = localStorage.getItem('preferredCurrency') || 'bd';
         document.getElementById('itemCount').textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
-        document.getElementById('subtotalAmount').textContent = `BD ${subtotal.toFixed(3)}`;
-        document.getElementById('serviceCharge').textContent = `BD ${serviceCharge.toFixed(3)}`;
-        document.getElementById('vat').textContent = `BD ${vat.toFixed(3)}`;
+        
+        const subtotalEl = document.getElementById('subtotalAmount');
+        subtotalEl.textContent = formatPrice(subtotal, currency);
+        subtotalEl.setAttribute('data-base-price', subtotal);
+        
+        const serviceEl = document.getElementById('serviceCharge');
+        serviceEl.textContent = formatPrice(serviceCharge, currency);
+        serviceEl.setAttribute('data-base-price', serviceCharge);
+        
+        const vatEl = document.getElementById('vat');
+        vatEl.textContent = formatPrice(vat, currency);
+        vatEl.setAttribute('data-base-price', vat);
         
         // Update tip amounts
         updateTipAmounts();
@@ -1498,10 +1509,11 @@
         const tip15Element = document.querySelector('label[for="tip15"] .tip-amount');
         const tip20Element = document.querySelector('label[for="tip20"] .tip-amount');
         
-        if (tip5Element) tip5Element.textContent = `BD ${tip5.toFixed(3)}`;
-        if (tip10Element) tip10Element.textContent = `BD ${tip10.toFixed(3)}`;
-        if (tip15Element) tip15Element.textContent = `BD ${tip15.toFixed(3)}`;
-        if (tip20Element) tip20Element.textContent = `BD ${tip20.toFixed(3)}`;
+        const currency = localStorage.getItem('preferredCurrency') || 'bd';
+        if (tip5Element) tip5Element.textContent = formatPrice(tip5, currency);
+        if (tip10Element) tip10Element.textContent = formatPrice(tip10, currency);
+        if (tip15Element) tip15Element.textContent = formatPrice(tip15, currency);
+        if (tip20Element) tip20Element.textContent = formatPrice(tip20, currency);
     }
 
     // Update tip from checkbox
@@ -1514,9 +1526,12 @@
             const percent = parseInt(checkbox.value);
             currentTipPercent = percent;
             currentTip = baseTotal * (percent / 100);
+            const currency = localStorage.getItem('preferredCurrency') || 'bd';
             document.getElementById('tipRow').style.display = 'flex';
             document.getElementById('tipPercentage').textContent = percent;
-            document.getElementById('tipAmount').textContent = `BD ${currentTip.toFixed(3)}`;
+            const tipEl = document.getElementById('tipAmount');
+            tipEl.textContent = formatPrice(currentTip, currency);
+            tipEl.setAttribute('data-base-price', currentTip);
             showToast(`${percent}% tip added`, 'success');
         } else {
             currentTip = 0;
@@ -1536,10 +1551,11 @@
         if (customTip > 0) {
             currentTip = customTip;
             currentTipPercent = ((customTip / baseTotal) * 100);
+            const currency = localStorage.getItem('preferredCurrency') || 'bd';
             document.getElementById('tipRow').style.display = 'flex';
             document.getElementById('tipPercentage').textContent = currentTipPercent.toFixed(1);
-            document.getElementById('tipAmount').textContent = `BD ${currentTip.toFixed(3)}`;
-            showToast(`Custom tip of BD ${customTip.toFixed(3)} added`, 'success');
+            document.getElementById('tipAmount').textContent = formatPrice(currentTip, currency);
+            showToast(`Custom tip of ${formatPrice(currentTip, currency)} added`, 'success');
         } else {
             currentTip = 0;
             currentTipPercent = 0;
@@ -1552,8 +1568,14 @@
     // Update total amount
     function updateTotal() {
         const total = baseTotal + currentTip;
-        document.getElementById('totalAmount').textContent = `BD ${total.toFixed(3)}`;
-        document.getElementById('payButtonAmount').textContent = `BD ${total.toFixed(3)}`;
+        const currency = localStorage.getItem('preferredCurrency') || 'bd';
+        const totalEl = document.getElementById('totalAmount');
+        totalEl.textContent = formatPrice(total, currency);
+        totalEl.setAttribute('data-base-price', total);
+        
+        const payBtnEl = document.getElementById('payButtonAmount');
+        payBtnEl.textContent = formatPrice(total, currency);
+        payBtnEl.setAttribute('data-base-price', total);
     }
 
     // Calculate price based on options
@@ -1835,7 +1857,7 @@
                             <div class="history-item-name">${order.orderId || 'Order'}</div>
                             <div class="history-item-meta">${formattedDate} · ${itemCount} items</div>
                         </div>
-                        <div class="history-item-price">BD ${total.toFixed(3)}</div>
+                        <div class="history-item-price">${formatPrice(total, localStorage.getItem('preferredCurrency') || 'bd')}</div>
                     </div>
                 `;
             });
@@ -1899,7 +1921,7 @@
                                 <span class="order-detail-qty">x${item.quantity}</span>
                             </div>
                         </div>
-                        <div class="order-detail-price">BD ${(item.price * item.quantity).toFixed(3)}</div>
+                        <div class="order-detail-price">${formatPrice(item.price * item.quantity, localStorage.getItem('preferredCurrency') || 'bd')}</div>
                     </div>
                 `;
             });
@@ -1920,25 +1942,25 @@
             <div style="background: #f5f5f5; border-radius: 20px; padding: 16px;">
                 <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px;">
                     <span>Subtotal</span>
-                    <span>BD ${(order.subtotal || 0).toFixed(3)}</span>
+                    <span>${formatPrice(order.subtotal || 0, localStorage.getItem('preferredCurrency') || 'bd')}</span>
                 </div>
                 <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px;">
                     <span>Service charge (10%)</span>
-                    <span>BD ${(order.serviceCharge || 0).toFixed(3)}</span>
+                    <span>${formatPrice(order.serviceCharge || 0, localStorage.getItem('preferredCurrency') || 'bd')}</span>
                 </div>
                 <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px;">
                     <span>VAT (5%)</span>
-                    <span>BD ${(order.vat || 0).toFixed(3)}</span>
+                    <span>${formatPrice(order.vat || 0, localStorage.getItem('preferredCurrency') || 'bd')}</span>
                 </div>
                 ${order.tip > 0 ? `
                 <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px;">
                     <span>Tip (${order.tipPercent ? order.tipPercent.toFixed(1) : 0}%)</span>
-                    <span>BD ${(order.tip || 0).toFixed(3)}</span>
+                    <span>${formatPrice(order.tip || 0, localStorage.getItem('preferredCurrency') || 'bd')}</span>
                 </div>
                 ` : ''}
                 <div style="border-top: 2px dashed #bbbbbb; margin: 12px 0; padding-top: 12px; display: flex; justify-content: space-between; font-weight: 700; color: var(--text-primary);">
                     <span>Total</span>
-                    <span>BD ${total.toFixed(3)}</span>
+                    <span>${formatPrice(total, localStorage.getItem('preferredCurrency') || 'bd')}</span>
                 </div>
             </div>
         `;

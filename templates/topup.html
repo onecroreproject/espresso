@@ -760,7 +760,7 @@
     <div class="current-balance">
         <div class="balance-info">
             <div class="balance-label">Current Balance</div>
-            <div class="balance-value" id="currentBalance">BD 0.000</div>
+            <div class="balance-value" id="currentBalance" data-base-price="0">0.000</div>
         </div>
         <div class="wallet-icon">
             <span class="material-symbols-outlined">account_balance_wallet</span>
@@ -780,23 +780,23 @@
 
     <!-- Quick Amount Selector -->
     <div class="quick-amounts">
-        <button class="quick-amount-btn" onclick="selectQuickAmount(5)">BD 5</button>
-        <button class="quick-amount-btn" onclick="selectQuickAmount(10)">BD 10</button>
-        <button class="quick-amount-btn selected" onclick="selectQuickAmount(25)">BD 25</button>
-        <button class="quick-amount-btn" onclick="selectQuickAmount(50)">BD 50</button>
+        <button class="quick-amount-btn" onclick="selectQuickAmount(5)">5</button>
+        <button class="quick-amount-btn" onclick="selectQuickAmount(10)">10</button>
+        <button class="quick-amount-btn selected" onclick="selectQuickAmount(25)">25</button>
+        <button class="quick-amount-btn" onclick="selectQuickAmount(50)">50</button>
     </div>
 
     <!-- Selected Amount Card -->
     <div class="selected-amount-card">
         <div class="selected-label">Selected Amount</div>
-        <div class="selected-amount" id="selectedAmount">BD 25.000</div>
-        <div class="selected-bonus" id="selectedBonus">
+        <div class="selected-amount" id="selectedAmount" data-base-price="25">25.000</div>
+        <div class="selected-bonus" id="selectedBonus" data-base-price="3.75">
             <span class="material-symbols-outlined">celebration</span>
             +3.750 Bonus
         </div>
         <div class="new-balance-preview">
             <span class="preview-label">New Balance</span>
-            <span class="preview-value" id="newBalance">BD 28.750</span>
+            <span class="preview-value" id="newBalance" data-base-price="28.75">28.750</span>
         </div>
     </div>
 
@@ -1029,7 +1029,10 @@
 
     // Update balance display
     function updateBalanceDisplay() {
-        document.getElementById('currentBalance').textContent = `BD ${currentBalance.toFixed(3)}`;
+        const currency = localStorage.getItem('preferredCurrency') || 'bd';
+        const balanceEl = document.getElementById('currentBalance');
+        balanceEl.textContent = formatPrice(currentBalance, currency);
+        balanceEl.setAttribute('data-base-price', currentBalance);
 
         // Show/hide zero balance warning
         const warningEl = document.getElementById('zeroBalanceWarning');
@@ -1055,15 +1058,26 @@
         const bonus = calculateBonus(selectedAmount);
         const newBalance = currentBalance + selectedAmount + bonus;
 
-        document.getElementById('selectedAmount').textContent = `BD ${selectedAmount.toFixed(3)}`;
-        document.getElementById('selectedBonus').innerHTML = `
+        const currency = localStorage.getItem('preferredCurrency') || 'bd';
+        
+        const selectedEl = document.getElementById('selectedAmount');
+        selectedEl.textContent = formatPrice(selectedAmount, currency);
+        selectedEl.setAttribute('data-base-price', selectedAmount);
+
+        const bonusEl = document.getElementById('selectedBonus');
+        bonusEl.innerHTML = `
             <span class="material-symbols-outlined">celebration</span>
-            +${bonus.toFixed(3)} Bonus
+            +${formatPrice(bonus, currency)} Bonus
         `;
-        document.getElementById('newBalance').textContent = `BD ${newBalance.toFixed(3)}`;
-        document.getElementById('payAmount').textContent = `BD ${selectedAmount.toFixed(3)}`;
-        document.getElementById('modalPayAmount').textContent = `BD ${selectedAmount.toFixed(3)}`;
-        document.getElementById('successMessage').textContent = `BD ${(selectedAmount + bonus).toFixed(3)} added to your wallet`;
+        bonusEl.setAttribute('data-base-price', bonus);
+
+        const newBalEl = document.getElementById('newBalance');
+        newBalEl.textContent = formatPrice(newBalance, currency);
+        newBalEl.setAttribute('data-base-price', newBalance);
+
+        document.getElementById('payAmount').textContent = formatPrice(selectedAmount, currency);
+        document.getElementById('modalPayAmount').textContent = formatPrice(selectedAmount, currency);
+        document.getElementById('successMessage').textContent = `${formatPrice(selectedAmount + bonus, currency)} added to your wallet`;
     }
 
     // Select quick amount
@@ -1077,7 +1091,8 @@
         event.target.classList.add('selected');
 
         updateCalculations();
-        showToast(`Amount updated to BD ${amount.toFixed(3)}`, 'success');
+        const currency = localStorage.getItem('preferredCurrency') || 'bd';
+        showToast(`Amount updated to ${formatPrice(amount, currency)}`, 'success');
     }
 
     // Select payment method
@@ -1108,7 +1123,8 @@
                 showToast(`BD ${(selectedAmount + bonus).toFixed(3)} added to your wallet!`, 'success', 4000);
 
                 payBtn.disabled = false;
-                payBtn.innerHTML = `<span class="material-symbols-outlined">lock</span> Pay <span id="payAmount">BD ${selectedAmount.toFixed(3)}</span>`;
+                const currency = localStorage.getItem('preferredCurrency') || 'bd';
+                payBtn.innerHTML = `<span class="material-symbols-outlined">lock</span> Pay <span id="payAmount">${formatPrice(selectedAmount, currency)}</span>`;
 
                 // Update balance display
                 updateBalanceDisplay();

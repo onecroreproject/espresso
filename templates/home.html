@@ -417,13 +417,6 @@
         gap: 4px;
     }
 
-    .menu-list-price::before {
-        content: 'BD ';
-        font-size: 11px;
-        font-weight: 500;
-        display: inline;
-    }
-
     .list-add-btn {
         width: 32px;
         height: 32px;
@@ -1064,7 +1057,8 @@
 
     function updateModalPrice() {
         const price = calculatePrice();
-        modalPrice.textContent = price.toFixed(3);
+        const currency = localStorage.getItem('preferredCurrency') || 'bd';
+        modalPrice.textContent = formatPrice(price, currency);
     }
 
     function openModal(item) {
@@ -1166,7 +1160,7 @@
                 <div class="bento-overlay">
                     <div class="bento-tag">Featured</div>
                     <div class="bento-title">${item.name}</div>
-                    <div class="bento-price">BD ${item.price.toFixed(3)}</div>
+                    <div class="bento-price" data-base-price="${item.price}">${formatPrice(item.price, localStorage.getItem('preferredCurrency') || 'bd')}</div>
                 </div>
             </div>`).join('');
     }
@@ -1181,7 +1175,7 @@
                     <div class="menu-list-desc">${item.desc || ''}</div>
                     <div class="menu-list-meta"><span class="menu-list-badge">${item.category}</span></div>
                 </div>
-                <div class="menu-list-price">${item.price.toFixed(3)}
+                <div class="menu-list-price" data-base-price="${item.price}">${formatPrice(item.price, localStorage.getItem('preferredCurrency') || 'bd')}
                     <button class="list-add-btn" onclick="event.stopPropagation(); openModal(${JSON.stringify(item).replace(/"/g, '&quot;')})">
                         <span class="material-symbols-outlined">add</span>
                     </button>

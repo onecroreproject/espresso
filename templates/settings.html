@@ -147,6 +147,45 @@
         color: #e74c3c;
         background: #fdf2f2;
     }
+
+    .rate-input {
+        width: 80px;
+        padding: 10px;
+        border-radius: 12px;
+        border: 1px solid #eee;
+        background: #f9f9f9;
+        text-align: right;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 600;
+        color: var(--text-primary);
+        outline: none;
+        transition: border-color 0.2s;
+    }
+
+    .rate-input:focus {
+        border-color: var(--accent);
+    }
+
+    .save-rates-btn {
+        background: var(--accent);
+        color: black;
+        border: none;
+        padding: 12px 30px;
+        border-radius: 15px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .save-rates-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .save-rates-btn:active {
+        transform: translateY(0);
+    }
 </style>
 {% endblock %}
 
@@ -228,6 +267,38 @@
         </div>
     </div>
 
+    <!-- Exchange Rates -->
+    <div class="settings-group-title">Exchange Rates</div>
+    <div class="settings-group">
+        <div class="settings-item" style="cursor: default;">
+            <div class="settings-icon"><span class="material-symbols-outlined">payments</span></div>
+            <div class="settings-content">
+                <div class="settings-title">BD Rate</div>
+                <div class="settings-subtitle">Base currency (Default 1.0)</div>
+            </div>
+            <input type="number" id="rate_bd" step="0.001" value="{{ rates.bd }}" class="rate-input">
+        </div>
+        <div class="settings-item" style="cursor: default;">
+            <div class="settings-icon"><span class="material-symbols-outlined">currency_exchange</span></div>
+            <div class="settings-content">
+                <div class="settings-title">Dollar Rate (USD)</div>
+                <div class="settings-subtitle">Conversion rate for USD</div>
+            </div>
+            <input type="number" id="rate_usd" step="0.001" value="{{ rates.usd }}" class="rate-input">
+        </div>
+        <div class="settings-item" style="cursor: default;">
+            <div class="settings-icon"><span class="material-symbols-outlined">euro</span></div>
+            <div class="settings-content">
+                <div class="settings-title">Euro Rate (EUR)</div>
+                <div class="settings-subtitle">Conversion rate for EUR</div>
+            </div>
+            <input type="number" id="rate_eur" step="0.001" value="{{ rates.eur }}" class="rate-input">
+        </div>
+        <div style="padding: 16px; display: flex; justify-content: flex-end;">
+            <button id="saveRatesBtn" class="save-rates-btn">Save Rates</button>
+        </div>
+    </div>
+
     <!-- Support & Legal -->
     <div class="settings-group-title">More</div>
     <div class="settings-group">
@@ -269,4 +340,53 @@
         </a>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.getElementById('saveRatesBtn').addEventListener('click', function() {
+    const btn = this;
+    const originalText = btn.innerText;
+    btn.innerText = 'Saving...';
+    btn.disabled = true;
+
+    const data = {
+        bd: document.getElementById('rate_bd').value,
+        usd: document.getElementById('rate_usd').value,
+        eur: document.getElementById('rate_eur').value
+    };
+    
+    fetch('/update_rates', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            btn.innerText = 'Success!';
+            btn.style.background = '#27ae60';
+            btn.style.color = 'white';
+            setTimeout(() => {
+                btn.innerText = originalText;
+                btn.style.background = 'var(--accent)';
+                btn.style.color = 'black';
+                btn.disabled = false;
+            }, 2000);
+        } else {
+            alert('Failed to update rates.');
+            btn.innerText = originalText;
+            btn.disabled = false;
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred.');
+        btn.innerText = originalText;
+        btn.disabled = false;
+    });
+});
+</script>
 {% endblock %}

@@ -698,7 +698,7 @@
             <span class="material-symbols-outlined">account_balance_wallet</span>
             Available Balance
         </div>
-        <div class="balance-amount" id="walletBalance">BD 0.000</div>
+        <div class="balance-amount" id="walletBalance" data-base-price="0">BD 0.000</div>
     </div>
 </div>
 
@@ -731,20 +731,20 @@
     </div>
     <div class="preset-grid">
         <div class="preset-card" data-amount="5" onclick="fillCustomAmount(5)">
-            <div class="preset-amount">BD 5</div>
-            <div class="preset-bonus">+0.500</div>
+            <div class="preset-amount" data-base-price="5">BD 5</div>
+            <div class="preset-bonus" data-base-price="0.500">+0.500</div>
         </div>
         <div class="preset-card" data-amount="10" onclick="fillCustomAmount(10)">
-            <div class="preset-amount">BD 10</div>
-            <div class="preset-bonus">+1.500</div>
+            <div class="preset-amount" data-base-price="10">BD 10</div>
+            <div class="preset-bonus" data-base-price="1.500">+1.500</div>
         </div>
         <div class="preset-card active" data-amount="25" onclick="fillCustomAmount(25)">
-            <div class="preset-amount">BD 25</div>
-            <div class="preset-bonus">+5.000</div>
+            <div class="preset-amount" data-base-price="25">BD 25</div>
+            <div class="preset-bonus" data-base-price="5.000">+5.000</div>
         </div>
         <div class="preset-card" data-amount="50" onclick="fillCustomAmount(50)">
-            <div class="preset-amount">BD 50</div>
-            <div class="preset-bonus">+12.000</div>
+            <div class="preset-amount" data-base-price="50">BD 50</div>
+            <div class="preset-bonus" data-base-price="12.000">+12.000</div>
         </div>
     </div>
 
@@ -969,7 +969,8 @@
 
     // Update balance display
     function updateBalanceDisplay() {
-        document.getElementById('walletBalance').textContent = `BD ${walletBalance.toFixed(3)}`;
+        const currency = localStorage.getItem('preferredCurrency') || 'bd';
+        document.getElementById('walletBalance').textContent = formatPrice(walletBalance, currency);
         
         // Show/hide zero balance message
         const warningEl = document.getElementById('zeroBalanceMessage');
@@ -1006,7 +1007,8 @@
         // Focus on the input field
         customInput.focus();
         
-        showToast(`Amount set to BD ${amount}.000`, 'success');
+        const currency = localStorage.getItem('preferredCurrency') || 'bd';
+        showToast(`Amount set to ${formatPrice(amount, currency)}`, 'success');
     }
 
     // Proceed to topup with custom amount
@@ -1071,12 +1073,8 @@
                 html += `<div class="month-divider">${monthYear}</div>`;
             }
 
-            const isPositive = transaction.amount > 0;
-            const icon = transaction.type === 'topup' ? 'add_card' : 
-                        transaction.type === 'payment' ? (transaction.title?.toLowerCase().includes('coffee') ? 'coffee' : 'shopping_bag') :
-                        transaction.type === 'bonus' ? 'celebration' : 'autorenew';
-            
-            const amountDisplay = `${isPositive ? '+' : ''}${Math.abs(transaction.amount).toFixed(3)}`;
+            const currency = localStorage.getItem('preferredCurrency') || 'bd';
+            const amountDisplay = `${isPositive ? '+' : ''}${formatPrice(Math.abs(transaction.amount), currency)}`;
             const balanceAfter = transaction.balance || 0;
 
             // Format payment method for display
@@ -1104,28 +1102,27 @@
                         </div>
                     </div>
                     <div class="history-modal-amount ${isPositive ? 'positive' : 'negative'}">
-                        ${isPositive ? '+' : '-'}BD ${Math.abs(transaction.amount).toFixed(3)}
-                        ${transaction.bonus ? `<span class="history-modal-balance">+${transaction.bonus.toFixed(3)} bonus</span>` : ''}
-                        <span class="history-modal-balance">Balance: BD ${balanceAfter.toFixed(3)}</span>
+                        ${isPositive ? '+' : '-'}${formatPrice(Math.abs(transaction.amount), currency)}
+                        ${transaction.bonus ? `<span class="history-modal-balance">+${formatPrice(transaction.bonus, currency)} bonus</span>` : ''}
+                        <span class="history-modal-balance">Balance: ${formatPrice(balanceAfter, currency)}</span>
                     </div>
                 </div>
             `;
         });
 
-        // Add summary at the top
         const summaryHtml = `
             <div class="history-summary">
                 <div class="summary-card">
                     <div class="summary-label">Total Top-ups</div>
-                    <div class="summary-value positive">BD ${totalTopups.toFixed(3)}</div>
+                    <div class="summary-value positive">${formatPrice(totalTopups, currency)}</div>
                 </div>
                 <div class="summary-card">
                     <div class="summary-label">Total Payments</div>
-                    <div class="summary-value negative">BD ${totalPayments.toFixed(3)}</div>
+                    <div class="summary-value negative">${formatPrice(totalPayments, currency)}</div>
                 </div>
                 <div class="summary-card">
                     <div class="summary-label">Bonuses Earned</div>
-                    <div class="summary-value positive">BD ${totalBonuses.toFixed(3)}</div>
+                    <div class="summary-value positive">${formatPrice(totalBonuses, currency)}</div>
                 </div>
             </div>
         `;

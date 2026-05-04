@@ -186,13 +186,6 @@
         justify-content: space-between;
     }
 
-    .favorite-price::before {
-        content: 'BD ';
-        font-size: 12px;
-        font-weight: 500;
-        margin-right: 2px;
-    }
-
     .remove-fav {
         width: 32px;
         height: 32px;
@@ -563,6 +556,7 @@
         emptyState.style.display = 'none';
         
         // Render favorites
+        const currency = localStorage.getItem('preferredCurrency') || 'bd';
         grid.innerHTML = favoriteItems.map(item => `
             <div class="favorite-card" data-name="${item.name}" data-category="${item.category}">
                 <button class="remove-fav" onclick="removeFavorite('${item.name}', event)">
@@ -574,7 +568,7 @@
                 <span class="favorite-category">${item.category}</span>
                 <div class="favorite-name" onclick="openItemDetails('${item.name}')">${item.name}</div>
                 <div class="favorite-price" onclick="openItemDetails('${item.name}')">
-                    <span>${item.price.toFixed(3)}</span>
+                    <span data-base-price="${item.price}">${formatPrice(item.price, currency)}</span>
                 </div>
                 <div class="quick-add">
                     <button class="add-to-order" onclick="addToOrder('${item.name}', event)">

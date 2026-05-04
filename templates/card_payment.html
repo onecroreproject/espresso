@@ -542,7 +542,7 @@
   <!-- Amount Card -->
   <div class="amount-card" id="amountCard">
     <div class="amount-label">Total Amount</div>
-    <div class="amount-value" id="displayAmount">₹588</div>
+    <div class="amount-value" id="displayAmount">0.000</div>
     <div class="amount-merchant">
       <span class="material-symbols-outlined">store</span>
       Espresso Cafe
@@ -627,7 +627,7 @@
     <!-- Pay Button -->
     <button class="btn-pay-card" onclick="processCardPayment()" id="payButton">
       <span class="material-symbols-outlined">lock</span>
-      Pay <span id="payButtonAmount">₹588</span>
+      Pay <span id="payButtonAmount">0.000</span>
     </button>
   </div>
 
@@ -668,13 +668,17 @@
 
   window.addEventListener('load', function() {
     const savedOrder = localStorage.getItem('pendingCardPayment');
+    const currency = localStorage.getItem('preferredCurrency') || 'bd';
     if (savedOrder) {
       try {
         const order = JSON.parse(savedOrder);
         orderTotal = order.total;
-        document.getElementById('displayAmount').textContent = `₹${orderTotal}`;
-        document.getElementById('payButtonAmount').textContent = `₹${orderTotal}`;
+        document.getElementById('displayAmount').textContent = formatPrice(orderTotal, currency);
+        document.getElementById('payButtonAmount').textContent = formatPrice(orderTotal, currency);
       } catch(e) {}
+    } else {
+        document.getElementById('displayAmount').textContent = formatPrice(orderTotal, currency);
+        document.getElementById('payButtonAmount').textContent = formatPrice(orderTotal, currency);
     }
   });
 
